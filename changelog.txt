@@ -1,22 +1,5 @@
-1.4.28:
-- Small api method to allow getting the default config
+2023.4.2
+更新:
+看向方块时，显示的该使用的工具的信息
+方块不需要工具挖掘的信息
 
-1.4.27:
-- Joseph made growth show up for any block with an integer property named "age".
-
-1.4.25:
-- More optimal way to send 'pick data' from the client to the server (to avoid overloading the packet limit). TOP now honors the 'share tag' of the item if presnet
-- Added a new 'maxPacketToServer' config option (default 20000). If the size of the full NBT of the pick block would exceed this limit it will send over the item without NBT instead
-
-1.4.24:
-- Added a new config option ('dontSendNBT') which contains a set of registry names for blocks that don't want their NBT data to be sent from client to server. This is to avoid network packets becoming too large for blocks that have huge itemstacks as a result of 'picking' them
-
-1.4.23:
-- Compatible with the latest version of McJtyLib (for big power api)
-- Fixed a bug where the one probe would show if a stone block contains a silverfish
-- Added the word ‘level’ to the TOP info when a block cannot be harvested to hopefully lessen confusion with this
-
-1.4.23alpha:
-- Compatible with the latest version of McJtyLib (for big power api)
-- Fixed a bug where the one probe would show if a stone block contains a silverfish
-- Added the word ‘level’ to the TOP info when a block cannot be harvested to hopefully lessen confusion with this
