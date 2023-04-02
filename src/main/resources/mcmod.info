@@ -2,7 +2,7 @@
 {
   "modid": "theoneprobe",
   "name": "The One Probe",
-  "description": "A Probe to rule them all!",
+  "description": "This is a branch, please do not feed issues back into The One Probe",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",

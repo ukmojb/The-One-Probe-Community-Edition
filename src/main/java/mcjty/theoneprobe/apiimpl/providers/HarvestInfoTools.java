@@ -37,9 +37,9 @@ public class HarvestInfoTools {
 
     private static final HashMap<String, ItemStack> testTools = new HashMap<>();
     static {
-        testTools.put(I18n.format("tile.shovel.tools"), new ItemStack(Items.WOODEN_SHOVEL));
-        testTools.put(I18n.format("tile.axe.tools"), new ItemStack(Items.WOODEN_AXE));
-        testTools.put(I18n.format("tile.pickaxe.tools"), new ItemStack(Items.WOODEN_PICKAXE));
+        testTools.put(I18n.format("top.toolclass.Shovel"), new ItemStack(Items.WOODEN_SHOVEL));
+        testTools.put(I18n.format("top.toolclass.Axe"), new ItemStack(Items.WOODEN_AXE));
+        testTools.put(I18n.format("top.toolclass.Pickaxe"), new ItemStack(Items.WOODEN_PICKAXE));
     }
 
     static void showHarvestLevel(IProbeInfo probeInfo, IBlockState blockState, Block block) {

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="mcjty.theoneprobe.The-One-Probe-Community-Edition.api" target="1.8" />
+      <module name="mcjty.theoneprobe.The-One-Probe-Community-Edition.main" target="1.8" />
+      <module name="mcjty.theoneprobe.The-One-Probe-Community-Edition.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

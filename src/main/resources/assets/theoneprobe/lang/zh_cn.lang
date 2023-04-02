@@ -14,5 +14,5 @@ top.toolclass.Shovel=铲
 top.toolclass.Axe=斧
 top.toolclass.Sword=剑
 
-top.NoTool=没有工具
+top.NoTool=无需工具
 top.level=level
