@@ -1,3 +1,3 @@
 a mod for minecraft
 
-此版本主要是为了解决原TOP的硬编码.
+This version is mainly to solve the hard coding of the original TOP.
