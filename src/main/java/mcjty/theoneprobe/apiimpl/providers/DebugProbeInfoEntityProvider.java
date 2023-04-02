@@ -7,6 +7,7 @@ import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoEntityProvider;
 import mcjty.theoneprobe.api.ProbeMode;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -37,11 +38,11 @@ public class DebugProbeInfoEntityProvider implements IProbeInfoEntityProvider {
                 float aiMoveSpeed = entityLivingBase.getAIMoveSpeed();
                 int revengeTimer = entityLivingBase.getRevengeTimer();
                 vertical
-                        .text(LABEL + "Tot armor: " + INFO + totalArmorValue)
-                        .text(LABEL + "Age: " + INFO + age)
-                        .text(LABEL + "Absorption: " + INFO + absorptionAmount)
-                        .text(LABEL + "AI Move Speed: " + INFO + aiMoveSpeed)
-                        .text(LABEL + "Revenge Timer: " + INFO + revengeTimer);
+                        .text(LABEL + I18n.format("top.Tot_armor") + ": " + INFO + totalArmorValue)
+                        .text(LABEL + I18n.format("top.Age") + ": " + INFO + age)
+                        .text(LABEL + I18n.format("top.Absorption") + ": " + INFO + absorptionAmount)
+                        .text(LABEL + I18n.format("top.AI_Move_Speed") + ": " + INFO + aiMoveSpeed)
+                        .text(LABEL + I18n.format("top.Revenge_Timer") + ": " + INFO + revengeTimer);
             }
             if (entity instanceof EntityAgeable) {
                 if (vertical == null) {
@@ -51,7 +52,7 @@ public class DebugProbeInfoEntityProvider implements IProbeInfoEntityProvider {
                 EntityAgeable entityAgeable = (EntityAgeable) entity;
                 int growingAge = entityAgeable.getGrowingAge();
                 vertical
-                        .text(LABEL + "Growing Age: " + INFO + growingAge);
+                        .text(LABEL + I18n.format("top.Growing_Age") + ": " + INFO + growingAge);
             }
         }
     }

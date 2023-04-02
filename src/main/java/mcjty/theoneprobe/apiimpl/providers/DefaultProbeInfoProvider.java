@@ -10,6 +10,7 @@ import mcjty.theoneprobe.compat.RedstoneFluxTools;
 import mcjty.theoneprobe.compat.TeslaTools;
 import mcjty.theoneprobe.config.ConfigSetup;
 import mcjty.theoneprobe.setup.ModSetup;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.block.*;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -111,9 +112,9 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
                 int fuel = ((TileEntityBrewingStand) te).getField(1);
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
                         .item(new ItemStack(Items.BLAZE_POWDER), probeInfo.defaultItemStyle().width(16).height(16))
-                        .text(LABEL + "Fuel: " + INFO + fuel);
+                        .text(LABEL + I18n.format("top.Fuel") + ": " + INFO + fuel);
                 if (brewtime > 0) {
-                    probeInfo.text(LABEL + "Time: " + INFO + brewtime + " ticks");
+                    probeInfo.text(LABEL + I18n.format("top.Time") + ": " + INFO + brewtime + " " + I18n.format("top.Ticks"));
                 }
 
             }
@@ -128,7 +129,7 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
                 String mobName = logic.getCachedEntity().getName();
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle()
                     .alignment(ElementAlignment.ALIGN_CENTER))
-                    .text(LABEL + "Mob: " + INFO + mobName);
+                    .text(LABEL + I18n.format("top.Mob") + ": " + INFO + mobName);
             }
         }
     }
@@ -148,7 +149,7 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
         if (redstonePower > 0) {
             probeInfo.horizontal()
                     .item(new ItemStack(Items.REDSTONE), probeInfo.defaultItemStyle().width(14).height(14))
-                    .text(LABEL + "Power: " + INFO + redstonePower);
+                    .text(LABEL + I18n.format("top.Power") + ": " + INFO + redstonePower);
         }
     }
 
@@ -156,16 +157,16 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
         if (block instanceof BlockLever) {
             Boolean powered = blockState.getValue(BlockLever.POWERED);
             probeInfo.horizontal().item(new ItemStack(Items.REDSTONE), probeInfo.defaultItemStyle().width(14).height(14))
-                    .text(LABEL + "State: " + INFO + (powered ? "On" : "Off"));
+                    .text(LABEL + I18n.format("top.State") + ": " + INFO + (powered ? I18n.format("top.On") : I18n.format("top.Off")));
         } else if (block instanceof BlockRedstoneComparator) {
             BlockRedstoneComparator.Mode mode = blockState.getValue(BlockRedstoneComparator.MODE);
-            probeInfo.text(LABEL + "Mode: " + INFO + mode.getName());
+            probeInfo.text(LABEL + I18n.format("top.Mode") + ": " + INFO + mode.getName());
         } else if (block instanceof BlockRedstoneRepeater) {
             Boolean locked = blockState.getValue(BlockRedstoneRepeater.LOCKED);
             Integer delay = blockState.getValue(BlockRedstoneRepeater.DELAY);
-            probeInfo.text(LABEL + "Delay: " + INFO + delay + " ticks");
+            probeInfo.text(LABEL + I18n.format("top.Delay") + ": " + INFO + delay + " " + I18n.format("top.Ticks"));
             if (locked) {
-                probeInfo.text(INFO + "Locked");
+                probeInfo.text(INFO + I18n.format("top.Looked"));
             }
         }
     }
@@ -193,7 +194,7 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
     private void addFluidInfo(IProbeInfo probeInfo, ProbeConfig config, FluidStack fluidStack, int maxContents) {
         int contents = fluidStack == null ? 0 : fluidStack.amount;
         if (fluidStack != null) {
-            probeInfo.text(NAME + "Liquid: " + fluidStack.getLocalizedName());
+            probeInfo.text(NAME + I18n.format("top.Liquid") + ": " + fluidStack.getLocalizedName());
         }
         if (config.getTankMode() == 1) {
             probeInfo.progress(contents, maxContents,
@@ -241,7 +242,7 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
                             .borderColor(ConfigSetup.rfbarBorderColor)
                             .numberFormat(ConfigSetup.rfFormat));
         } else {
-            probeInfo.text(PROGRESS + "RF: " + ElementProgress.format(energy, ConfigSetup.rfFormat, "RF"));
+            probeInfo.text(PROGRESS + I18n.format("top.RF") + ": " + ElementProgress.format(energy, ConfigSetup.rfFormat, "RF"));
         }
     }
 
@@ -253,9 +254,9 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
                 int age = blockState.getValue(integerProperty);
                 int maxAge = Collections.max(integerProperty.getAllowedValues());
                 if (age == maxAge) {
-                    probeInfo.text(OK + "Fully grown");
+                    probeInfo.text(OK + I18n.format("top.Fully_grown"));
                 } else {
-                    probeInfo.text(LABEL + "Growth: " + WARNING + (age * 100) / maxAge + "%");
+                    probeInfo.text(LABEL + I18n.format("top.Growth") + ": " + WARNING + (age * 100) / maxAge + "%");
                 }
             }
             return;
