@@ -1,3 +1,2 @@
-a mod for minecraft
-
-This version is mainly to solve the hard coding of the original TOP.
+[English](README.EN.md)
+[简体中文](README.CN.md)
