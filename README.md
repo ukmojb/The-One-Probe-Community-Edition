@@ -1,5 +1,5 @@
-[English](README.EN.md)
-[简体中文](README.CN.md)
+[English](https://github.com/ukmojb/The-One-Probe-Community-Edition/blob/main/README/README.EN.md))
+[简体中文](https://github.com/ukmojb/The-One-Probe-Community-Edition/blob/main/README/README.CN.md)
 
 
 在构建前需要在The-One-Probe-Community-Edition/.gradle/minecraft内安装Tesla-1.12.2-1.0.63.jar，否则构建会失败
