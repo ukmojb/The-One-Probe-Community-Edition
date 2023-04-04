@@ -6,6 +6,7 @@ import mcjty.theoneprobe.items.ModItems;
 import mcjty.theoneprobe.setup.IProxy;
 import mcjty.theoneprobe.setup.ModSetup;
 import mcjty.theoneprobe.mods.ember_top.TOPHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
@@ -56,7 +57,10 @@ public class TheOneProbe {
     public void init(FMLInitializationEvent e) {
         setup.init(e);
         proxy.init(e);
-        TOPHandler.registerTips();
+        if (Loader.isModLoaded("embers")) {
+            TOPHandler.registerTips();
+        }
+
     }
 
     @Mod.EventHandler
