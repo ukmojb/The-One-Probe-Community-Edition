@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "botania:managun"
+    },
+    "title": {
+      "translate": "advancement.botania:manaBlasterShoot"
+    },
+    "description": {
+      "translate": "advancement.botania:manaBlasterShoot.desc"
+    }
+  },
+  "parent": "botania:main/rune_pickup",
+  "criteria": {
+    "shoot": {
+      "trigger": "botania:use_item_success",
+      "conditions": {
+        "item": {
+          "item": "botania:managun"
+        }
+      }
+    }
+  }
+}

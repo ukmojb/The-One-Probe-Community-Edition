@@ -66,6 +66,9 @@ public class ConfigSetup {
 
     public static boolean showDebugInfo = true;
 
+    public static boolean showBotaniaprogress = true;
+    public static boolean testinprogress = true;
+
     private static int leftX = 5;
     private static int topY = 5;
     private static int rightX = -1;
@@ -160,6 +163,11 @@ public class ConfigSetup {
         showContentsWithoutSneaking = cfg.getStringList("showContentsWithoutSneaking", CATEGORY_THEONEPROBE, showContentsWithoutSneaking, "A list of blocks for which we automatically show chest contents even if not sneaking");
         dontShowContentsUnlessSneaking = cfg.getStringList("dontShowContentsUnlessSneaking", CATEGORY_THEONEPROBE, dontShowContentsUnlessSneaking, "A list of blocks for which we don't show chest contents automatically except if sneaking");
         dontSendNBT = cfg.getStringList("dontSendNBT", CATEGORY_THEONEPROBE, dontSendNBT, "A list of blocks for which we don't send NBT over the network. This is mostly useful for blocks that have HUGE NBT in their pickblock (itemstack)");
+
+        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_THEONEPROBE, compactEqualStacks, "决定显示植物魔法魔力的魔力条是否显示(别问为什么是中文，问就是英文不好)");
+        testinprogress = cfg.getBoolean("testinprogress", CATEGORY_THEONEPROBE, compactEqualStacks, "决定显示魔力值是显示在魔力条中还是魔力条下面(若showBotaniaprogress为false，则本选项不生效)");
+
+
 
         setupStyleConfig(cfg);
     }

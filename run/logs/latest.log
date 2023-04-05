@@ -1,0 +1,268 @@
+[02:12:00] [main/INFO] [GradleStart]: Extra: []
+[02:12:00] [main/INFO] [GradleStart]: Running with arguments: [--userProperties, {}, --assetsDir, C:/Users/HP/.gradle/caches/minecraft/assets, --assetIndex, 1.12, --accessToken{REDACTED}, --version, 1.12.2, --tweakClass, net.minecraftforge.fml.common.launcher.FMLTweaker, --tweakClass, net.minecraftforge.gradle.tweakers.CoremodTweaker]
+[02:12:00] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLTweaker
+[02:12:00] [main/INFO] [LaunchWrapper]: Using primary tweak class name net.minecraftforge.fml.common.launcher.FMLTweaker
+[02:12:00] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.gradle.tweakers.CoremodTweaker
+[02:12:00] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLTweaker
+[02:12:00] [main/INFO] [FML]: Forge Mod Loader version 14.23.3.2678 for Minecraft 1.12.2 loading
+[02:12:00] [main/INFO] [FML]: Java is Java HotSpot(TM) 64-Bit Server VM, version 1.8.0_192, running on Windows 10:amd64:10.0, installed at C:\Program Files\Java\jdk1.8.0_192\jre
+[02:12:00] [main/ERROR] [FML]: Apache Maven library folder was not in the format expected: C:\Users\HP\.gradle\caches\modules-2\files-2.1\org.apache.maven\maven-artifact\3.5.3\7dc72b6d6d8a6dced3d294ed54c2cc3515ade9f4\maven-artifact-3.5.3.jar. Using default libraries directory.
+[02:12:00] [main/INFO] [FML]: Managed to load a deobfuscated Minecraft name- we are in a deobfuscated environment. Skipping runtime deobfuscation
+[02:12:00] [main/INFO] [FML]: Ignoring missing certificate for coremod FMLCorePlugin (net.minecraftforge.fml.relauncher.FMLCorePlugin), we are in deobf and it's a forge core plugin
+[02:12:00] [main/INFO] [FML]: Ignoring missing certificate for coremod FMLForgePlugin (net.minecraftforge.classloading.FMLForgePlugin), we are in deobf and it's a forge core plugin
+[02:12:00] [main/INFO] [FML]: Searching C:\Users\HP\Desktop\mods\The-One-Probe-Community-Edition\run\.\mods for mods
+[02:12:00] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.gradle.tweakers.CoremodTweaker
+[02:12:00] [main/INFO] [GradleStart]: Injecting location in coremod net.minecraftforge.fml.relauncher.FMLCorePlugin
+[02:12:00] [main/INFO] [GradleStart]: Injecting location in coremod net.minecraftforge.classloading.FMLForgePlugin
+[02:12:00] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[02:12:00] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[02:12:00] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.gradle.tweakers.AccessTransformerTweaker
+[02:12:00] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[02:12:00] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[02:12:00] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[02:12:00] [main/ERROR] [FML]: FML appears to be missing any signature data. This is not a good thing
+[02:12:00] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[02:12:00] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[02:12:01] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.gradle.tweakers.AccessTransformerTweaker
+[02:12:01] [main/INFO] [GradleStart]: Remapping AccessTransformer rules...
+[02:12:01] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.TerminalTweaker
+[02:12:01] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.TerminalTweaker
+[02:12:01] [main/INFO] [LaunchWrapper]: Launching wrapped minecraft {net.minecraft.client.main.Main}
+[02:12:01] [main/INFO] [net.minecraft.client.Minecraft]: Setting user: Player142
+[02:12:03] [main/WARN] [net.minecraft.client.settings.GameSettings]: Skipping bad option: lastServer:
+[02:12:03] [main/INFO] [net.minecraft.client.Minecraft]: LWJGL Version: 2.9.4
+[02:12:03] [main/INFO] [FML]: -- System Details --
+Details:
+	Minecraft Version: 1.12.2
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_192, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 619645872 bytes (590 MB) / 851968000 bytes (812 MB) up to 3741319168 bytes (3568 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: 
+	Loaded coremods (and transformers): 
+	GL info: ' Vendor: 'NVIDIA Corporation' Version: '4.6.0 NVIDIA 516.59' Renderer: 'NVIDIA GeForce RTX 3060 Laptop GPU/PCIe/SSE2'
+[02:12:03] [main/INFO] [FML]: MinecraftForge v14.23.3.2678 Initialized
+[02:12:03] [main/INFO] [FML]: Starts to replace vanilla recipe ingredients with ore ingredients.
+[02:12:03] [main/INFO] [FML]: Replaced 1036 ore ingredients
+[02:12:03] [main/INFO] [FML]: Searching C:\Users\HP\Desktop\mods\The-One-Probe-Community-Edition\run\.\mods for mods
+[02:12:04] [main/WARN] [FML]: Mod embers is missing the required element 'version' and a version.properties file could not be found. Falling back to metadata version 1.18
+[02:12:04] [main/WARN] [FML]: Mod patchouli is missing the required element 'version' and a version.properties file could not be found. Falling back to metadata version 1.0-21
+[02:12:04] [main/INFO] [FML]: Forge Mod Loader has identified 12 mods to load
+[02:12:04] [main/INFO] [FML]: Attempting connection with missing mods [minecraft, mcp, FML, forge, jei, redstoneflux, tesla, embers, theoneprobe, baubles, botania, patchouli] at CLIENT
+[02:12:04] [main/INFO] [FML]: Attempting connection with missing mods [minecraft, mcp, FML, forge, jei, redstoneflux, tesla, embers, theoneprobe, baubles, botania, patchouli] at SERVER
+[02:12:05] [main/INFO] [net.minecraft.client.resources.SimpleReloadableResourceManager]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Just Enough Items, FMLFileResourcePack:Redstone Flux, FMLFileResourcePack:TESLA, FMLFileResourcePack:Embers Rekindled, FMLFileResourcePack:The One Probe, FMLFileResourcePack:Baubles, FMLFileResourcePack:Botania, FMLFileResourcePack:Patchouli
+[02:12:05] [main/INFO] [FML]: Processing ObjectHolder annotations
+[02:12:05] [main/INFO] [FML]: Found 1274 ObjectHolder annotations
+[02:12:05] [main/INFO] [FML]: Identifying ItemStackHolder annotations
+[02:12:05] [main/INFO] [FML]: Found 0 ItemStackHolder annotations
+[02:12:05] [main/INFO] [FML]: Configured a dormant chunk cache size of 0
+[02:12:05] [Forge Version Check/INFO] [forge.VersionCheck]: [forge] Starting version check at http://files.minecraftforge.net/maven/net/minecraftforge/forge/promotions_slim.json
+[02:12:06] [Thread-3/INFO] [FML]: Using sync timing. 200 frames of Display.update took 56789800 nanos
+[02:12:06] [main/ERROR] [FML]: Error registering event handler: FMLMod:embers{1.18} class net.minecraftforge.event.RegistryEvent$Register public void teamroots.embers.RegistryManager.init(net.minecraftforge.event.RegistryEvent$Register)
+java.lang.TypeNotPresentException: Type net.minecraftforge.registries.DataSerializerEntry not present
+	at sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:117) ~[?:1.8.0_192]
+	at sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:125) ~[?:1.8.0_192]
+	at sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49) ~[?:1.8.0_192]
+	at sun.reflect.generics.visitor.Reifier.reifyTypeArguments(Reifier.java:68) ~[?:1.8.0_192]
+	at sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:138) ~[?:1.8.0_192]
+	at sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49) ~[?:1.8.0_192]
+	at sun.reflect.generics.repository.ConstructorRepository.getParameterTypes(ConstructorRepository.java:94) ~[?:1.8.0_192]
+	at java.lang.reflect.Executable.getGenericParameterTypes(Executable.java:283) ~[?:1.8.0_192]
+	at java.lang.reflect.Method.getGenericParameterTypes(Method.java:283) ~[?:1.8.0_192]
+	at net.minecraftforge.fml.common.eventhandler.ASMEventHandler.<init>(ASMEventHandler.java:70) ~[ASMEventHandler.class:?]
+	at net.minecraftforge.fml.common.eventhandler.EventBus.register(EventBus.java:131) [EventBus.class:?]
+	at net.minecraftforge.fml.common.eventhandler.EventBus.register(EventBus.java:112) [EventBus.class:?]
+	at teamroots.embers.Embers.preInit(Embers.java:68) [Embers.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_192]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_192]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_192]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_192]
+	at net.minecraftforge.fml.common.FMLModContainer.handleModStateEvent(FMLModContainer.java:602) [FMLModContainer.class:?]
+	at sun.reflect.GeneratedMethodAccessor2.invoke(Unknown Source) ~[?:?]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_192]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_192]
+	at com.google.common.eventbus.Subscriber.invokeSubscriberMethod(Subscriber.java:91) [guava-21.0.jar:?]
+	at com.google.common.eventbus.Subscriber$SynchronizedSubscriber.invokeSubscriberMethod(Subscriber.java:150) [guava-21.0.jar:?]
+	at com.google.common.eventbus.Subscriber$1.run(Subscriber.java:76) [guava-21.0.jar:?]
+	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:399) [guava-21.0.jar:?]
+	at com.google.common.eventbus.Subscriber.dispatchEvent(Subscriber.java:71) [guava-21.0.jar:?]
+	at com.google.common.eventbus.Dispatcher$PerThreadQueuedDispatcher.dispatch(Dispatcher.java:116) [guava-21.0.jar:?]
+	at com.google.common.eventbus.EventBus.post(EventBus.java:217) [guava-21.0.jar:?]
+	at net.minecraftforge.fml.common.LoadController.sendEventToModContainer(LoadController.java:280) [LoadController.class:?]
+	at net.minecraftforge.fml.common.LoadController.propogateStateMessage(LoadController.java:258) [LoadController.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_192]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_192]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_192]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_192]
+	at com.google.common.eventbus.Subscriber.invokeSubscriberMethod(Subscriber.java:91) [guava-21.0.jar:?]
+	at com.google.common.eventbus.Subscriber$SynchronizedSubscriber.invokeSubscriberMethod(Subscriber.java:150) [guava-21.0.jar:?]
+	at com.google.common.eventbus.Subscriber$1.run(Subscriber.java:76) [guava-21.0.jar:?]
+	at com.google.common.util.concurrent.MoreExecutors$DirectExecutor.execute(MoreExecutors.java:399) [guava-21.0.jar:?]
+	at com.google.common.eventbus.Subscriber.dispatchEvent(Subscriber.java:71) [guava-21.0.jar:?]
+	at com.google.common.eventbus.Dispatcher$PerThreadQueuedDispatcher.dispatch(Dispatcher.java:116) [guava-21.0.jar:?]
+	at com.google.common.eventbus.EventBus.post(EventBus.java:217) [guava-21.0.jar:?]
+	at net.minecraftforge.fml.common.LoadController.distributeStateMessage(LoadController.java:149) [LoadController.class:?]
+	at net.minecraftforge.fml.common.Loader.preinitializeMods(Loader.java:637) [Loader.class:?]
+	at net.minecraftforge.fml.client.FMLClientHandler.beginMinecraftLoading(FMLClientHandler.java:270) [FMLClientHandler.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:513) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_192]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_192]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_192]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_192]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_192]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_192]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_192]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_192]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.lang.ClassNotFoundException: net.minecraftforge.registries.DataSerializerEntry
+	at net.minecraft.launchwrapper.LaunchClassLoader.findClass(LaunchClassLoader.java:191) ~[launchwrapper-1.12.jar:?]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:424) ~[?:1.8.0_192]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:357) ~[?:1.8.0_192]
+	at java.lang.Class.forName0(Native Method) ~[?:1.8.0_192]
+	at java.lang.Class.forName(Class.java:348) ~[?:1.8.0_192]
+	at sun.reflect.generics.factory.CoreReflectionFactory.makeNamedType(CoreReflectionFactory.java:114) ~[?:1.8.0_192]
+	... 58 more
+Caused by: java.lang.NullPointerException
+[02:12:06] [main/INFO] [theoneprobe]: The One Probe Detected TESLA: enabling support
+[02:12:06] [main/INFO] [theoneprobe]: The One Probe Detected RedstoneFlux: enabling support
+[02:12:06] [main/INFO] [theoneprobe]: The One Probe Detected Baubles: enabling support
+[02:12:07] [main/INFO] [FML]: Applying holder lookups
+[02:12:07] [main/INFO] [FML]: Holder lookups applied
+[02:12:07] [main/INFO] [FML]: Applying holder lookups
+[02:12:07] [main/INFO] [FML]: Holder lookups applied
+[02:12:07] [main/INFO] [FML]: Applying holder lookups
+[02:12:07] [main/INFO] [FML]: Holder lookups applied
+[02:12:07] [main/INFO] [FML]: OBJLoader: Domain botania has been added.
+[02:12:07] [main/INFO] [FML]: Applying holder lookups
+[02:12:07] [main/INFO] [FML]: Holder lookups applied
+[02:12:07] [main/INFO] [FML]: Injecting itemstacks
+[02:12:07] [main/INFO] [FML]: Itemstack injection complete
+[02:12:08] [Sound Library Loader/INFO] [net.minecraft.client.audio.SoundManager]: Starting up SoundSystem...
+[02:12:08] [Thread-5/INFO] [net.minecraft.client.audio.SoundManager]: Initializing LWJGL OpenAL
+[02:12:08] [Thread-5/INFO] [net.minecraft.client.audio.SoundManager]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[02:12:09] [Thread-5/INFO] [net.minecraft.client.audio.SoundManager]: OpenAL initialized.
+[02:12:09] [Sound Library Loader/INFO] [net.minecraft.client.audio.SoundManager]: Sound engine started
+[02:12:09] [main/INFO] [FML]: Max texture size: 16384
+[02:12:10] [main/INFO] [net.minecraft.client.renderer.texture.TextureMap]: Created: 1024x1024 textures-atlas
+[02:12:11] [main/INFO] [STDOUT]: [net.minecraft.init.Bootstrap:printToSYSOUT:629]: ---- Minecraft Crash Report ----
+// Don't be sad, have a hug! <3
+
+Time: 4/5/23 2:12 AM
+Description: Initializing game
+
+java.lang.NoSuchFieldError: field_185050_h
+	at vazkii.botania.common.item.equipment.tool.ItemEnderDagger.getItemAttributeModifiers(ItemEnderDagger.java:64)
+	at net.minecraft.item.Item.getAttributeModifiers(Item.java:602)
+	at net.minecraft.item.ItemStack.getAttributeModifiers(ItemStack.java:1154)
+	at net.minecraft.item.ItemStack.getTooltip(ItemStack.java:867)
+	at net.minecraft.client.Minecraft.lambda$populateSearchTreeManager$1(Minecraft.java:625)
+	at net.minecraft.client.util.SearchTree.index(SearchTree.java:93)
+	at net.minecraft.client.util.SearchTree.add(SearchTree.java:78)
+	at java.lang.Iterable.forEach(Iterable.java:75)
+	at net.minecraft.client.Minecraft.populateSearchTreeManager(Minecraft.java:639)
+	at net.minecraft.client.Minecraft.init(Minecraft.java:575)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421)
+	at net.minecraft.client.main.Main.main(Main.java:118)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97)
+	at GradleStart.main(GradleStart.java:25)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Client thread
+Stacktrace:
+	at vazkii.botania.common.item.equipment.tool.ItemEnderDagger.getItemAttributeModifiers(ItemEnderDagger.java:64)
+	at net.minecraft.item.Item.getAttributeModifiers(Item.java:602)
+	at net.minecraft.item.ItemStack.getAttributeModifiers(ItemStack.java:1154)
+	at net.minecraft.item.ItemStack.getTooltip(ItemStack.java:867)
+	at net.minecraft.client.Minecraft.lambda$populateSearchTreeManager$1(Minecraft.java:625)
+	at net.minecraft.client.util.SearchTree.index(SearchTree.java:93)
+	at net.minecraft.client.util.SearchTree.add(SearchTree.java:78)
+	at java.lang.Iterable.forEach(Iterable.java:75)
+	at net.minecraft.client.Minecraft.populateSearchTreeManager(Minecraft.java:639)
+	at net.minecraft.client.Minecraft.init(Minecraft.java:575)
+
+-- Initialization --
+Details:
+Stacktrace:
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421)
+	at net.minecraft.client.main.Main.main(Main.java:118)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97)
+	at GradleStart.main(GradleStart.java:25)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.12.2
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_192, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 1012180824 bytes (965 MB) / 1460666368 bytes (1393 MB) up to 3741319168 bytes (3568 MB)
+	JVM Flags: 0 total; 
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP 9.42 Powered by Forge 14.23.3.2678 12 mods loaded, 12 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+
+	| State | ID           | Version      | Source                                                                    | Signature                                |
+	|:----- |:------------ |:------------ |:------------------------------------------------------------------------- |:---------------------------------------- |
+	| UCH   | minecraft    | 1.12.2       | minecraft.jar                                                             | None                                     |
+	| UCH   | mcp          | 9.42         | minecraft.jar                                                             | None                                     |
+	| UCH   | FML          | 8.0.99.99    | forgeSrc-1.12.2-14.23.3.2678-PROJECT(The-One-Probe-Community-Edition).jar | None                                     |
+	| UCH   | forge        | 14.23.3.2678 | forgeSrc-1.12.2-14.23.3.2678-PROJECT(The-One-Probe-Community-Edition).jar | None                                     |
+	| UCH   | jei          | 4.8.5.159    | jei_1.12.2-4.8.5.159.jar                                                  | None                                     |
+	| UCH   | redstoneflux | 2.0.0        | RedstoneFlux-1.12-2.0.0.1-universal.jar                                   | d4f1503fbacd9b9fb767720420c5395104239ec9 |
+	| UCH   | tesla        | 1.0.63       | Tesla-1.12.2-1.0.63.jar                                                   | d476d1b22b218a10d845928d1665d45fce301b27 |
+	| UCH   | embers       | 1.18         | embersrekindled-300777-3225431.jar                                        | None                                     |
+	| UCH   | theoneprobe  | 1.4.28       | theoneprobe-1.12-1.4.28.jar                                               | None                                     |
+	| UCH   | baubles      | 1.5.2        | Baubles-1.12-1.5.2.jar                                                    | None                                     |
+	| UCH   | botania      | r1.10-364    | Botania r1.10-364.4.jar                                                   | None                                     |
+	| UCH   | patchouli    | 1.0-21       | Patchouli-1.0-21.jar                                                      | None                                     |
+
+	Loaded coremods (and transformers): 
+	GL info: ' Vendor: 'NVIDIA Corporation' Version: '4.6.0 NVIDIA 516.59' Renderer: 'NVIDIA GeForce RTX 3060 Laptop GPU/PCIe/SSE2'
+	Patchouli open book context: n/a
+	Launched Version: 1.12.2
+	LWJGL: 2.9.4
+	OpenGL: NVIDIA GeForce RTX 3060 Laptop GPU/PCIe/SSE2 GL version 4.6.0 NVIDIA 516.59, NVIDIA Corporation
+	GL Caps: Using GL 1.3 multitexturing.
+Using GL 1.3 texture combiners.
+Using framebuffer objects because OpenGL 3.0 is supported and separate blending is supported.
+Shaders are available because OpenGL 2.1 is supported.
+VBOs are available because OpenGL 1.5 is supported.
+
+	Using VBOs: Yes
+	Is Modded: Definitely; Client brand changed to 'fml,forge'
+	Type: Client (map_client.txt)
+	Resource Packs: 
+	Current Language: 简体中文 (中国)
+	Profiler Position: N/A (disabled)
+	CPU: 20x 12th Gen Intel(R) Core(TM) i7-12700H
+[02:12:11] [main/INFO] [STDOUT]: [net.minecraft.init.Bootstrap:printToSYSOUT:629]: #@!@# Game crashed! Crash report saved to: #@!@# C:\Users\HP\Desktop\mods\The-One-Probe-Community-Edition\run\.\crash-reports\crash-2023-04-05_02.12.11-client.txt

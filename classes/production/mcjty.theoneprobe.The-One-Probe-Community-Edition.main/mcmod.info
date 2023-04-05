@@ -1,0 +1,16 @@
+[
+{
+  "modid": "theoneprobe",
+  "name": "The One Probe",
+  "description": "This is a branch, please do not feed issues back into The One Probe",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["McJty"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

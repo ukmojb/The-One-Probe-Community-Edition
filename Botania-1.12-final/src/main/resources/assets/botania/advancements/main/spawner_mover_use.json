@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "botania:spawnermover"
+    },
+    "title": {
+      "translate": "advancement.botania:spawnerMoverUse"
+    },
+    "description": {
+      "translate": "advancement.botania:spawnerMoverUse.desc"
+    }
+  },
+  "parent": "botania:main/gaia_guardian_kill",
+  "criteria": {
+    "use_spawner_mover": {
+      "trigger": "botania:use_item_success",
+      "conditions": {
+        "item": {
+          "item": "botania:spawnermover"
+        }
+      }
+    }
+  }
+}

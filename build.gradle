@@ -2,14 +2,19 @@
 // For those who want the bleeding edge
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "http://maven.minecraftforge.net/"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'com.matthewprenger:CurseGradle:1.0-SNAPSHOT'
     }
 }
 
@@ -36,11 +41,15 @@ repositories {
         url = "http://maven.covers1624.net"
     }
     maven {
-        name = "TESLA"
-        url = "https://maven.mcmoddev.com"
+      
+        url 'http://maven.mcmoddev.com'
     }
     maven { //CurseMaven
         url = "https://www.cursemaven.com/"
+    }
+    maven {
+        name = 'jared maven'
+        url = 'https://maven.blamejared.com'
     }
 }
 
@@ -68,10 +77,11 @@ minecraft {
 }
 
 dependencies {
-    deobfCompile "curse.maven:embersrekindled-300777:3225431"
-    deobfCompile "mezz.jei:jei_${jei_version}"
-    deobfCompile "cofh:RedstoneFlux:${redstoneflux_version}"
+    compile "mezz.jei:jei_${jei_version}"
+    compile "cofh:RedstoneFlux:${redstoneflux_version}"
     compile "darkhax.tesla:Tesla-1.12.2:1.0.63"
+    compile "curse.maven:embersrekindled-300777:3225431"
+    provided "vazkii.botania:Botania:r1.10-364.4"
     
 }
 
