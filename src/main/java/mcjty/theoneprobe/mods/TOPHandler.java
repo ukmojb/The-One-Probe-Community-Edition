@@ -11,9 +11,6 @@ public class TOPHandler {
         if (Loader.isModLoaded("botania")) {
             TheOneProbeImp theOneProbeImp = TheOneProbe.theOneProbeImp;
             theOneProbeImp.registerProvider(new ManaPool());
-            theOneProbeImp.registerProvider(new Distributor());
-            theOneProbeImp.registerProvider(new ManaVoid());
-            theOneProbeImp.registerProvider(new RFGenerator());
             theOneProbeImp.registerProvider(new Spreader());
         }
         if (Loader.isModLoaded("embers")) {

@@ -16,10 +16,10 @@ public class Spreader implements IProbeInfoProvider{
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data){
         if(world.getTileEntity(data.getPos()) instanceof TileSpreader){
-            TilePool tile = (TilePool) world.getTileEntity(data.getPos());
+            TileSpreader tile = (TileSpreader) world.getTileEntity(data.getPos());
 
             final int mana = (int) tile.getCurrentMana();
-            final int manamax = (int) tile.manaCap;
+            final int manamax = (int) tile.getMaxMana();
             int light_bule = new Color(39,255,247).getRGB();
             int gray = Color.gray.getRGB();
             int white = Color.white.getRGB();
