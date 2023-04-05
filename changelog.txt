@@ -11,3 +11,12 @@
 1.0.2
 更新:
 生物，方块的显示全部本地化
+
+1.0.3
+更新:
+合并余烬高亮
+https://github.com/lyuxc-unknow/ember_top
+
+1.0.4
+更新:
+支持植物魔法(Botania)
