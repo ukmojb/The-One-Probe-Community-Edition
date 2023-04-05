@@ -52,6 +52,6 @@ public class ManaVoid implements IProbeInfoProvider{
 
     @Override
     public String getID() {
-        return "random.botania.Distributor";
+        return "random.botania.ManaVoid";
     }
 }

@@ -52,6 +52,6 @@ public class RFGenerator implements IProbeInfoProvider{
 
     @Override
     public String getID() {
-        return "random.botania.Distributor";
+        return "random.botania.RFGenerator";
     }
 }
