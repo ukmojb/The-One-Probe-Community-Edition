@@ -82,7 +82,6 @@ dependencies {
     compile "darkhax.tesla:Tesla-1.12.2:1.0.63"
     compile "curse.maven:embersrekindled-300777:3225431"
     compile "vazkii.botania:Botania:r1.10-364.4"
-    compile "ExtraMeteorP.extrabotany:ExtraBotany-r1.1-58r"
     
 }
 
