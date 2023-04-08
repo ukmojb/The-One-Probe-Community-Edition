@@ -97,7 +97,7 @@ public class OverlayRenderer {
         EntityPlayerSP entity = Minecraft.getMinecraft().player;
         Vec3d start  = entity.getPositionEyes(partialTicks);
         Vec3d vec31 = entity.getLook(partialTicks);
-        Vec3d end = start.addVector(vec31.x * dist, vec31.y * dist, vec31.z * dist);
+        Vec3d end = start.add(vec31.x * dist, vec31.y * dist, vec31.z * dist);
 
         mouseOver = entity.getEntityWorld().rayTraceBlocks(start, end, ConfigSetup.showLiquids);
         if (mouseOver == null) {

@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ProbeGoggles extends Item implements IBauble {
 
     public ProbeGoggles() {
-        setUnlocalizedName(TheOneProbe.MODID + ".probe_goggles");
+        setTranslationKey(TheOneProbe.MODID + ".probe_goggles");
         setRegistryName("probe_goggles");
         setCreativeTab(TheOneProbe.tabProbe);
     }

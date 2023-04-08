@@ -39,7 +39,7 @@ public class DebugProbeInfoProvider implements IProbeInfoProvider {
         String simpleName = block.getClass().getSimpleName();
         IProbeInfo vertical = probeInfo.vertical(new LayoutStyle().borderColor(0xffff4444).spacing(2))
                 .text(LABEL + I18n.format("top.Reg_Name") + ": " + INFO + block.getRegistryName().toString())
-                .text(LABEL + I18n.format("top.Unlocname") + ": " + INFO + block.getUnlocalizedName())
+                .text(LABEL + I18n.format("top.Unlocname") + ": " + INFO + block.getTranslationKey())
                 .text(LABEL + I18n.format("top.Meta") + ": " + INFO + blockState.getBlock().getMetaFromState(blockState))
                 .text(LABEL + I18n.format("top.Class") + ": " + INFO + simpleName)
                 .text(LABEL + I18n.format("top.Hardness") + ": " + INFO + block.getBlockHardness(blockState, world, pos))

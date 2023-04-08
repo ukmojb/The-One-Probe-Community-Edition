@@ -42,7 +42,7 @@ public class TheOneProbe {
 
     public static CreativeTabs tabProbe = new CreativeTabs("Probe") {
         @Override
-        public ItemStack getTabIconItem() {
+        public ItemStack createIcon() {
             return new ItemStack(ModItems.probe);
         }
     };

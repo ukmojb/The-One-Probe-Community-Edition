@@ -321,6 +321,6 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
     }
 
     private static String getBlockUnlocalizedName(Block block) {
-        return STARTLOC + block.getUnlocalizedName() + ".name" + ENDLOC;
+        return STARTLOC + block.getTranslationKey() + ".name" + ENDLOC;
     }
 }
