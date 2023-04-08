@@ -3,7 +3,7 @@ buildscript {
         maven {
             url = "https://maven.minecraftforge.net/"
         }
-		maven {
+        maven {
             url "https://files.minecraftforge.net/maven"
         }
         maven {
@@ -67,10 +67,11 @@ dependencies {
     deobfCompile 'curse.maven:embers-rekindled-300777:3695248'
     deobfCompile 'curse.maven:botania-225643:3330934'
     deobfCompile 'curse.maven:extrabotany-299086:3112313'
-	deobfCompile 'curse.maven:baubles-227083:2518667'
-	deobfCompile 'curse.maven:botanic-additions-310637:2939405'
-	
-	runtime 'curse.maven:hwyla-253449:2568751'
+    deobfCompile 'curse.maven:baubles-227083:2518667'
+    deobfCompile 'curse.maven:botanic_additions-310637:2939405'
+
+    runtime 'curse.maven:hwyla-253449:2568751'
+    runtime 'curse.maven:hammer-lib-247401:3611193'
 }
 
 jar {
@@ -87,11 +88,11 @@ processResources{
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
@@ -106,7 +107,7 @@ task apiJar(type: Jar) {
 }
 
 tasks.withType(JavaCompile) {
-options.encoding = "UTF-8"
+    options.encoding = "UTF-8"
 }
 
 artifacts {
