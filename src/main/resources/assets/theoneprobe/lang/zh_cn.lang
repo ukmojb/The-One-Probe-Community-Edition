@@ -76,3 +76,13 @@ top.Speed=速度
 
 top.Collar=项圈颜色
 
+
+#########################
+#        config         #
+#########################
+
+
+top.config.Botaniatop=是否开启植物魔法的TOP显示
+top.config.showBotaniaprogress=决定植物魔法的魔力条是否显示
+top.config.testinprogress=决定显示魔力值是显示在魔力条中还是魔力条下面(若showBotaniaprogress为false，则本选项不生效)
+

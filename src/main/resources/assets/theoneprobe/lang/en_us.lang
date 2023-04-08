@@ -76,3 +76,13 @@ top.Speed=Speed
 
 top.Collar=Collar
 
+
+#########################
+#        config         #
+#########################
+
+
+top.config.Botaniatop=Whether to enable Botania's top display
+top.config.showBotaniaprogress=Whether to show Botania's mana
+top.config.testinprogress=Whether the mana value should be displayed in or below the mana bar
+

@@ -11,6 +11,7 @@ import mcjty.theoneprobe.apiimpl.styles.DefaultOverlayStyle;
 import mcjty.theoneprobe.setup.ModSetup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -150,9 +151,9 @@ public class Config {
         dontShowContentsUnlessSneaking = cfg.getStringList("dontShowContentsUnlessSneaking", CATEGORY_THEONEPROBE, dontShowContentsUnlessSneaking, "A list of blocks for which we don't show chest contents automatically except if sneaking");
         dontSendNBT = cfg.getStringList("dontSendNBT", CATEGORY_THEONEPROBE, dontSendNBT, "A list of blocks for which we don't send NBT over the network. This is mostly useful for blocks that have HUGE NBT in their pickblock (itemstack)");
 
-        Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, compactEqualStacks, "Whether to enable Botania's top display");
-        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, compactEqualStacks, "Whether to show Botania's mana");
-        testinprogress = cfg.getBoolean("testinprogress", CATEGORY_BOTANIA, compactEqualStacks, "Whether the mana value should be displayed in or below the mana bar");
+        Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, compactEqualStacks, I18n.format("top.config.Botaniatop"));
+        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, compactEqualStacks, I18n.format("top.config.showBotaniaprogress"));
+        testinprogress = cfg.getBoolean("testinprogress", CATEGORY_BOTANIA, compactEqualStacks, I18n.format("top.config.testinprogress"));
 
 
         setupStyleConfig(cfg);
