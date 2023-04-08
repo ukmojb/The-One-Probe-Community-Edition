@@ -68,6 +68,7 @@ dependencies {
     deobfCompile 'curse.maven:botania-225643:3330934'
     deobfCompile 'curse.maven:extrabotany-299086:3112313'
 	deobfCompile 'curse.maven:baubles-227083:2518667'
+	deobfCompile 'curse.maven:botanic-additions-310637:2939405'
 	
 	runtime 'curse.maven:hwyla-253449:2568751'
 }

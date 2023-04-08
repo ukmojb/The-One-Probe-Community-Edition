@@ -30,6 +30,7 @@ public class ConfigSetup {
     public static String CATEGORY_THEONEPROBE = "theoneprobe";
     public static String CATEGORY_PROVIDERS = "providers";
     public static String CATEGORY_CLIENT = "client";
+    public static String CATEGORY_BOTANIA = "Botania";
 
     public static final int PROBE_NOTNEEDED = 0;
     public static final int PROBE_NEEDED = 1;
@@ -66,6 +67,7 @@ public class ConfigSetup {
 
     public static boolean showDebugInfo = true;
 
+    public static boolean Botaniatop = true;
     public static boolean showBotaniaprogress = true;
     public static boolean testinprogress = true;
 
@@ -164,8 +166,9 @@ public class ConfigSetup {
         dontShowContentsUnlessSneaking = cfg.getStringList("dontShowContentsUnlessSneaking", CATEGORY_THEONEPROBE, dontShowContentsUnlessSneaking, "A list of blocks for which we don't show chest contents automatically except if sneaking");
         dontSendNBT = cfg.getStringList("dontSendNBT", CATEGORY_THEONEPROBE, dontSendNBT, "A list of blocks for which we don't send NBT over the network. This is mostly useful for blocks that have HUGE NBT in their pickblock (itemstack)");
 
-        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_THEONEPROBE, compactEqualStacks, "决定显示植物魔法魔力的魔力条是否显示(别问为什么是中文，问就是英文不好)");
-        testinprogress = cfg.getBoolean("testinprogress", CATEGORY_THEONEPROBE, compactEqualStacks, "决定显示魔力值是显示在魔力条中还是魔力条下面(若showBotaniaprogress为false，则本选项不生效)");
+        Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, compactEqualStacks, "是否开启植物魔法的top显示");
+        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, compactEqualStacks, "决定显示植物魔法魔力的魔力条是否显示");
+        testinprogress = cfg.getBoolean("testinprogress", CATEGORY_BOTANIA, compactEqualStacks, "决定显示魔力值是显示在魔力条中还是魔力条下面(若showBotaniaprogress为false，则本选项不生效)");
 
 
 
