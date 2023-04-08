@@ -4,6 +4,7 @@ import mcjty.theoneprobe.TheOneProbe;
 import mcjty.theoneprobe.apiimpl.TheOneProbeImp;
 import mcjty.theoneprobe.mods.botania.*;
 import mcjty.theoneprobe.mods.ember_top.*;
+import mcjty.theoneprobe.mods.ExtraBotany.*;
 import net.minecraftforge.fml.common.Loader;
 
 public class TOPHandler {
@@ -12,6 +13,13 @@ public class TOPHandler {
             TheOneProbeImp theOneProbeImp = TheOneProbe.theOneProbeImp;
             theOneProbeImp.registerProvider(new ManaPool());
             theOneProbeImp.registerProvider(new Spreader());
+            theOneProbeImp.registerProvider(new TerraPlate());
+            theOneProbeImp.registerProvider(new RuneAltar());
+        }
+        if (Loader.isModLoaded("extrabotany")) {
+            TheOneProbeImp theOneProbeImp = TheOneProbe.theOneProbeImp;
+            theOneProbeImp.registerProvider(new ManaBuffer());
+            theOneProbeImp.registerProvider(new QuantumManaBuffer());
         }
         if (Loader.isModLoaded("embers")) {
             TheOneProbeImp theOneProbeImp = TheOneProbe.theOneProbeImp;
