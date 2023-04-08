@@ -83,6 +83,7 @@ dependencies {
     compile "curse.maven:embersrekindled-300777:3225431"
     compile "vazkii.botania:Botania:r1.10-364.4"
     compile "curse.maven:ExtraBontina_r1.1-60-beta-hotfix-299086:3112313"
+    compile "curse.maven:botanic-additions-310637:2939405"
     
 }
 
