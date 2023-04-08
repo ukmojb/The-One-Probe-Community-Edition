@@ -1,10 +1,10 @@
 package mcjty.theoneprobe.setup;
 
 import mcjty.theoneprobe.gui.GuiConfig;
+import mcjty.theoneprobe.gui.GuiNote;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import mcjty.theoneprobe.gui.GuiNote;
 
 public class GuiProxy implements IGuiHandler {
 

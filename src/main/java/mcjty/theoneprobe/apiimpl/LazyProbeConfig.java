@@ -33,7 +33,7 @@ public class LazyProbeConfig implements IProbeConfig {
                     .showMobSpawnerSetting(original.getShowMobSpawnerSetting())
                     .showAnimalOwnerSetting(original.getAnimalOwnerSetting())
                     .showHorseStatSetting(original.getHorseStatSetting())
-					.showSilverfish(original.getShowSilverfish());
+                    .showSilverfish(original.getShowSilverfish());
         }
         return original;
     }
@@ -235,15 +235,15 @@ public class LazyProbeConfig implements IProbeConfig {
     public ConfigMode getShowLeverSetting() {
         return original.getShowLeverSetting();
     }
-	
-	@Override
-	public ConfigMode getShowSilverfish() {
-		return original.getShowSilverfish();
-	}
-	
-	@Override
-	public IProbeConfig showSilverfish(ConfigMode mode){
-		realCopy().showSilverfish(mode);
-		return this;
-	}
+
+    @Override
+    public ConfigMode getShowSilverfish() {
+        return original.getShowSilverfish();
+    }
+
+    @Override
+    public IProbeConfig showSilverfish(ConfigMode mode) {
+        realCopy().showSilverfish(mode);
+        return this;
+    }
 }

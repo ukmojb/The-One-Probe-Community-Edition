@@ -40,6 +40,55 @@ public class PacketGetInfo implements IMessage {
     private Vec3d hitVec;
     private ItemStack pickBlock;
 
+    public PacketGetInfo() {
+    }
+
+    public PacketGetInfo(int dim, BlockPos pos, ProbeMode mode, RayTraceResult mouseOver, ItemStack pickBlock) {
+        this.dim = dim;
+        this.pos = pos;
+        this.mode = mode;
+        this.sideHit = mouseOver.sideHit;
+        this.hitVec = mouseOver.hitVec;
+        this.pickBlock = pickBlock;
+    }
+
+    private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, BlockPos blockPos, EnumFacing sideHit, Vec3d hitVec, ItemStack pickBlock) {
+        if (ConfigSetup.needsProbe == PROBE_NEEDEDFOREXTENDED) {
+            // We need a probe only for extended information
+            if (!ModItems.hasAProbeSomewhere(player)) {
+                // No probe anywhere, switch EXTENDED to NORMAL
+                if (mode == ProbeMode.EXTENDED) {
+                    mode = ProbeMode.NORMAL;
+                }
+            }
+        } else if (ConfigSetup.needsProbe == PROBE_NEEDEDHARD && !ModItems.hasAProbeSomewhere(player)) {
+            // The server says we need a probe but we don't have one in our hands
+            return null;
+        }
+
+        IBlockState state = world.getBlockState(blockPos);
+        ProbeInfo probeInfo = TheOneProbe.theOneProbeImp.create();
+        IProbeHitData data = new ProbeHitData(blockPos, hitVec, sideHit, pickBlock);
+
+        IProbeConfig probeConfig = TheOneProbe.theOneProbeImp.createProbeConfig();
+        List<IProbeConfigProvider> configProviders = TheOneProbe.theOneProbeImp.getConfigProviders();
+        for (IProbeConfigProvider configProvider : configProviders) {
+            configProvider.getProbeConfig(probeConfig, player, world, state, data);
+        }
+        ConfigSetup.setRealConfig(probeConfig);
+
+        List<IProbeInfoProvider> providers = TheOneProbe.theOneProbeImp.getProviders();
+        for (IProbeInfoProvider provider : providers) {
+            try {
+                provider.addProbeInfo(mode, probeInfo, player, world, state, data);
+            } catch (Throwable e) {
+                ThrowableIdentity.registerThrowable(e);
+                probeInfo.text(LABEL + "Error: " + ERROR + provider.getID());
+            }
+        }
+        return probeInfo;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf) {
         dim = buf.readInt();
@@ -84,18 +133,6 @@ public class PacketGetInfo implements IMessage {
         }
     }
 
-    public PacketGetInfo() {
-    }
-
-    public PacketGetInfo(int dim, BlockPos pos, ProbeMode mode, RayTraceResult mouseOver, ItemStack pickBlock) {
-        this.dim = dim;
-        this.pos = pos;
-        this.mode = mode;
-        this.sideHit = mouseOver.sideHit;
-        this.hitVec = mouseOver.hitVec;
-        this.pickBlock = pickBlock;
-    }
-
     public static class Handler implements IMessageHandler<PacketGetInfo, IMessage> {
         @Override
         public IMessage onMessage(PacketGetInfo message, MessageContext ctx) {
@@ -111,43 +148,6 @@ public class PacketGetInfo implements IMessage {
                 PacketHandler.INSTANCE.sendTo(new PacketReturnInfo(message.dim, message.pos, probeInfo), ctx.getServerHandler().player);
             }
         }
-    }
-
-    private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, BlockPos blockPos, EnumFacing sideHit, Vec3d hitVec, ItemStack pickBlock) {
-        if (ConfigSetup.needsProbe == PROBE_NEEDEDFOREXTENDED) {
-            // We need a probe only for extended information
-            if (!ModItems.hasAProbeSomewhere(player)) {
-                // No probe anywhere, switch EXTENDED to NORMAL
-                if (mode == ProbeMode.EXTENDED) {
-                    mode = ProbeMode.NORMAL;
-                }
-            }
-        } else if (ConfigSetup.needsProbe == PROBE_NEEDEDHARD && !ModItems.hasAProbeSomewhere(player)) {
-            // The server says we need a probe but we don't have one in our hands
-            return null;
-        }
-
-        IBlockState state = world.getBlockState(blockPos);
-        ProbeInfo probeInfo = TheOneProbe.theOneProbeImp.create();
-        IProbeHitData data = new ProbeHitData(blockPos, hitVec, sideHit, pickBlock);
-
-        IProbeConfig probeConfig = TheOneProbe.theOneProbeImp.createProbeConfig();
-        List<IProbeConfigProvider> configProviders = TheOneProbe.theOneProbeImp.getConfigProviders();
-        for (IProbeConfigProvider configProvider : configProviders) {
-            configProvider.getProbeConfig(probeConfig, player, world, state, data);
-        }
-        ConfigSetup.setRealConfig(probeConfig);
-
-        List<IProbeInfoProvider> providers = TheOneProbe.theOneProbeImp.getProviders();
-        for (IProbeInfoProvider provider : providers) {
-            try {
-                provider.addProbeInfo(mode, probeInfo, player, world, state, data);
-            } catch (Throwable e) {
-                ThrowableIdentity.registerThrowable(e);
-                probeInfo.text(LABEL + "Error: " + ERROR + provider.getID());
-            }
-        }
-        return probeInfo;
     }
 
 }

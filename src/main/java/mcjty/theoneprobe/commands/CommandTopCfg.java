@@ -25,18 +25,7 @@ import java.util.function.Consumer;
 public class CommandTopCfg implements ICommand {
 
 
-    @Override
-    public String getName() {
-        return "topcfg";
-    }
-
-    @Override
-    public String getUsage(ICommandSender sender) {
-        String args = StringUtils.join(SUBCOMMANDS.keySet(), " | ");
-        return "topcfg [ " + args + " ]";
-    }
-
-    private static Map<String,Consumer<String[]>> SUBCOMMANDS = new HashMap<>();
+    private static Map<String, Consumer<String[]>> SUBCOMMANDS = new HashMap<>();
 
     static {
         SUBCOMMANDS.put("center", s -> ConfigSetup.setPos(-1, -1, -1, -1));
@@ -60,7 +49,6 @@ public class CommandTopCfg implements ICommand {
         SUBCOMMANDS.put("defaultinmain", s -> ConfigSetup.setExtendedInMain(false));
     }
 
-
     private static void setPos(String[] args) {
         if (args.length != 5) {
             return;
@@ -73,6 +61,17 @@ public class CommandTopCfg implements ICommand {
             ConfigSetup.setPos(leftx, topy, rightx, bottomy);
         } catch (NumberFormatException e) {
         }
+    }
+
+    @Override
+    public String getName() {
+        return "topcfg";
+    }
+
+    @Override
+    public String getUsage(ICommandSender sender) {
+        String args = StringUtils.join(SUBCOMMANDS.keySet(), " | ");
+        return "topcfg [ " + args + " ]";
     }
 
     @Override
@@ -91,7 +90,7 @@ public class CommandTopCfg implements ICommand {
         String cmd = args[0];
         Consumer<String[]> consumer = SUBCOMMANDS.get(cmd);
         if (consumer == null) {
-            ((EntityPlayer)sender).sendStatusMessage(new TextComponentString(TextFormatting.RED + "Unknown style option!"), false);
+            ((EntityPlayer) sender).sendStatusMessage(new TextComponentString(TextFormatting.RED + "Unknown style option!"), false);
         } else {
             consumer.accept(args);
         }

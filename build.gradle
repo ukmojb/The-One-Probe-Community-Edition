@@ -1,90 +1,77 @@
-
-// For those who want the bleeding edge
 buildscript {
     repositories {
-        mavenCentral()
         maven {
-            name = "forge"
-            url = "http://maven.minecraftforge.net/"
+            url = "https://maven.minecraftforge.net/"
         }
         maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url "https://files.minecraftforge.net/maven"
+        }
+        maven {
+            url = 'https://maven.cleanroommc.com/'
+        }
+        maven {
+            url = 'https://repo.spongepowered.org/maven/'
+        }
+        maven {
+            url = 'https://repo1.maven.org/maven2/'
+        }
+        maven {
+            url = 'https://maven.cleanroommc.com/'
         }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath 'com.matthewprenger:CurseGradle:1.0-SNAPSHOT'
     }
-}
-
-plugins {
-    id 'com.matthewprenger.cursegradle' version '1.1.0'
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'maven-publish'
 
 repositories {
-    maven { // JEI
-        url = "http://dvs1.progwml6.com/files/maven"
-    }
-    maven { // CompatLayer
-        url = "http://maven.k-4u.nl"
+    maven {
+        url = 'https://www.cursemaven.com/'
     }
     maven {
-        name = "sonatype"
-        url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        url = 'https://maven.minecraftforge.net'
     }
     maven {
-        name = "CoFH Maven"
-        url = "http://maven.covers1624.net"
-    }
-    maven {
-      
-        url 'http://maven.mcmoddev.com'
-    }
-    maven { //CurseMaven
-        url = "https://www.cursemaven.com/"
-    }
-    maven {
-        name = 'jared maven'
-        url = 'https://maven.blamejared.com'
+        url = 'https://maven.cleanroommc.com/'
     }
 }
 
-def ENV = System.getenv()
-if (ENV.DRONE_BUILD_NUMBER) {
-    version += ".n" + ENV.DRONE_BUILD_NUMBER
-}
 group= "mcjty.theoneprobe" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "theoneprobe"
+archivesBaseName = "TheOneProbe-CE"
 
-if (System.getenv('BUILD_NUMBER') != null) {
-    version += "-${System.getenv('BUILD_NUMBER')}"
+sourceCompatibility = targetCompatibility = '1.8'
+
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
 }
-
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 minecraft {
-    version = "${minecraft_version}-${forge_version}"
+    version = '1.12.2-14.23.5.2847'
     runDir = "run"
-    mappings = mcp_mappings
+    mappings = 'stable_39'
     useDepAts = true
 
 }
 
+runClient {
+    args '--username', 'sddsd2332'
+    jvmArgs '-Xms4G', '-Xmx8G'
+}
+
 dependencies {
-    compile "mezz.jei:jei_${jei_version}"
-    compile "cofh:RedstoneFlux:${redstoneflux_version}"
-    compile "darkhax.tesla:Tesla-1.12.2:1.0.63"
-    compile "curse.maven:embersrekindled-300777:3225431"
-    compile "vazkii.botania:Botania:r1.10-364.4"
-    compile "curse.maven:ExtraBontina_r1.1-60-beta-hotfix-299086:3112313"
-    compile "curse.maven:botanic-additions-310637:2939405"
-    
+    deobfCompile 'curse.maven:HadEnoughItems-557549:4451828'
+    deobfCompile 'curse.maven:redstone_flux-270789:2920436'
+    deobfCompile 'curse.maven:tesla-244651:2487962'
+    deobfCompile 'curse.maven:embers-rekindled-300777:3695248'
+    deobfCompile 'curse.maven:botania-225643:3330934'
+    deobfCompile 'curse.maven:extrabotany-299086:3112313'
+    deobfCompile 'curse.maven:baubles-227083:2518667'
+    deobfCompile 'curse.maven:botanic_additions-310637:2939405'
+
+    runtime 'curse.maven:hwyla-253449:2568751'
+    runtime 'curse.maven:hammer-lib-247401:3611193'
 }
 
 jar {
@@ -93,8 +80,7 @@ jar {
     }
 }
 
-processResources
-{
+processResources{
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -102,11 +88,11 @@ processResources
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
@@ -120,80 +106,10 @@ task apiJar(type: Jar) {
     }
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 artifacts {
     archives apiJar
-}
-
-publishing {
-    tasks.publish.dependsOn 'build'
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifact apiJar
-            artifact sourceJar
-        }
-    }
-
-    repositories {
-        if (project.hasProperty('mavendir')) {
-            maven { url mavendir }
-        } else {
-            mavenLocal()
-        }
-    }
-}
-
-String getChangelogText() {
-    def changelogFile = file('changelog.txt')
-    String str = ''
-    int lineCount = 0
-    boolean done = false
-    changelogFile.eachLine {
-        if (done || it == null) {
-            return
-        }
-        if (it.size() > 1) {
-            def temp = it
-            if (lineCount == 0) {
-                temp = "${modname} ${version}"
-                temp = "<h2>$temp</h2>"
-            } else if (it.startsWith('-')) {
-                temp = "&nbsp;&nbsp;&nbsp;$temp"
-                temp = temp.replaceAll("(\\S+\\/\\S+)#([0-9]+)\\b", "<a href=\"https://github.com/\$1/issues/\$2\">\$0</a>");
-                temp = temp.replaceAll("#([0-9]+)\\b(?!<\\/a>)", "<a href=\"https://github.com/$github_project/issues/\$1\">\$0</a>");
-            } else {
-                temp = "<h4>$temp</h4>"
-            }
-            str += "$temp<br/>"
-            lineCount++
-            return
-        } else {
-            done = true
-        }
-    }
-    return str
-}
-
-tasks.curseforge.enabled = project.hasProperty('curseforge_key')
-
-curseforge {
-    if (project.hasProperty('curseforge_key')) {
-        apiKey = project.curseforge_key
-    }
-
-    project {
-        id = project.projectId
-        changelog = System.getenv('CHANGELOG') == null || System.getenv('CHANGELOG').equals('none') ? getChangelogText() : System.getenv('CHANGELOG')
-        changelogType = 'html'
-        releaseType = project.curse_type
-        addGameVersion '1.12.2'
-        mainArtifact(jar) {
-            displayName = "${modname} - ${version}"
-        }
-        relations {
-            optionalLibrary 'baubles'
-            optionalLibrary 'tesla'
-            optionalLibrary 'redstone-flux'
-        }
-    }
 }

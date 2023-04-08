@@ -3,7 +3,6 @@ package mcjty.theoneprobe.mods.ember_top;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.TileEntityEmitter;
@@ -20,8 +19,8 @@ public class ember_emitter implements IProbeInfoProvider {
             int orange = Color.ORANGE.getRGB();
             int yellow = Color.yellow.getRGB();
             int white = Color.white.getRGB();
-            if(tileEntityEmitter.capability.getEmber()>0){
-                probeInfo.progress(ember, max+1, new ProgressStyle().prefix("Ember" + ":" + ember).suffix("/" + max)
+            if (tileEntityEmitter.capability.getEmber() > 0) {
+                probeInfo.progress(ember, max + 1, new ProgressStyle().prefix("Ember" + ":" + ember).suffix("/" + max)
                         .width(110)
                         .numberFormat(NumberFormat.NONE)
                         .borderColor(yellow)

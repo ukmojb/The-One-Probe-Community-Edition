@@ -1,9 +1,9 @@
 package mcjty.theoneprobe.apiimpl;
 
-import mcjty.theoneprobe.config.ConfigSetup;
 import mcjty.theoneprobe.TheOneProbe;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.elements.*;
+import mcjty.theoneprobe.config.ConfigSetup;
 
 import java.util.*;
 
@@ -24,7 +24,7 @@ public class TheOneProbeImp implements ITheOneProbe {
     private List<IProbeInfoEntityProvider> entityProviders = new ArrayList<>();
     private List<IBlockDisplayOverride> blockOverrides = new ArrayList<>();
     private List<IEntityDisplayOverride> entityOverrides = new ArrayList<>();
-    private Map<Integer,IElementFactory> factories = new HashMap<>();
+    private Map<Integer, IElementFactory> factories = new HashMap<>();
     private int lastId = 0;
 
     public TheOneProbeImp() {
@@ -42,7 +42,7 @@ public class TheOneProbeImp implements ITheOneProbe {
     }
 
     private int findProvider(String id) {
-        for (int i = 0 ; i < providers.size() ; i++) {
+        for (int i = 0; i < providers.size(); i++) {
             if (id.equals(providers.get(i).getID())) {
                 return i;
             }
@@ -61,7 +61,7 @@ public class TheOneProbeImp implements ITheOneProbe {
     }
 
     private int findEntityProvider(String id) {
-        for (int i = 0 ; i < entityProviders.size() ; i++) {
+        for (int i = 0; i < entityProviders.size(); i++) {
             if (id.equals(entityProviders.get(i).getID())) {
                 return i;
             }

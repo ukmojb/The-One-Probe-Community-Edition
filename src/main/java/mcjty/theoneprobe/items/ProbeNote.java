@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ProbeNote extends Item {
 
     public ProbeNote() {
-        setUnlocalizedName(TheOneProbe.MODID + ".probenote");
+        setTranslationKey(TheOneProbe.MODID + ".probenote");
         setRegistryName("probenote");
         setCreativeTab(TheOneProbe.tabProbe);
         setMaxStackSize(1);

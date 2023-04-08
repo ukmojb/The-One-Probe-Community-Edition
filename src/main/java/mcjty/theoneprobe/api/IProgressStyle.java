@@ -32,7 +32,7 @@ public interface IProgressStyle {
     IProgressStyle height(int h);
 
     IProgressStyle lifeBar(boolean b);
-    
+
     IProgressStyle armorBar(boolean b);
 
     int getBorderColor();

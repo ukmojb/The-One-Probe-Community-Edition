@@ -20,18 +20,6 @@ public abstract class AbstractElementPanel implements IElement, IProbeInfo {
     protected ElementAlignment alignment;
     protected IProbeConfig overriddenConfig;
 
-    @Override
-    public void render(int x, int y) {
-        if (borderColor != null) {
-            int w = getWidth();
-            int h = getHeight();
-            RenderHelper.drawHorizontalLine(x, y, x + w - 1, borderColor);
-            RenderHelper.drawHorizontalLine(x, y + h - 1, x + w - 1, borderColor);
-            RenderHelper.drawVerticalLine(x, y, y + h - 1, borderColor);
-            RenderHelper.drawVerticalLine(x + w - 1, y, y + h, borderColor);
-        }
-    }
-
     public AbstractElementPanel(Integer borderColor, int spacing, ElementAlignment alignment) {
         this.borderColor = borderColor;
         this.spacing = spacing;
@@ -45,6 +33,18 @@ public abstract class AbstractElementPanel implements IElement, IProbeInfo {
         }
         spacing = buf.readShort();
         alignment = ElementAlignment.values()[buf.readShort()];
+    }
+
+    @Override
+    public void render(int x, int y) {
+        if (borderColor != null) {
+            int w = getWidth();
+            int h = getHeight();
+            RenderHelper.drawHorizontalLine(x, y, x + w - 1, borderColor);
+            RenderHelper.drawHorizontalLine(x, y + h - 1, x + w - 1, borderColor);
+            RenderHelper.drawVerticalLine(x, y, y + h - 1, borderColor);
+            RenderHelper.drawVerticalLine(x + w - 1, y, y + h, borderColor);
+        }
     }
 
     @Override

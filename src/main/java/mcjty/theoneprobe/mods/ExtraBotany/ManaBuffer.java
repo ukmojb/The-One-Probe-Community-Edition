@@ -1,14 +1,14 @@
 package mcjty.theoneprobe.mods.ExtraBotany;
 
+import com.meteor.extrabotany.common.block.tile.TileManaBuffer;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import mcjty.theoneprobe.config.ConfigSetup;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import com.meteor.extrabotany.common.block.tile.*;
 
-import java.awt.Color;
+import java.awt.*;
 
 
 public class ManaBuffer implements IProbeInfoProvider {

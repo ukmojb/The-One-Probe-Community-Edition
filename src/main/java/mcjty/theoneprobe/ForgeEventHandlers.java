@@ -28,7 +28,7 @@ public class ForgeEventHandlers {
     }
 
     @SubscribeEvent
-    public void onEntityConstructing(AttachCapabilitiesEvent<Entity> event){
+    public void onEntityConstructing(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer) {
             if (!event.getObject().hasCapability(PlayerProperties.PLAYER_GOT_NOTE, null)) {
                 event.addCapability(new ResourceLocation(TheOneProbe.MODID, "Properties"), new PropertiesDispatcher());

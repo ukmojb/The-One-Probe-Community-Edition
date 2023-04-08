@@ -3,7 +3,7 @@ package mcjty.theoneprobe.api;
 /**
  * Main interface for this mod. Use this to build probe information
  * Get a reference to an implementation of this interface by calling:
- *         FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "<whatever>.YourClass$GetTheOneProbe");
+ * FMLInterModComms.sendFunctionMessage("theoneprobe", "getTheOneProbe", "<whatever>.YourClass$GetTheOneProbe");
  */
 public interface ITheOneProbe {
 
@@ -13,15 +13,15 @@ public interface ITheOneProbe {
      * with the same string ID as one that already exists it will replace that provider. This
      * is one way to replace the standard providers. TheOneProbe has the following standard
      * providers (registered in the given order):
-     *
-     *   - "theoneprobe:default": this is the default provider that takes care of showing
-     *     the block icon, name and modid as well as the harvest level of the block and other
-     *     basic information
-     *   - "theoneprobe:debug": this provider shows debug information if the creative probe
-     *     is being used.
-     *   - "theoneprobe:block": this provider will check if the block has an IProbeInfoAccessor
-     *     and then use that. i.e. this is the provider that takes care of making sure
-     *     that IProbeInfoAccessor works.
+     * <p>
+     * - "theoneprobe:default": this is the default provider that takes care of showing
+     * the block icon, name and modid as well as the harvest level of the block and other
+     * basic information
+     * - "theoneprobe:debug": this provider shows debug information if the creative probe
+     * is being used.
+     * - "theoneprobe:block": this provider will check if the block has an IProbeInfoAccessor
+     * and then use that. i.e. this is the provider that takes care of making sure
+     * that IProbeInfoAccessor works.
      *
      * @param provider
      */
@@ -33,14 +33,14 @@ public interface ITheOneProbe {
      * with the same string ID as one that already exists it will replace that provider. This
      * is one way to replace the standard providers. TheOneProbe has the following standard
      * providers (registered in the given order):
-     *
-     *   - "theoneprobe:entity.default": this is the default provider that takes care of showing
-     *     the entity name and modid as well as the current health of the entity.
-     *   - "theoneprobe:entity.debug": this provider shows debug information if the creative probe
-     *     is being used.
-     *   - "theoneprobe:entity.entity": this provider will check if the entity has an IProbeInfoEntityAccessor
-     *     and then use that. i.e. this is the provider that takes care of making sure
-     *     that IProbeInfoEntityAccessor works.
+     * <p>
+     * - "theoneprobe:entity.default": this is the default provider that takes care of showing
+     * the entity name and modid as well as the current health of the entity.
+     * - "theoneprobe:entity.debug": this provider shows debug information if the creative probe
+     * is being used.
+     * - "theoneprobe:entity.entity": this provider will check if the entity has an IProbeInfoEntityAccessor
+     * and then use that. i.e. this is the provider that takes care of making sure
+     * that IProbeInfoEntityAccessor works.
      *
      * @param provider
      */
@@ -48,6 +48,7 @@ public interface ITheOneProbe {
 
     /**
      * Register an element factory.
+     *
      * @return an id to use when defining elements using this factory
      */
     int registerElementFactory(IElementFactory factory);

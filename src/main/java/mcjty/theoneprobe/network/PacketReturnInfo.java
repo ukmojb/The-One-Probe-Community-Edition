@@ -15,6 +15,15 @@ public class PacketReturnInfo implements IMessage {
     private BlockPos pos;
     private ProbeInfo probeInfo;
 
+    public PacketReturnInfo() {
+    }
+
+    public PacketReturnInfo(int dim, BlockPos pos, ProbeInfo probeInfo) {
+        this.dim = dim;
+        this.pos = pos;
+        this.probeInfo = probeInfo;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf) {
         dim = buf.readInt();
@@ -39,15 +48,6 @@ public class PacketReturnInfo implements IMessage {
         } else {
             buf.writeBoolean(false);
         }
-    }
-
-    public PacketReturnInfo() {
-    }
-
-    public PacketReturnInfo(int dim, BlockPos pos, ProbeInfo probeInfo) {
-        this.dim = dim;
-        this.pos = pos;
-        this.probeInfo = probeInfo;
     }
 
     public static class Handler implements IMessageHandler<PacketReturnInfo, IMessage> {

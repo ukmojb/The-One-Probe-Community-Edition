@@ -3,7 +3,6 @@ package mcjty.theoneprobe.mods.ember_top;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.TileEntityAlchemyPedestal;
@@ -22,8 +21,8 @@ public class ember_alchemy_pedestal implements IProbeInfoProvider {
             int darkGrayRGB = Color.darkGray.getRGB();
             int gary = SystemColor.GRAY.getRGB();
             int white = Color.white.getRGB();
-            if(!tileEntityAlchemyPedestal.inventory.getStackInSlot(0).isEmpty()){
-                probeInfo.progress(tileEntityAlchemyPedestal.inventory.getStackInSlot(0).getCount()-1, 64, new ProgressStyle().prefix("Ash" + ":" + tileEntityAlchemyPedestal.inventory.getStackInSlot(0).getCount()).suffix("/" + "64")
+            if (!tileEntityAlchemyPedestal.inventory.getStackInSlot(0).isEmpty()) {
+                probeInfo.progress(tileEntityAlchemyPedestal.inventory.getStackInSlot(0).getCount() - 1, 64, new ProgressStyle().prefix("Ash" + ":" + tileEntityAlchemyPedestal.inventory.getStackInSlot(0).getCount()).suffix("/" + "64")
                         .width(101)
                         .numberFormat(NumberFormat.NONE)
                         .borderColor(gary)

@@ -22,6 +22,7 @@ public interface IProbeHitData {
      * Access the client-side result of getPickBlock() for the given block. That way
      * you don't have to call this server side because that can sometimes be
      * problematic
+     *
      * @return the picked block or null
      */
     @Nullable

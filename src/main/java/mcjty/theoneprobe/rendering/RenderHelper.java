@@ -287,8 +287,8 @@ public class RenderHelper {
      */
     public static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, int twidth, int theight) {
         float zLevel = 0.01f;
-        float f = (1.0f/twidth);
-        float f1 = (1.0f/theight);
+        float f = (1.0f / twidth);
+        float f1 = (1.0f / theight);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -305,8 +305,8 @@ public class RenderHelper {
      */
     public static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
         float zLevel = 0.01f;
-        float f = (1/256.0f);
-        float f1 = (1/256.0f);
+        float f = (1 / 256.0f);
+        float f1 = (1 / 256.0f);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
@@ -320,8 +320,8 @@ public class RenderHelper {
 
     public static void drawTexturedModalRect(int x, int y, TextureAtlasSprite sprite, int width, int height) {
         float zLevel = 0.01f;
-        float f = (1/256.0f);
-        float f1 = (1/256.0f);
+        float f = (1 / 256.0f);
+        float f1 = (1 / 256.0f);
 
         float u1 = sprite.getMinU();
         float v1 = sprite.getMinV();
@@ -530,7 +530,7 @@ public class RenderHelper {
                 GlStateManager.disableTexture2D();
                 Tessellator tessellator1 = Tessellator.getInstance();
                 BufferBuilder vertexbuffer1 = tessellator1.getBuffer();
-                draw(vertexbuffer1, xPosition, yPosition + (int)Math.floor(16.0F * (1.0F - f)), 16, (int)Math.ceil(16.0F * f), 255, 255, 255, 127);
+                draw(vertexbuffer1, xPosition, yPosition + (int) Math.floor(16.0F * (1.0F - f)), 16, (int) Math.ceil(16.0F * f), 255, 255, 255, 127);
                 GlStateManager.enableTexture2D();
                 GlStateManager.enableLighting();
                 GlStateManager.enableDepth();
@@ -580,6 +580,25 @@ public class RenderHelper {
         return width;
     }
 
+    private static Vector Cross(Vector a, Vector b) {
+        float x = a.y * b.z - a.z * b.y;
+        float y = a.z * b.x - a.x * b.z;
+        float z = a.x * b.y - a.y * b.x;
+        return new Vector(x, y, z);
+    }
+
+    private static Vector Sub(Vector a, Vector b) {
+        return new Vector(a.x - b.x, a.y - b.y, a.z - b.z);
+    }
+
+    private static Vector Add(Vector a, Vector b) {
+        return new Vector(a.x + b.x, a.y + b.y, a.z + b.z);
+    }
+
+    private static Vector Mul(Vector a, float f) {
+        return new Vector(a.x * f, a.y * f, a.z * f);
+    }
+
     public static class Vector {
         public final float x;
         public final float y;
@@ -611,25 +630,6 @@ public class RenderHelper {
             float n = norm();
             return new Vector(x / n, y / n, z / n);
         }
-    }
-
-    private static Vector Cross(Vector a, Vector b) {
-        float x = a.y * b.z - a.z * b.y;
-        float y = a.z * b.x - a.x * b.z;
-        float z = a.x * b.y - a.y * b.x;
-        return new Vector(x, y, z);
-    }
-
-    private static Vector Sub(Vector a, Vector b) {
-        return new Vector(a.x - b.x, a.y - b.y, a.z - b.z);
-    }
-
-    private static Vector Add(Vector a, Vector b) {
-        return new Vector(a.x + b.x, a.y + b.y, a.z + b.z);
-    }
-
-    private static Vector Mul(Vector a, float f) {
-        return new Vector(a.x * f, a.y * f, a.z * f);
     }
 
 

@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 
 public class ElementProgress implements IElement {
 
+    private static DecimalFormat dfCommas = new DecimalFormat("###,###");
     private final long current;
     private final long max;
     private final IProgressStyle style;
@@ -40,8 +41,6 @@ public class ElementProgress implements IElement {
                 .lifeBar(buf.readBoolean())
                 .armorBar(buf.readBoolean());
     }
-
-    private static DecimalFormat dfCommas = new DecimalFormat("###,###");
 
     /**
      * If the suffix starts with 'm' we can possibly drop that

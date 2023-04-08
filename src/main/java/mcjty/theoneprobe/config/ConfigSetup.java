@@ -25,17 +25,15 @@ import static mcjty.theoneprobe.api.TextStyleClass.*;
 
 public class ConfigSetup {
 
-    public static Configuration mainConfig;
-
-    public static String CATEGORY_THEONEPROBE = "theoneprobe";
-    public static String CATEGORY_PROVIDERS = "providers";
-    public static String CATEGORY_CLIENT = "client";
-    public static String CATEGORY_BOTANIA = "Botania";
-
     public static final int PROBE_NOTNEEDED = 0;
     public static final int PROBE_NEEDED = 1;
     public static final int PROBE_NEEDEDHARD = 2;
     public static final int PROBE_NEEDEDFOREXTENDED = 3;
+    public static Configuration mainConfig;
+    public static String CATEGORY_THEONEPROBE = "theoneprobe";
+    public static String CATEGORY_PROVIDERS = "providers";
+    public static String CATEGORY_CLIENT = "client";
+    public static String CATEGORY_BOTANIA = "Botania";
     public static int needsProbe = PROBE_NEEDEDFOREXTENDED;
 
     public static boolean extendedInMain = false;
@@ -51,52 +49,46 @@ public class ConfigSetup {
     // Chest related settings
     public static int showSmallChestContentsWithoutSneaking = 0;
     public static int showItemDetailThresshold = 4;
-    public static String[] showContentsWithoutSneaking = { "storagedrawers:basicDrawers", "storagedrawersextra:extra_drawers" };
+    public static String[] showContentsWithoutSneaking = {"storagedrawers:basicDrawers", "storagedrawersextra:extra_drawers"};
     public static String[] dontShowContentsUnlessSneaking = {};
-    public static String[] dontSendNBT = { };
-
-    private static Set<ResourceLocation> inventoriesToShow = null;
-    private static Set<ResourceLocation> inventoriesToNotShow = null;
-    private static Set<ResourceLocation> dontSendNBTSet = null;
-
+    public static String[] dontSendNBT = {};
     public static float probeDistance = 6;
     public static boolean showLiquids = false;
     public static boolean isVisible = true;
     public static boolean compactEqualStacks = true;
     public static boolean holdKeyToMakeVisible = false;
-
     public static boolean showDebugInfo = true;
-
     public static boolean Botaniatop = true;
     public static boolean showBotaniaprogress = true;
     public static boolean testinprogress = true;
-
+    public static int showBreakProgress = 1;    // 0 == off, 1 == bar, 2 == text
+    public static boolean harvestStyleVanilla = true;
+    public static int chestContentsBorderColor = 0xff006699;
+    public static float tooltipScale = 1.0f;
+    public static int rfbarFilledColor = 0xffdd0000;
+    public static int rfbarAlternateFilledColor = 0xff430000;
+    public static int rfbarBorderColor = 0xff555555;
+    public static int tankbarFilledColor = 0xff0000dd;
+    public static int tankbarAlternateFilledColor = 0xff000043;
+    public static int tankbarBorderColor = 0xff555555;
+    public static Map<TextStyleClass, String> defaultTextStyleClasses = new HashMap<>();
+    public static Map<TextStyleClass, String> textStyleClasses = new HashMap<>();
+    public static int loggingThrowableTimeout = 20000;
+    public static boolean showCollarColor = true;
+    private static Set<ResourceLocation> inventoriesToShow = null;
+    private static Set<ResourceLocation> inventoriesToNotShow = null;
+    private static Set<ResourceLocation> dontSendNBTSet = null;
     private static int leftX = 5;
     private static int topY = 5;
     private static int rightX = -1;
     private static int bottomY = -1;
-
-    public static int showBreakProgress = 1;    // 0 == off, 1 == bar, 2 == text
-    public static boolean harvestStyleVanilla = true;
-
-    public static int chestContentsBorderColor = 0xff006699;
     private static int boxBorderColor = 0xff999999;
     private static int boxFillColor = 0x55006699;
     private static int boxThickness = 2;
     private static int boxOffset = 0;
-
-    public static float tooltipScale = 1.0f;
-
-    public static int rfbarFilledColor = 0xffdd0000;
-    public static int rfbarAlternateFilledColor = 0xff430000;
-    public static int rfbarBorderColor = 0xff555555;
-
-    public static int tankbarFilledColor = 0xff0000dd;
-    public static int tankbarAlternateFilledColor = 0xff000043;
-    public static int tankbarBorderColor = 0xff555555;
-
-    public static Map<TextStyleClass, String> defaultTextStyleClasses = new HashMap<>();
-    public static Map<TextStyleClass, String> textStyleClasses = new HashMap<>();
+    private static IOverlayStyle defaultOverlayStyle;
+    private static ProbeConfig defaultConfig = new ProbeConfig();
+    private static IProbeConfig realConfig;
 
     static {
         defaultTextStyleClasses.put(NAME, "white");
@@ -112,24 +104,16 @@ public class ConfigSetup {
         textStyleClasses = new HashMap<>(defaultTextStyleClasses);
     }
 
-    public static int loggingThrowableTimeout = 20000;
-
-    public static boolean showCollarColor = true;
-
-    private static IOverlayStyle defaultOverlayStyle;
-    private static ProbeConfig defaultConfig = new ProbeConfig();
-    private static IProbeConfig realConfig;
-
     public static ProbeConfig getDefaultConfig() {
         return defaultConfig;
     }
 
-    public static void setRealConfig(IProbeConfig config) {
-        realConfig = config;
-    }
-
     public static IProbeConfig getRealConfig() {
         return realConfig;
+    }
+
+    public static void setRealConfig(IProbeConfig config) {
+        realConfig = config;
     }
 
     public static void init(Configuration cfg) {
@@ -166,10 +150,9 @@ public class ConfigSetup {
         dontShowContentsUnlessSneaking = cfg.getStringList("dontShowContentsUnlessSneaking", CATEGORY_THEONEPROBE, dontShowContentsUnlessSneaking, "A list of blocks for which we don't show chest contents automatically except if sneaking");
         dontSendNBT = cfg.getStringList("dontSendNBT", CATEGORY_THEONEPROBE, dontSendNBT, "A list of blocks for which we don't send NBT over the network. This is mostly useful for blocks that have HUGE NBT in their pickblock (itemstack)");
 
-        Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, compactEqualStacks, "是否开启植物魔法的top显示");
-        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, compactEqualStacks, "决定显示植物魔法魔力的魔力条是否显示");
-        testinprogress = cfg.getBoolean("testinprogress", CATEGORY_BOTANIA, compactEqualStacks, "决定显示魔力值是显示在魔力条中还是魔力条下面(若showBotaniaprogress为false，则本选项不生效)");
-
+        Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, compactEqualStacks, "Whether to enable Botania's top display");
+        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, compactEqualStacks, "Whether to show Botania's mana");
+        testinprogress = cfg.getBoolean("testinprogress", CATEGORY_BOTANIA, compactEqualStacks, "Whether the mana value should be displayed in or below the mana bar");
 
 
         setupStyleConfig(cfg);
@@ -192,7 +175,7 @@ public class ConfigSetup {
         defaultConfig.showMobSpawnerSetting(IProbeConfig.ConfigMode.values()[cfg.getInt("showMobSpawnerSetting", CATEGORY_THEONEPROBE, defaultConfig.getShowMobSpawnerSetting().ordinal(), 0, 2, "Show mob spawner setting (0 = not, 1 = always, 2 = sneak)")]);
         defaultConfig.showAnimalOwnerSetting(IProbeConfig.ConfigMode.values()[cfg.getInt("showAnimalOwnerSetting", CATEGORY_THEONEPROBE, defaultConfig.getAnimalOwnerSetting().ordinal(), 0, 2, "Show animal owner setting (0 = not, 1 = always, 2 = sneak)")]);
         defaultConfig.showHorseStatSetting(IProbeConfig.ConfigMode.values()[cfg.getInt("showHorseStatSetting", CATEGORY_THEONEPROBE, defaultConfig.getHorseStatSetting().ordinal(), 0, 2, "Show horse stats setting (0 = not, 1 = always, 2 = sneak)")]);
-        defaultConfig.showSilverfish(IProbeConfig.ConfigMode.values()[cfg.getInt("showSilverfish",CATEGORY_THEONEPROBE,defaultConfig.getShowSilverfish().ordinal(),0,2,"Reveal monster eggs (0 = not, 1 = always, 2 = sneak)")]);
+        defaultConfig.showSilverfish(IProbeConfig.ConfigMode.values()[cfg.getInt("showSilverfish", CATEGORY_THEONEPROBE, defaultConfig.getShowSilverfish().ordinal(), 0, 2, "Reveal monster eggs (0 = not, 1 = always, 2 = sneak)")]);
 
     }
 

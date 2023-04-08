@@ -15,6 +15,14 @@ public class PacketReturnEntityInfo implements IMessage {
     private UUID uuid;
     private ProbeInfo probeInfo;
 
+    public PacketReturnEntityInfo() {
+    }
+
+    public PacketReturnEntityInfo(UUID uuid, ProbeInfo probeInfo) {
+        this.uuid = uuid;
+        this.probeInfo = probeInfo;
+    }
+
     @Override
     public void fromBytes(ByteBuf buf) {
         uuid = new UUID(buf.readLong(), buf.readLong());
@@ -36,14 +44,6 @@ public class PacketReturnEntityInfo implements IMessage {
         } else {
             buf.writeBoolean(false);
         }
-    }
-
-    public PacketReturnEntityInfo() {
-    }
-
-    public PacketReturnEntityInfo(UUID uuid, ProbeInfo probeInfo) {
-        this.uuid = uuid;
-        this.probeInfo = probeInfo;
     }
 
     public static class Handler implements IMessageHandler<PacketReturnEntityInfo, IMessage> {

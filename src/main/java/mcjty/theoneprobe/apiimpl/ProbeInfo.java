@@ -12,14 +12,6 @@ import java.util.List;
 
 public class ProbeInfo extends ElementVertical {
 
-    public List<IElement> getElements() {
-        return children;
-    }
-
-    public void fromBytes(ByteBuf buf) {
-        children = createElements(buf);
-    }
-
     public ProbeInfo() {
         super((Integer) null, 2, ElementAlignment.ALIGN_TOPLEFT);
     }
@@ -27,7 +19,7 @@ public class ProbeInfo extends ElementVertical {
     public static List<IElement> createElements(ByteBuf buf) {
         int size = buf.readShort();
         List<IElement> elements = new ArrayList<>(size);
-        for (int i = 0 ; i < size ; i++) {
+        for (int i = 0; i < size; i++) {
             int id = buf.readInt();
             IElementFactory factory = TheOneProbe.theOneProbeImp.getElementFactory(id);
             IElement element = factory.createElement(buf);
@@ -42,6 +34,14 @@ public class ProbeInfo extends ElementVertical {
             buf.writeInt(element.getID());
             element.toBytes(buf);
         }
+    }
+
+    public List<IElement> getElements() {
+        return children;
+    }
+
+    public void fromBytes(ByteBuf buf) {
+        children = createElements(buf);
     }
 
     public void removeElement(IElement element) {

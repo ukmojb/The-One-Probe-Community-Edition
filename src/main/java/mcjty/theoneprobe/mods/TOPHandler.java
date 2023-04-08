@@ -2,15 +2,20 @@ package mcjty.theoneprobe.mods;
 
 import mcjty.theoneprobe.TheOneProbe;
 import mcjty.theoneprobe.apiimpl.TheOneProbeImp;
-import mcjty.theoneprobe.mods.BotanicAdditions.*;
-import mcjty.theoneprobe.mods.botania.*;
-import mcjty.theoneprobe.mods.ember_top.*;
-import mcjty.theoneprobe.mods.ExtraBotany.*;
 import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.mods.BotanicAdditions.DreamingManaPool;
+import mcjty.theoneprobe.mods.BotanicAdditions.ElvenAltar;
+import mcjty.theoneprobe.mods.ExtraBotany.ManaBuffer;
+import mcjty.theoneprobe.mods.ExtraBotany.QuantumManaBuffer;
+import mcjty.theoneprobe.mods.botania.ManaPool;
+import mcjty.theoneprobe.mods.botania.RuneAltar;
+import mcjty.theoneprobe.mods.botania.Spreader;
+import mcjty.theoneprobe.mods.botania.TerraPlate;
+import mcjty.theoneprobe.mods.ember_top.*;
 import net.minecraftforge.fml.common.Loader;
 
 public class TOPHandler {
-    public static void registerTips(){
+    public static void registerTips() {
         TheOneProbeImp theOneProbeImp = TheOneProbe.theOneProbeImp;
         if (ConfigSetup.Botaniatop) {
             if (Loader.isModLoaded("botania")) {

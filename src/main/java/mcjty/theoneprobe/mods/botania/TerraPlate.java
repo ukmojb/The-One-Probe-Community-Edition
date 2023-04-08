@@ -7,25 +7,24 @@ import mcjty.theoneprobe.config.ConfigSetup;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import vazkii.botania.common.block.tile.mana.TilePool;
 import vazkii.botania.common.block.tile.TileTerraPlate;
+import vazkii.botania.common.block.tile.mana.TilePool;
 
 import java.awt.*;
 
-public class TerraPlate implements IProbeInfoProvider{
-
+public class TerraPlate implements IProbeInfoProvider {
 
 
     @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data){
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
 
-        if(world.getTileEntity(data.getPos()) instanceof TileTerraPlate){
+        if (world.getTileEntity(data.getPos()) instanceof TileTerraPlate) {
             TileTerraPlate tile = (TileTerraPlate) world.getTileEntity(data.getPos());
 
 
             final int mana = tile.getCurrentMana();
             final int manamax = TilePool.MAX_MANA / 2;
-            int light_bule = new Color(39,255,247).getRGB();
+            int light_bule = new Color(39, 255, 247).getRGB();
             int gray = Color.gray.getRGB();
             int white = Color.white.getRGB();
             if (ConfigSetup.showBotaniaprogress) {
@@ -38,7 +37,7 @@ public class TerraPlate implements IProbeInfoProvider{
                             .backgroundColor(gray)
                             .filledColor(light_bule)
                             .alternateFilledColor(light_bule));
-                }else {
+                } else {
                     probeInfo.progress(mana, manamax, new ProgressStyle()
                             .width(110)
                             .numberFormat(NumberFormat.NONE)

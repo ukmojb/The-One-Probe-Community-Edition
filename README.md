@@ -1,8 +1,30 @@
-[English](https://github.com/ukmojb/The-One-Probe-Community-Edition/blob/main/README/README.EN.md)
-[简体中文](https://github.com/ukmojb/The-One-Probe-Community-Edition/blob/main/README/README.CN.md)
+# The One Probe Community Edition
 
+Language Select
 
-在构建前需要在The-One-Probe-Community-Edition/.gradle/minecraft内安装Tesla-1.12.2-1.0.63.jar，否则构建会失败
+1. [简体中文](#简体中文)
+2. [English](#English)
 
-Tesla-1.12.2-1.0.63.jar needs to be installed in The-One-Probe-Community-Edition/.gradle/minecraft before building, otherwise the build will fail
-(My native language is not English, there may be a little deviation in meaning, sorry)
+## 简体中文
+
+TOP社区版主要是为了解决原TOP的硬编码，并添加了更多的功能
+
+### 增强功能：
+
+* 看向方块时，显示的该使用的工具的信息
+* 方块不需要工具挖掘的信息
+* 生物，方块的显示全部本地化
+* [合并余烬高亮](#https://github.com/lyuxc-unknow/ember_top)
+* 支持植物魔法(Botania)的魔力显示
+
+## English
+
+TOP Community Edition is mainly to solve the hardcoding of the original TOP and add more features
+
+### Enhancements:
+
+* When you look at the square, information about the tool used is displayed
+* Blocks do not require information that the tool mines
+* The display of creatures and blocks is all localized
+* [Merge ember highlight](#https://github.com/lyuxc-unknow/ember_top)
+* Support for Botania's magic display

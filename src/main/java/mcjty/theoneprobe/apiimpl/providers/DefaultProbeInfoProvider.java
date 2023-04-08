@@ -10,10 +10,10 @@ import mcjty.theoneprobe.compat.RedstoneFluxTools;
 import mcjty.theoneprobe.compat.TeslaTools;
 import mcjty.theoneprobe.config.ConfigSetup;
 import mcjty.theoneprobe.setup.ModSetup;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.block.*;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -24,21 +24,78 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.fluids.BlockFluidBase;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+
+import java.util.Collections;
 
 import static mcjty.theoneprobe.api.IProbeInfo.ENDLOC;
 import static mcjty.theoneprobe.api.IProbeInfo.STARTLOC;
 import static mcjty.theoneprobe.api.TextStyleClass.*;
 
-import java.util.Collections;
-
 public class DefaultProbeInfoProvider implements IProbeInfoProvider {
+
+    public static void showStandardBlockInfo(IProbeConfig config, ProbeMode mode, IProbeInfo probeInfo, IBlockState blockState, Block block, World world,
+                                             BlockPos pos, EntityPlayer player, IProbeHitData data) {
+        String modid = Tools.getModName(block);
+
+        ItemStack pickBlock = data.getPickBlock();
+
+        if (block instanceof BlockSilverfish && mode != ProbeMode.DEBUG && !Tools.show(mode, config.getShowSilverfish())) {
+            BlockSilverfish.EnumType type = blockState.getValue(BlockSilverfish.VARIANT);
+            blockState = type.getModelBlock();
+            block = blockState.getBlock();
+            pickBlock = new ItemStack(block, 1, block.getMetaFromState(blockState));
+        }
+
+        if (block instanceof BlockFluidBase || block instanceof BlockLiquid) {
+            Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
+            if (fluid != null) {
+                FluidStack fluidStack = new FluidStack(fluid, Fluid.BUCKET_VOLUME);
+                ItemStack bucketStack = FluidUtil.getFilledBucket(fluidStack);
+
+                IProbeInfo horizontal = probeInfo.horizontal();
+                if (fluidStack.isFluidEqual(FluidUtil.getFluidContained(bucketStack))) {
+                    horizontal.item(bucketStack);
+                } else {
+                    horizontal.icon(fluid.getStill(), -1, -1, 16, 16, probeInfo.defaultIconStyle().width(20));
+                }
+
+                horizontal.vertical()
+                        .text(NAME + fluidStack.getLocalizedName())
+                        .text(MODNAME + modid);
+                return;
+            }
+        }
+
+        if (!pickBlock.isEmpty()) {
+            if (Tools.show(mode, config.getShowModName())) {
+                probeInfo.horizontal()
+                        .item(pickBlock)
+                        .vertical()
+                        .itemLabel(pickBlock)
+                        .text(MODNAME + modid);
+            } else {
+                probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
+                        .item(pickBlock)
+                        .itemLabel(pickBlock);
+            }
+        } else {
+            if (Tools.show(mode, config.getShowModName())) {
+                probeInfo.vertical()
+                        .text(NAME + getBlockUnlocalizedName(block))
+                        .text(MODNAME + modid);
+            } else {
+                probeInfo.vertical()
+                        .text(NAME + getBlockUnlocalizedName(block));
+            }
+        }
+    }
+
+    private static String getBlockUnlocalizedName(Block block) {
+        return STARTLOC + block.getTranslationKey() + ".name" + ENDLOC;
+    }
 
     @Override
     public String getID() {
@@ -128,8 +185,8 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
                 MobSpawnerBaseLogic logic = ((TileEntityMobSpawner) te).getSpawnerBaseLogic();
                 String mobName = logic.getCachedEntity().getName();
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle()
-                    .alignment(ElementAlignment.ALIGN_CENTER))
-                    .text(LABEL + I18n.format("top.Mob") + ": " + INFO + mobName);
+                        .alignment(ElementAlignment.ALIGN_CENTER))
+                        .text(LABEL + I18n.format("top.Mob") + ": " + INFO + mobName);
             }
         }
     }
@@ -248,9 +305,9 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
 
     private void showGrowthLevel(IProbeInfo probeInfo, IBlockState blockState) {
         for (IProperty<?> property : blockState.getProperties().keySet()) {
-            if(!"age".equals(property.getName())) continue;
-            if(property.getValueClass() == Integer.class) {
-                IProperty<Integer> integerProperty = (IProperty<Integer>)property;
+            if (!"age".equals(property.getName())) continue;
+            if (property.getValueClass() == Integer.class) {
+                IProperty<Integer> integerProperty = (IProperty<Integer>) property;
                 int age = blockState.getValue(integerProperty);
                 int maxAge = Collections.max(integerProperty.getAllowedValues());
                 if (age == maxAge) {
@@ -261,66 +318,5 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
             }
             return;
         }
-    }
-
-    public static void showStandardBlockInfo(IProbeConfig config, ProbeMode mode, IProbeInfo probeInfo, IBlockState blockState, Block block, World world,
-                                             BlockPos pos, EntityPlayer player, IProbeHitData data) {
-        String modid = Tools.getModName(block);
-
-        ItemStack pickBlock = data.getPickBlock();
-
-        if (block instanceof BlockSilverfish && mode != ProbeMode.DEBUG && !Tools.show(mode,config.getShowSilverfish())) {
-            BlockSilverfish.EnumType type = blockState.getValue(BlockSilverfish.VARIANT);
-            blockState = type.getModelBlock();
-            block = blockState.getBlock();
-            pickBlock = new ItemStack(block, 1, block.getMetaFromState(blockState));
-        }
-
-        if (block instanceof BlockFluidBase || block instanceof BlockLiquid) {
-            Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
-            if (fluid != null) {
-                FluidStack fluidStack = new FluidStack(fluid, Fluid.BUCKET_VOLUME);
-                ItemStack bucketStack = FluidUtil.getFilledBucket(fluidStack);
-
-                IProbeInfo horizontal = probeInfo.horizontal();
-                if (fluidStack.isFluidEqual(FluidUtil.getFluidContained(bucketStack))) {
-                    horizontal.item(bucketStack);
-                } else {
-                    horizontal.icon(fluid.getStill(), -1, -1, 16, 16, probeInfo.defaultIconStyle().width(20));
-                }
-
-                horizontal.vertical()
-                        .text(NAME + fluidStack.getLocalizedName())
-                        .text(MODNAME + modid);
-                return;
-            }
-        }
-
-        if (!pickBlock.isEmpty()) {
-            if (Tools.show(mode, config.getShowModName())) {
-                probeInfo.horizontal()
-                        .item(pickBlock)
-                        .vertical()
-                        .itemLabel(pickBlock)
-                        .text(MODNAME + modid);
-            } else {
-                probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
-                        .item(pickBlock)
-                        .itemLabel(pickBlock);
-            }
-        } else {
-            if (Tools.show(mode, config.getShowModName())) {
-                probeInfo.vertical()
-                        .text(NAME + getBlockUnlocalizedName(block))
-                        .text(MODNAME + modid);
-            } else {
-                probeInfo.vertical()
-                        .text(NAME + getBlockUnlocalizedName(block));
-            }
-        }
-    }
-
-    private static String getBlockUnlocalizedName(Block block) {
-        return STARTLOC + block.getUnlocalizedName() + ".name" + ENDLOC;
     }
 }

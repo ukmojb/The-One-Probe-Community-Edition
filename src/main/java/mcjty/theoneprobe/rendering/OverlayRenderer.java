@@ -42,7 +42,7 @@ import static mcjty.theoneprobe.api.TextStyleClass.ERROR;
 
 public class OverlayRenderer {
 
-    private static Map<Pair<Integer,BlockPos>, Pair<Long, ProbeInfo>> cachedInfo = new HashMap<>();
+    private static Map<Pair<Integer, BlockPos>, Pair<Long, ProbeInfo>> cachedInfo = new HashMap<>();
     private static Map<UUID, Pair<Long, ProbeInfo>> cachedEntityInfo = new HashMap<>();
     private static long lastCleanupTime = 0;
 
@@ -95,9 +95,9 @@ public class OverlayRenderer {
         }
 
         EntityPlayerSP entity = Minecraft.getMinecraft().player;
-        Vec3d start  = entity.getPositionEyes(partialTicks);
+        Vec3d start = entity.getPositionEyes(partialTicks);
         Vec3d vec31 = entity.getLook(partialTicks);
-        Vec3d end = start.addVector(vec31.x * dist, vec31.y * dist, vec31.z * dist);
+        Vec3d end = start.add(vec31.x * dist, vec31.y * dist, vec31.z * dist);
 
         mouseOver = entity.getEntityWorld().rayTraceBlocks(start, end, ConfigSetup.showLiquids);
         if (mouseOver == null) {
@@ -353,7 +353,7 @@ public class OverlayRenderer {
 
     private static void cleanupCachedBlocks(long time) {
         // It has been a while. Time to clean up unused cached pairs.
-        Map<Pair<Integer,BlockPos>, Pair<Long, ProbeInfo>> newCachedInfo = new HashMap<>();
+        Map<Pair<Integer, BlockPos>, Pair<Long, ProbeInfo>> newCachedInfo = new HashMap<>();
         for (Map.Entry<Pair<Integer, BlockPos>, Pair<Long, ProbeInfo>> entry : cachedInfo.entrySet()) {
             long t = entry.getValue().getLeft();
             if (time < t + ConfigSetup.timeout + 1000) {
@@ -376,7 +376,7 @@ public class OverlayRenderer {
     }
 
     public static void renderElements(ProbeInfo probeInfo, IOverlayStyle style, double sw, double sh,
-                                       @Nullable IElement extra) {
+                                      @Nullable IElement extra) {
         if (extra != null) {
             probeInfo.element(extra);
         }
@@ -421,9 +421,9 @@ public class OverlayRenderer {
 
         if (thick > 0) {
             if (offset > 0) {
-                RenderHelper.drawThickBeveledBox(x, y, x + w-1, y + h-1, thick, style.getBoxColor(), style.getBoxColor(), style.getBoxColor());
+                RenderHelper.drawThickBeveledBox(x, y, x + w - 1, y + h - 1, thick, style.getBoxColor(), style.getBoxColor(), style.getBoxColor());
             }
-            RenderHelper.drawThickBeveledBox(x+offset, y+offset, x + w-1-offset, y + h-1-offset, thick, style.getBorderColor(), style.getBorderColor(), style.getBoxColor());
+            RenderHelper.drawThickBeveledBox(x + offset, y + offset, x + w - 1 - offset, y + h - 1 - offset, thick, style.getBorderColor(), style.getBorderColor(), style.getBoxColor());
         }
 
         if (!Minecraft.getMinecraft().isGamePaused()) {

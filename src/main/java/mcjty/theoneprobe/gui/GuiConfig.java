@@ -28,16 +28,9 @@ import static mcjty.theoneprobe.api.TextStyleClass.*;
 public class GuiConfig extends GuiScreen {
     private static final int WIDTH = 230;
     private static final int HEIGHT = 230;
-
-    private int guiLeft;
-    private int guiTop;
-
     private static final ResourceLocation background = new ResourceLocation(TheOneProbe.MODID, "textures/gui/config.png");
     private static final ResourceLocation scene = new ResourceLocation(TheOneProbe.MODID, "textures/gui/scene.png");
-
     private static final List<Preset> presets = new ArrayList<>();
-
-    private List<HitBox> hitboxes = Collections.emptyList();
 
     static {
         presets.add(new Preset("Default style", 0xff999999, 0x55006699, 2, 0));
@@ -57,6 +50,9 @@ public class GuiConfig extends GuiScreen {
         ));
     }
 
+    private int guiLeft;
+    private int guiTop;
+    private List<HitBox> hitboxes = Collections.emptyList();
 
     @Override
     public boolean doesGuiPauseGame() {
@@ -84,9 +80,9 @@ public class GuiConfig extends GuiScreen {
         int y = guiTop + 10;
         RenderHelper.renderText(Minecraft.getMinecraft(), x, y, TextFormatting.GOLD + "Placement:");
         y += 12;
-        RenderHelper.renderText(Minecraft.getMinecraft(), x+10, y, "Click on corner in screenshot");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x + 10, y, "Click on corner in screenshot");
         y += 10;
-        RenderHelper.renderText(Minecraft.getMinecraft(), x+10, y, "to move tooltip there");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x + 10, y, "to move tooltip there");
         y += 10;
 
         y += 20;
@@ -102,11 +98,26 @@ public class GuiConfig extends GuiScreen {
 
         RenderHelper.renderText(Minecraft.getMinecraft(), x, y, TextFormatting.GOLD + "Scale:");
         y += 12;
-        addButton(x+10, y, 30, 14, "--", () -> { ConfigSetup.setScale(1.2f);}); x += 36;
-        addButton(x+10, y, 30, 14, "-", () -> { ConfigSetup.setScale(1.1f);}); x += 36;
-        addButton(x+10, y, 30, 14, "0", () -> { ConfigSetup.setScale(1f);}); x += 36;
-        addButton(x+10, y, 30, 14, "+", () -> { ConfigSetup.setScale(0.9f);}); x += 36;
-        addButton(x+10, y, 30, 14, "++", () -> { ConfigSetup.setScale(0.8f);}); x += 36;
+        addButton(x + 10, y, 30, 14, "--", () -> {
+            ConfigSetup.setScale(1.2f);
+        });
+        x += 36;
+        addButton(x + 10, y, 30, 14, "-", () -> {
+            ConfigSetup.setScale(1.1f);
+        });
+        x += 36;
+        addButton(x + 10, y, 30, 14, "0", () -> {
+            ConfigSetup.setScale(1f);
+        });
+        x += 36;
+        addButton(x + 10, y, 30, 14, "+", () -> {
+            ConfigSetup.setScale(0.9f);
+        });
+        x += 36;
+        addButton(x + 10, y, 30, 14, "++", () -> {
+            ConfigSetup.setScale(0.8f);
+        });
+        x += 36;
 
         int margin = 90;
         hitboxes.add(new HitBox(0, 0, margin, margin, () -> {
@@ -143,7 +154,7 @@ public class GuiConfig extends GuiScreen {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         if (mouseButton == 0) {
             for (HitBox box : hitboxes) {
-                if (box.isHit(mouseX-guiLeft, mouseY-guiTop)) {
+                if (box.isHit(mouseX - guiLeft, mouseY - guiTop)) {
                     box.call();
                 }
             }
@@ -173,9 +184,9 @@ public class GuiConfig extends GuiScreen {
     }
 
     private void addButton(int x, int y, int width, int height, String text, Runnable runnable) {
-        drawRect(x, y, x + width-1, y + height-1, 0xff000000);
+        drawRect(x, y, x + width - 1, y + height - 1, 0xff000000);
         RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 3, text);
-        hitboxes.add(new HitBox(x - guiLeft, y - guiTop, x + width -1 - guiLeft, y + height -1 - guiTop, runnable));
+        hitboxes.add(new HitBox(x - guiLeft, y - guiTop, x + width - 1 - guiLeft, y + height - 1 - guiTop, runnable));
     }
 
     private void renderProbe() {
@@ -197,7 +208,7 @@ public class GuiConfig extends GuiScreen {
     private void renderElements(ProbeInfo probeInfo, IOverlayStyle style) {
 
         GlStateManager.pushMatrix();
-        GlStateManager.scale(1/ ConfigSetup.tooltipScale, 1/ ConfigSetup.tooltipScale, 1/ ConfigSetup.tooltipScale);
+        GlStateManager.scale(1 / ConfigSetup.tooltipScale, 1 / ConfigSetup.tooltipScale, 1 / ConfigSetup.tooltipScale);
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableLighting();
@@ -245,7 +256,7 @@ public class GuiConfig extends GuiScreen {
             if (offset > 0) {
                 RenderHelper.drawThickBeveledBox(x, y, x2, y2, thick, style.getBoxColor(), style.getBoxColor(), style.getBoxColor());
             }
-            RenderHelper.drawThickBeveledBox(x+offset, y+offset, x2-offset, y2-offset, thick, style.getBorderColor(), style.getBorderColor(), style.getBoxColor());
+            RenderHelper.drawThickBeveledBox(x + offset, y + offset, x2 - offset, y2 - offset, thick, style.getBorderColor(), style.getBorderColor(), style.getBoxColor());
         }
 
         if (!Minecraft.getMinecraft().isGamePaused()) {
