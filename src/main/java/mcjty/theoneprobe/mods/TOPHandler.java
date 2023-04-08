@@ -6,24 +6,27 @@ import mcjty.theoneprobe.mods.BotanicAdditions.*;
 import mcjty.theoneprobe.mods.botania.*;
 import mcjty.theoneprobe.mods.ember_top.*;
 import mcjty.theoneprobe.mods.ExtraBotany.*;
+import mcjty.theoneprobe.config.ConfigSetup;
 import net.minecraftforge.fml.common.Loader;
 
 public class TOPHandler {
     public static void registerTips(){
         TheOneProbeImp theOneProbeImp = TheOneProbe.theOneProbeImp;
-        if (Loader.isModLoaded("botania")) {
-            theOneProbeImp.registerProvider(new ManaPool());
-            theOneProbeImp.registerProvider(new Spreader());
-            theOneProbeImp.registerProvider(new TerraPlate());
-            theOneProbeImp.registerProvider(new RuneAltar());
-        }
-        if (Loader.isModLoaded("extrabotany")) {
-            theOneProbeImp.registerProvider(new ManaBuffer());
-            theOneProbeImp.registerProvider(new QuantumManaBuffer());
-        }
-        if (Loader.isModLoaded("botanicadds")) {
-            theOneProbeImp.registerProvider(new DreamingManaPool());
-            theOneProbeImp.registerProvider(new ElvenAltar());
+        if (ConfigSetup.Botaniatop) {
+            if (Loader.isModLoaded("botania")) {
+                theOneProbeImp.registerProvider(new ManaPool());
+                theOneProbeImp.registerProvider(new Spreader());
+                theOneProbeImp.registerProvider(new TerraPlate());
+                theOneProbeImp.registerProvider(new RuneAltar());
+            }
+            if (Loader.isModLoaded("extrabotany")) {
+                theOneProbeImp.registerProvider(new ManaBuffer());
+                theOneProbeImp.registerProvider(new QuantumManaBuffer());
+            }
+            if (Loader.isModLoaded("botanicadds")) {
+                theOneProbeImp.registerProvider(new DreamingManaPool());
+                theOneProbeImp.registerProvider(new ElvenAltar());
+            }
         }
         if (Loader.isModLoaded("embers")) {
             theOneProbeImp.registerProvider(new ember_coppercell());
