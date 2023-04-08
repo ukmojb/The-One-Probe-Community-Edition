@@ -7,15 +7,11 @@ import mcjty.theoneprobe.apiimpl.styles.ItemStyle;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
 import mcjty.theoneprobe.config.ConfigSetup;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.IEntityOwnable;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
@@ -36,12 +32,44 @@ import static mcjty.theoneprobe.api.TextStyleClass.*;
 
 public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider {
 
+    private static DecimalFormat dfCommas = new DecimalFormat("##.#");
+
+    public static String getPotionDurationString(PotionEffect effect, float factor) {
+        if (effect.getDuration() == 32767) {
+            return "**:**";
+        } else {
+            int i = MathHelper.floor(effect.getDuration() * factor);
+            return ticksToElapsedTime(i);
+        }
+    }
+
+    public static String ticksToElapsedTime(int ticks) {
+        int i = ticks / 20;
+        int j = i / 60;
+        i = i % 60;
+        return i < 10 ? j + ":0" + i : j + ":" + i;
+    }
+
+    public static void showStandardInfo(ProbeMode mode, IProbeInfo probeInfo, Entity entity, IProbeConfig config) {
+        String modid = Tools.getModName(entity);
+
+        if (Tools.show(mode, config.getShowModName())) {
+            probeInfo.horizontal()
+                    .entity(entity)
+                    .vertical()
+                    .text(NAME + entity.getDisplayName().getFormattedText())
+                    .text(MODNAME + modid);
+        } else {
+            probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
+                    .entity(entity)
+                    .text(NAME + entity.getDisplayName().getFormattedText());
+        }
+    }
+
     @Override
     public String getID() {
         return TheOneProbe.MODID + ":entity.default";
     }
-
-    private static DecimalFormat dfCommas = new DecimalFormat("##.#");
 
     @Override
     public void addProbeEntityInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, Entity entity, IProbeHitEntityData data) {
@@ -78,10 +106,10 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             }
 
             if (Tools.show(mode, config.getShowMobGrowth()) && entity instanceof EntityAgeable) {
-               int age = ((EntityAgeable) entity).getGrowingAge();
-               if (age < 0) {
-                   probeInfo.text(LABEL + I18n.format("top.Growing_time") + ": " + ((age * -1) / 20) + I18n.format("top.Second"));
-               }
+                int age = ((EntityAgeable) entity).getGrowingAge();
+                if (age < 0) {
+                    probeInfo.text(LABEL + I18n.format("top.Growing_time") + ": " + ((age * -1) / 20) + I18n.format("top.Second"));
+                }
             }
 
             if (Tools.show(mode, config.getShowMobPotionEffects())) {
@@ -109,9 +137,9 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                 }
             }
         } else if (entity instanceof EntityItemFrame) {
-            EntityItemFrame itemFrame = (EntityItemFrame)entity;
+            EntityItemFrame itemFrame = (EntityItemFrame) entity;
             ItemStack stack = itemFrame.getDisplayedItem();
-            if(!stack.isEmpty()) {
+            if (!stack.isEmpty()) {
                 probeInfo.horizontal(new LayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER))
                         .item(stack, new ItemStyle().width(16).height(16))
                         .text(INFO + stack.getDisplayName());
@@ -158,39 +186,6 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                 EnumDyeColor collarColor = ((EntityWolf) entity).getCollarColor();
                 probeInfo.text(LABEL + I18n.format("top.Collar") + ": " + INFO + collarColor.getName());
             }
-        }
-    }
-
-    public static String getPotionDurationString(PotionEffect effect, float factor) {
-        if (effect.getDuration() == 32767) {
-            return "**:**";
-        } else {
-            int i = MathHelper.floor(effect.getDuration() * factor);
-            return ticksToElapsedTime(i);
-        }
-    }
-
-    public static String ticksToElapsedTime(int ticks) {
-        int i = ticks / 20;
-        int j = i / 60;
-        i = i % 60;
-        return i < 10 ? j + ":0" + i : j + ":" + i;
-    }
-
-
-    public static void showStandardInfo(ProbeMode mode, IProbeInfo probeInfo, Entity entity, IProbeConfig config) {
-        String modid = Tools.getModName(entity);
-
-        if (Tools.show(mode, config.getShowModName())) {
-            probeInfo.horizontal()
-                    .entity(entity)
-                    .vertical()
-                        .text(NAME + entity.getDisplayName().getFormattedText())
-                        .text(MODNAME + modid);
-        } else {
-            probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
-                    .entity(entity)
-                    .text(NAME + entity.getDisplayName().getFormattedText());
         }
     }
 }

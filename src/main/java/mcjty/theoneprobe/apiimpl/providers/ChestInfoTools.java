@@ -92,7 +92,7 @@ public class ChestInfoTools {
             for (ItemStack stackInSlot : stacks) {
                 horizontal = vertical.horizontal(new LayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
                 horizontal.item(stackInSlot, new ItemStyle().width(16).height(16))
-                    .text(INFO + stackInSlot.getDisplayName());
+                        .text(INFO + stackInSlot.getDisplayName());
             }
         } else {
             for (ItemStack stackInSlot : stacks) {
@@ -128,7 +128,7 @@ public class ChestInfoTools {
                     addItemStack(stacks, foundItems, inventory.getStackInSlot(i));
                 }
             }
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException("Getting the contents of a " + world.getBlockState(pos).getBlock().getRegistryName() + " (" + te.getClass().getName() + ")", e);
         }
         return maxSlots;

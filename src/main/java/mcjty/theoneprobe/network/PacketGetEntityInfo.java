@@ -34,32 +34,6 @@ public class PacketGetEntityInfo implements IMessage {
     private ProbeMode mode;
     private Vec3d hitVec;
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        dim = buf.readInt();
-        uuid = new UUID(buf.readLong(), buf.readLong());
-        mode = ProbeMode.values()[buf.readByte()];
-        if (buf.readBoolean()) {
-            hitVec = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
-        }
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(dim);
-        buf.writeLong(uuid.getMostSignificantBits());
-        buf.writeLong(uuid.getLeastSignificantBits());
-        buf.writeByte(mode.ordinal());
-        if (hitVec == null) {
-            buf.writeBoolean(false);
-        } else {
-            buf.writeBoolean(true);
-            buf.writeDouble(hitVec.x);
-            buf.writeDouble(hitVec.y);
-            buf.writeDouble(hitVec.z);
-        }
-    }
-
     public PacketGetEntityInfo() {
     }
 
@@ -68,25 +42,6 @@ public class PacketGetEntityInfo implements IMessage {
         this.uuid = entity.getPersistentID();
         this.mode = mode;
         this.hitVec = mouseOver.hitVec;
-    }
-
-    public static class Handler implements IMessageHandler<PacketGetEntityInfo, IMessage> {
-        @Override
-        public IMessage onMessage(PacketGetEntityInfo message, MessageContext ctx) {
-            FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
-            return null;
-        }
-
-        private void handle(PacketGetEntityInfo message, MessageContext ctx) {
-            WorldServer world = DimensionManager.getWorld(message.dim);
-            if (world != null) {
-                Entity entity = world.getEntityFromUuid(message.uuid);
-                if (entity != null) {
-                    ProbeInfo probeInfo = getProbeInfo(ctx.getServerHandler().player, message.mode, world, entity, message.hitVec);
-                    PacketHandler.INSTANCE.sendTo(new PacketReturnEntityInfo(message.uuid, probeInfo), ctx.getServerHandler().player);
-                }
-            }
-        }
     }
 
     private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, Entity entity, Vec3d hitVec) {
@@ -123,6 +78,51 @@ public class PacketGetEntityInfo implements IMessage {
             }
         }
         return probeInfo;
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        dim = buf.readInt();
+        uuid = new UUID(buf.readLong(), buf.readLong());
+        mode = ProbeMode.values()[buf.readByte()];
+        if (buf.readBoolean()) {
+            hitVec = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        }
+    }
+
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(dim);
+        buf.writeLong(uuid.getMostSignificantBits());
+        buf.writeLong(uuid.getLeastSignificantBits());
+        buf.writeByte(mode.ordinal());
+        if (hitVec == null) {
+            buf.writeBoolean(false);
+        } else {
+            buf.writeBoolean(true);
+            buf.writeDouble(hitVec.x);
+            buf.writeDouble(hitVec.y);
+            buf.writeDouble(hitVec.z);
+        }
+    }
+
+    public static class Handler implements IMessageHandler<PacketGetEntityInfo, IMessage> {
+        @Override
+        public IMessage onMessage(PacketGetEntityInfo message, MessageContext ctx) {
+            FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
+            return null;
+        }
+
+        private void handle(PacketGetEntityInfo message, MessageContext ctx) {
+            WorldServer world = DimensionManager.getWorld(message.dim);
+            if (world != null) {
+                Entity entity = world.getEntityFromUuid(message.uuid);
+                if (entity != null) {
+                    ProbeInfo probeInfo = getProbeInfo(ctx.getServerHandler().player, message.mode, world, entity, message.hitVec);
+                    PacketHandler.INSTANCE.sendTo(new PacketReturnEntityInfo(message.uuid, probeInfo), ctx.getServerHandler().player);
+                }
+            }
+        }
     }
 
 }

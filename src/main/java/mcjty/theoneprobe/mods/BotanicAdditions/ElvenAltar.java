@@ -6,19 +6,19 @@ import mcjty.theoneprobe.config.ConfigSetup;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import tk.zeitheron.botanicadds.blocks.tiles.*;
+import tk.zeitheron.botanicadds.blocks.tiles.TileElvenAltar;
 
 import java.awt.*;
 
 public class ElvenAltar implements IProbeInfoProvider {
     @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data){
-        if(world.getTileEntity(data.getPos()) instanceof TileElvenAltar){
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
+        if (world.getTileEntity(data.getPos()) instanceof TileElvenAltar) {
             TileElvenAltar tile = (TileElvenAltar) world.getTileEntity(data.getPos());
 
             final int mana = (int) tile.getCurrentMana();
             final int manamax = (int) tile.getTargetMana();
-            int light_bule = new Color(39,255,247).getRGB();
+            int light_bule = new Color(39, 255, 247).getRGB();
             int gray = Color.gray.getRGB();
             int white = Color.white.getRGB();
             if (ConfigSetup.showBotaniaprogress) {
@@ -31,7 +31,7 @@ public class ElvenAltar implements IProbeInfoProvider {
                             .backgroundColor(gray)
                             .filledColor(light_bule)
                             .alternateFilledColor(light_bule));
-                }else {
+                } else {
                     probeInfo.progress(mana, manamax, new ProgressStyle()
                             .width(110)
                             .numberFormat(NumberFormat.NONE)

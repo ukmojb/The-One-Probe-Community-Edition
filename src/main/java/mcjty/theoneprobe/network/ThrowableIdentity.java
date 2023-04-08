@@ -1,29 +1,14 @@
 package mcjty.theoneprobe.network;
 
-import mcjty.theoneprobe.config.ConfigSetup;
 import mcjty.theoneprobe.TheOneProbe;
+import mcjty.theoneprobe.config.ConfigSetup;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ThrowableIdentity {
-    private final String identifier;
-
     private static Map<ThrowableIdentity, Long> catchedThrowables = new HashMap<>();
-
-    public static void registerThrowable(Throwable e) {
-        ThrowableIdentity identity = new ThrowableIdentity(e);
-        long curtime = System.currentTimeMillis();
-        if (catchedThrowables.containsKey(identity)) {
-            long lasttime = catchedThrowables.get(identity);
-            if (curtime < lasttime + ConfigSetup.loggingThrowableTimeout) {
-                // If this exception occured less then some time ago we don't report it.
-                return;
-            }
-        }
-        catchedThrowables.put(identity, curtime);
-        TheOneProbe.setup.getLogger().debug("The One Probe catched error: ", e);
-    }
+    private final String identifier;
 
     public ThrowableIdentity(Throwable e) {
         String message = e.getMessage();
@@ -37,6 +22,20 @@ public class ThrowableIdentity {
                     .append(st[i].getLineNumber());
         }
         identifier = builder.toString();
+    }
+
+    public static void registerThrowable(Throwable e) {
+        ThrowableIdentity identity = new ThrowableIdentity(e);
+        long curtime = System.currentTimeMillis();
+        if (catchedThrowables.containsKey(identity)) {
+            long lasttime = catchedThrowables.get(identity);
+            if (curtime < lasttime + ConfigSetup.loggingThrowableTimeout) {
+                // If this exception occured less then some time ago we don't report it.
+                return;
+            }
+        }
+        catchedThrowables.put(identity, curtime);
+        TheOneProbe.setup.getLogger().debug("The One Probe catched error: ", e);
     }
 
     @Override

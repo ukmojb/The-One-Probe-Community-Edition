@@ -1,6 +1,6 @@
 package mcjty.theoneprobe.mods.ExtraBotany;
 
-import com.meteor.extrabotany.common.block.tile.*;
+import com.meteor.extrabotany.common.block.tile.TileQuantumManaBuffer;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import mcjty.theoneprobe.config.ConfigSetup;
@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import java.awt.*;
 
 
-public class QuantumManaBuffer implements IProbeInfoProvider{
+public class QuantumManaBuffer implements IProbeInfoProvider {
 
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {

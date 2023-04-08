@@ -9,11 +9,11 @@ import mcjty.theoneprobe.config.ConfigSetup;
 import mcjty.theoneprobe.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,6 +27,7 @@ import static mcjty.theoneprobe.api.TextStyleClass.*;
 public class HarvestInfoTools {
 
     private static final ResourceLocation ICONS = new ResourceLocation(TheOneProbe.MODID, "textures/gui/icons.png");
+    private static final HashMap<String, ItemStack> testTools = new HashMap<>();
     private static String[] harvestLevels = new String[]{
             "stone",
             "iron",
@@ -35,7 +36,6 @@ public class HarvestInfoTools {
             "cobalt"
     };
 
-    private static final HashMap<String, ItemStack> testTools = new HashMap<>();
     static {
         testTools.put(I18n.format("top.toolclass.Shovel"), new ItemStack(Items.WOODEN_SHOVEL));
         testTools.put(I18n.format("top.toolclass.Axe"), new ItemStack(Items.WOODEN_AXE));
@@ -121,7 +121,7 @@ public class HarvestInfoTools {
         IIconStyle iconStyle = probeInfo.defaultIconStyle().width(v ? 18 : 20).height(v ? 14 : 16).textureWidth(32).textureHeight(32);
         IProbeInfo horizontal = probeInfo.horizontal(alignment);
         if (harvestable) {
-            if(harvestTool != null){
+            if (harvestTool != null) {
                 String ToolClassString;
 
                 if (I18n.hasKey("top.toolclass." + harvestTool))
@@ -141,7 +141,7 @@ public class HarvestInfoTools {
                 horizontal.icon(ICONS, 16, offs, dim, dim, iconStyle)
                         .text(WARNING + ((harvestTool != null) ? harvestTool : I18n.format("top.NoTool")));
             } else {
-                if(harvestTool != null){
+                if (harvestTool != null) {
                     String ToolClassString;
 
                     if (I18n.hasKey("top.toolclass." + harvestTool))

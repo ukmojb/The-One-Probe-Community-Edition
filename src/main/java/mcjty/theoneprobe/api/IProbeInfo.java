@@ -7,11 +7,11 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Information to return to the probe. Most methods here return the same probe info
  * object so that you can chain:
- *     probeInfo.item(diamond).text("My diamond").text("Next line");
- *
+ * probeInfo.item(diamond).text("My diamond").text("Next line");
+ * <p>
  * horizontal() and vertical() are exceptions. They return a new probe info object
  * representing the new horizontal or vertical layout that was created. Keep that in mind!
- *
+ * <p>
  * Note that you can safeul use TextFormatting color codes in the text.
  */
 public interface IProbeInfo {
@@ -55,6 +55,7 @@ public interface IProbeInfo {
      * and TheOneProbe will try to find the resource location on that atlas
      */
     IProbeInfo icon(ResourceLocation icon, int u, int v, int w, int h, IIconStyle style);
+
     IProbeInfo icon(ResourceLocation icon, int u, int v, int w, int h);
 
     /**
@@ -62,8 +63,11 @@ public interface IProbeInfo {
      * representation of a resourcelocation (like 'minecraft:zombie')
      */
     IProbeInfo entity(String entityName, IEntityStyle style);
+
     IProbeInfo entity(String entityName);
+
     IProbeInfo entity(Entity entity, IEntityStyle style);
+
     IProbeInfo entity(Entity entity);
 
     /**
@@ -73,23 +77,29 @@ public interface IProbeInfo {
      * data on the client
      */
     IProbeInfo text(String text, ITextStyle style);
+
     IProbeInfo text(String text);
 
     IProbeInfo item(ItemStack stack, IItemStyle style);
+
     IProbeInfo item(ItemStack stack);
 
     /**
      * A localized name of the stack
      */
     IProbeInfo itemLabel(ItemStack stack, ITextStyle style);
+
     IProbeInfo itemLabel(ItemStack stack);
 
     /**
      * This creates a progress bar of 100 width
      */
     IProbeInfo progress(int current, int max, IProgressStyle style);
+
     IProbeInfo progress(int current, int max);
+
     IProbeInfo progress(long current, long max, IProgressStyle style);
+
     IProbeInfo progress(long current, long max);
 
     /**
@@ -97,6 +107,7 @@ public interface IProbeInfo {
      * probe info is the new horizontal layout and not this one!
      */
     IProbeInfo horizontal(ILayoutStyle style);
+
     IProbeInfo horizontal();
 
     /**
@@ -104,6 +115,7 @@ public interface IProbeInfo {
      * probe info is the new horizontal layout and not this one!
      */
     IProbeInfo vertical(ILayoutStyle style);
+
     IProbeInfo vertical();
 
     /**

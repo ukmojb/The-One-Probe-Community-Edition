@@ -140,7 +140,7 @@ public class NetworkTools {
     public static <T extends Enum<T>> void readEnumCollection(ByteBuf buf, Collection<T> collection, T[] values) {
         collection.clear();
         int size = buf.readInt();
-        for (int i = 0 ; i < size ; i++) {
+        for (int i = 0; i < size; i++) {
             collection.add(values[buf.readInt()]);
         }
     }

@@ -1,7 +1,6 @@
 package mcjty.theoneprobe.apiimpl.client;
 
 import mcjty.theoneprobe.api.IItemStyle;
-import mcjty.theoneprobe.network.ThrowableIdentity;
 import mcjty.theoneprobe.rendering.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;

@@ -3,10 +3,9 @@ package mcjty.theoneprobe;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.apiimpl.TheOneProbeImp;
 import mcjty.theoneprobe.items.ModItems;
+import mcjty.theoneprobe.mods.TOPHandler;
 import mcjty.theoneprobe.setup.IProxy;
 import mcjty.theoneprobe.setup.ModSetup;
-import mcjty.theoneprobe.mods.TOPHandler;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
@@ -19,10 +18,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Mod(modid = TheOneProbe.MODID, name="TheOneProbe",
+@Mod(modid = TheOneProbe.MODID, name = "TheOneProbe",
         dependencies =
                 "after:forge@[" + TheOneProbe.MIN_FORGE11_VER + ",);" +
-                "after:tesla",
+                        "after:tesla",
         version = TheOneProbe.VERSION,
         acceptedMinecraftVersions = "[1.12,1.13)",
         guiFactory = "mcjty.theoneprobe.config.TopModGuiFactory")
@@ -31,7 +30,7 @@ public class TheOneProbe {
     public static final String VERSION = "1.4.28";
     public static final String MIN_FORGE11_VER = "13.19.0.2176";
 
-    @SidedProxy(clientSide="mcjty.theoneprobe.setup.ClientProxy", serverSide="mcjty.theoneprobe.setup.ServerProxy")
+    @SidedProxy(clientSide = "mcjty.theoneprobe.setup.ClientProxy", serverSide = "mcjty.theoneprobe.setup.ServerProxy")
     public static IProxy proxy;
     public static ModSetup setup = new ModSetup();
 
