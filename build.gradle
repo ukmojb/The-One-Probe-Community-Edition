@@ -39,7 +39,7 @@ repositories {
 }
 
 group= "mcjty.theoneprobe" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "theoneprobe"
+archivesBaseName = "TheOneProbe-CE"
 
 sourceCompatibility = targetCompatibility = '1.8'
 
