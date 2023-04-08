@@ -6,7 +6,7 @@ import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ProbeMode;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -28,7 +28,7 @@ public class DebugProbeInfoProvider implements IProbeInfoProvider {
 
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
-        if (mode == ProbeMode.DEBUG && ConfigSetup.showDebugInfo) {
+        if (mode == ProbeMode.DEBUG && Config.showDebugInfo) {
             Block block = blockState.getBlock();
             BlockPos pos = data.getPos();
             showDebugInfo(probeInfo, world, blockState, pos, block, data.getSideHit());

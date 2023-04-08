@@ -1,6 +1,6 @@
 package mcjty.theoneprobe;
 
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.items.ModItems;
 import mcjty.theoneprobe.playerdata.PlayerGotNote;
 import mcjty.theoneprobe.playerdata.PlayerProperties;
@@ -19,11 +19,11 @@ public class ForgeEventHandlers {
 
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        ConfigSetup.setupStyleConfig(ConfigSetup.mainConfig);
-        ConfigSetup.updateDefaultOverlayStyle();
+        Config.setupStyleConfig(Config.mainConfig);
+        Config.updateDefaultOverlayStyle();
 
-        if (ConfigSetup.mainConfig.hasChanged()) {
-            ConfigSetup.mainConfig.save();
+        if (Config.mainConfig.hasChanged()) {
+            Config.mainConfig.save();
         }
     }
 
@@ -50,7 +50,7 @@ public class ForgeEventHandlers {
 
     @SubscribeEvent
     public void onPlayerLoggedIn(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
-        if (ConfigSetup.spawnNote) {
+        if (Config.spawnNote) {
             PlayerGotNote note = PlayerProperties.getPlayerGotNote(event.player);
             if (!note.isPlayerGotNote()) {
                 boolean success = event.player.inventory.addItemStackToInventory(new ItemStack(ModItems.probeNote));

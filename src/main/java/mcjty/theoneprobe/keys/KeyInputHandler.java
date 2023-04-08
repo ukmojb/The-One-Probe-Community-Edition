@@ -1,6 +1,6 @@
 package mcjty.theoneprobe.keys;
 
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 
@@ -9,10 +9,10 @@ public class KeyInputHandler {
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
         if (KeyBindings.toggleLiquids.isPressed()) {
-            ConfigSetup.setLiquids(!ConfigSetup.showLiquids);
+            Config.setLiquids(!Config.showLiquids);
         } else if (KeyBindings.toggleVisible.isPressed()) {
-            if (!ConfigSetup.holdKeyToMakeVisible) {
-                ConfigSetup.setVisible(!ConfigSetup.isVisible);
+            if (!Config.holdKeyToMakeVisible) {
+                Config.setVisible(!Config.isVisible);
             }
 //        } else if (KeyBindings.generateLag.isPressed()) {
 //            PacketHandler.INSTANCE.sendToServer(new PacketGenerateLag());

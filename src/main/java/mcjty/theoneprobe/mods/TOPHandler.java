@@ -2,7 +2,7 @@ package mcjty.theoneprobe.mods;
 
 import mcjty.theoneprobe.TheOneProbe;
 import mcjty.theoneprobe.apiimpl.TheOneProbeImp;
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.mods.BotanicAdditions.DreamingManaPool;
 import mcjty.theoneprobe.mods.BotanicAdditions.ElvenAltar;
 import mcjty.theoneprobe.mods.ExtraBotany.ManaBuffer;
@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.Loader;
 public class TOPHandler {
     public static void registerTips() {
         TheOneProbeImp theOneProbeImp = TheOneProbe.theOneProbeImp;
-        if (ConfigSetup.Botaniatop) {
+        if (Config.Botaniatop) {
             if (Loader.isModLoaded("botania")) {
                 theOneProbeImp.registerProvider(new ManaPool());
                 theOneProbeImp.registerProvider(new Spreader());

@@ -5,7 +5,7 @@ import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.styles.ItemStyle;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -73,7 +73,7 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
 
     @Override
     public void addProbeEntityInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, Entity entity, IProbeHitEntityData data) {
-        IProbeConfig config = ConfigSetup.getRealConfig();
+        IProbeConfig config = Config.getRealConfig();
 
         boolean handled = false;
         for (IEntityDisplayOverride override : TheOneProbe.theOneProbeImp.getEntityOverrides()) {
@@ -181,7 +181,7 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             }
         }
 
-        if (entity instanceof EntityWolf && ConfigSetup.showCollarColor) {
+        if (entity instanceof EntityWolf && Config.showCollarColor) {
             if (((EntityWolf) entity).isTamed()) {
                 EnumDyeColor collarColor = ((EntityWolf) entity).getCollarColor();
                 probeInfo.text(LABEL + I18n.format("top.Collar") + ": " + INFO + collarColor.getName());

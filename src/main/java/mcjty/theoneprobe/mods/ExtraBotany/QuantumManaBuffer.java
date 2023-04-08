@@ -3,7 +3,7 @@ package mcjty.theoneprobe.mods.ExtraBotany;
 import com.meteor.extrabotany.common.block.tile.TileQuantumManaBuffer;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
@@ -23,8 +23,8 @@ public class QuantumManaBuffer implements IProbeInfoProvider {
             int light_bule = new Color(39, 255, 247).getRGB();
             int gray = Color.gray.getRGB();
             int white = Color.white.getRGB();
-            if (ConfigSetup.showBotaniaprogress) {
-                if (ConfigSetup.testinprogress) {
+            if (Config.showBotaniaprogress) {
+                if (Config.testinprogress) {
                     probeInfo.progress(mana, manamax, new ProgressStyle()
                             .prefix("Mana" + ":" + mana).suffix("/" + manamax)
                             .width(110)

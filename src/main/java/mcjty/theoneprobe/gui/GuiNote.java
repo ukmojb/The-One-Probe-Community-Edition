@@ -1,7 +1,7 @@
 package mcjty.theoneprobe.gui;
 
 import mcjty.theoneprobe.TheOneProbe;
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.rendering.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -10,7 +10,7 @@ import net.minecraft.util.text.TextFormatting;
 
 import java.io.IOException;
 
-import static mcjty.theoneprobe.config.ConfigSetup.*;
+import static mcjty.theoneprobe.config.Config.*;
 import static net.minecraft.util.text.TextFormatting.BOLD;
 import static net.minecraft.util.text.TextFormatting.GREEN;
 
@@ -55,7 +55,7 @@ public class GuiNote extends GuiScreen {
         y += 10;
 
         y += 10;
-        switch (ConfigSetup.needsProbe) {
+        switch (Config.needsProbe) {
             case PROBE_NEEDED:
                 RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "In this pack the probe is configured to be");
                 y += 10;
@@ -109,11 +109,11 @@ public class GuiNote extends GuiScreen {
         mouseY += guiTop;
         if (mouseY >= hitY && mouseY < hitY + BUTTON_HEIGHT) {
             if (mouseX >= hitX && mouseX < hitX + BUTTON_WIDTH) {
-                ConfigSetup.setProbeNeeded(PROBE_NEEDED);
+                Config.setProbeNeeded(PROBE_NEEDED);
             } else if (mouseX >= hitX + BUTTON_MARGIN && mouseX < hitX + BUTTON_WIDTH + BUTTON_MARGIN) {
-                ConfigSetup.setProbeNeeded(PROBE_NOTNEEDED);
+                Config.setProbeNeeded(PROBE_NOTNEEDED);
             } else if (mouseX >= hitX + BUTTON_MARGIN * 2 && mouseX < hitX + BUTTON_WIDTH + BUTTON_MARGIN * 2) {
-                ConfigSetup.setProbeNeeded(PROBE_NEEDEDFOREXTENDED);
+                Config.setProbeNeeded(PROBE_NEEDEDFOREXTENDED);
             }
         }
     }

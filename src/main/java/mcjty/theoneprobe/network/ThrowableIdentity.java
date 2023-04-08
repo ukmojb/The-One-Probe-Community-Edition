@@ -1,7 +1,7 @@
 package mcjty.theoneprobe.network;
 
 import mcjty.theoneprobe.TheOneProbe;
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class ThrowableIdentity {
         long curtime = System.currentTimeMillis();
         if (catchedThrowables.containsKey(identity)) {
             long lasttime = catchedThrowables.get(identity);
-            if (curtime < lasttime + ConfigSetup.loggingThrowableTimeout) {
+            if (curtime < lasttime + Config.loggingThrowableTimeout) {
                 // If this exception occured less then some time ago we don't report it.
                 return;
             }

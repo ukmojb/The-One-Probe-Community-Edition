@@ -1,7 +1,7 @@
 package mcjty.theoneprobe;
 
 import mcjty.theoneprobe.api.ProbeMode;
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.gui.GuiConfig;
 import mcjty.theoneprobe.gui.GuiNote;
 import mcjty.theoneprobe.items.ModItems;
@@ -18,7 +18,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import static mcjty.theoneprobe.config.ConfigSetup.*;
+import static mcjty.theoneprobe.config.Config.*;
 
 public class ClientForgeEventHandlers {
 
@@ -42,12 +42,12 @@ public class ClientForgeEventHandlers {
             return;
         }
 
-        if (ConfigSetup.holdKeyToMakeVisible) {
+        if (Config.holdKeyToMakeVisible) {
             if (!KeyBindings.toggleVisible.isKeyDown()) {
                 return;
             }
         } else {
-            if (!ConfigSetup.isVisible) {
+            if (!Config.isVisible) {
                 return;
             }
         }
@@ -55,7 +55,7 @@ public class ClientForgeEventHandlers {
         if (hasItemInEitherHand(ModItems.creativeProbe)) {
             OverlayRenderer.renderHUD(ProbeMode.DEBUG, event.getPartialTicks());
         } else {
-            switch (ConfigSetup.needsProbe) {
+            switch (Config.needsProbe) {
                 case PROBE_NOTNEEDED:
                 case PROBE_NEEDEDFOREXTENDED:
                     OverlayRenderer.renderHUD(getModeForPlayer(), event.getPartialTicks());
@@ -72,7 +72,7 @@ public class ClientForgeEventHandlers {
 
     private ProbeMode getModeForPlayer() {
         EntityPlayerSP player = Minecraft.getMinecraft().player;
-        if (ConfigSetup.extendedInMain) {
+        if (Config.extendedInMain) {
             if (hasItemInMainHand(ModItems.probe)) {
                 return ProbeMode.EXTENDED;
             }

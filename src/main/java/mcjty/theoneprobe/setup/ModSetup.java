@@ -6,7 +6,7 @@ import mcjty.theoneprobe.api.IProbeInfoEntityProvider;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.apiimpl.TheOneProbeImp;
 import mcjty.theoneprobe.apiimpl.providers.*;
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.network.PacketHandler;
 import mcjty.theoneprobe.playerdata.PlayerGotNote;
 import net.minecraft.nbt.NBTBase;
@@ -69,7 +69,7 @@ public class ModSetup {
         TheOneProbe.theOneProbeImp.registerEntityProvider(new EntityProbeInfoEntityProvider());
 
         modConfigDir = e.getModConfigurationDirectory();
-        ConfigSetup.init();
+        Config.init();
 
         PacketHandler.registerMessages("theoneprobe");
 
@@ -93,7 +93,7 @@ public class ModSetup {
 
         baubles = Loader.isModLoaded("Baubles") || Loader.isModLoaded("baubles");
         if (baubles) {
-            if (ConfigSetup.supportBaubles) {
+            if (Config.supportBaubles) {
                 logger.log(Level.INFO, "The One Probe Detected Baubles: enabling support");
             } else {
                 logger.log(Level.INFO, "The One Probe Detected Baubles but support disabled in config");
@@ -110,8 +110,8 @@ public class ModSetup {
         configureProviders();
         configureEntityProviders();
 
-        if (ConfigSetup.mainConfig.hasChanged()) {
-            ConfigSetup.mainConfig.save();
+        if (Config.mainConfig.hasChanged()) {
+            Config.mainConfig.save();
         }
     }
 
@@ -123,8 +123,8 @@ public class ModSetup {
             defaultValues[i++] = provider.getID();
         }
 
-        String[] sortedProviders = ConfigSetup.mainConfig.getStringList("sortedProviders", ConfigSetup.CATEGORY_PROVIDERS, defaultValues, "Order in which providers should be used");
-        String[] excludedProviders = ConfigSetup.mainConfig.getStringList("excludedProviders", ConfigSetup.CATEGORY_PROVIDERS, new String[]{}, "Providers that should be excluded");
+        String[] sortedProviders = Config.mainConfig.getStringList("sortedProviders", Config.CATEGORY_PROVIDERS, defaultValues, "Order in which providers should be used");
+        String[] excludedProviders = Config.mainConfig.getStringList("excludedProviders", Config.CATEGORY_PROVIDERS, new String[]{}, "Providers that should be excluded");
         Set<String> excluded = new HashSet<>();
         Collections.addAll(excluded, excludedProviders);
 
@@ -139,8 +139,8 @@ public class ModSetup {
             defaultValues[i++] = provider.getID();
         }
 
-        String[] sortedProviders = ConfigSetup.mainConfig.getStringList("sortedEntityProviders", ConfigSetup.CATEGORY_PROVIDERS, defaultValues, "Order in which entity providers should be used");
-        String[] excludedProviders = ConfigSetup.mainConfig.getStringList("excludedEntityProviders", ConfigSetup.CATEGORY_PROVIDERS, new String[]{}, "Entity providers that should be excluded");
+        String[] sortedProviders = Config.mainConfig.getStringList("sortedEntityProviders", Config.CATEGORY_PROVIDERS, defaultValues, "Order in which entity providers should be used");
+        String[] excludedProviders = Config.mainConfig.getStringList("excludedEntityProviders", Config.CATEGORY_PROVIDERS, new String[]{}, "Entity providers that should be excluded");
         Set<String> excluded = new HashSet<>();
         Collections.addAll(excluded, excludedProviders);
 

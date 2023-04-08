@@ -5,7 +5,7 @@ import mcjty.theoneprobe.TheOneProbe;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.ProbeHitEntityData;
 import mcjty.theoneprobe.apiimpl.ProbeInfo;
-import mcjty.theoneprobe.config.ConfigSetup;
+import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.items.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,8 +24,8 @@ import java.util.UUID;
 
 import static mcjty.theoneprobe.api.TextStyleClass.ERROR;
 import static mcjty.theoneprobe.api.TextStyleClass.LABEL;
-import static mcjty.theoneprobe.config.ConfigSetup.PROBE_NEEDEDFOREXTENDED;
-import static mcjty.theoneprobe.config.ConfigSetup.PROBE_NEEDEDHARD;
+import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDFOREXTENDED;
+import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDHARD;
 
 public class PacketGetEntityInfo implements IMessage {
 
@@ -45,7 +45,7 @@ public class PacketGetEntityInfo implements IMessage {
     }
 
     private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, Entity entity, Vec3d hitVec) {
-        if (ConfigSetup.needsProbe == PROBE_NEEDEDFOREXTENDED) {
+        if (Config.needsProbe == PROBE_NEEDEDFOREXTENDED) {
             // We need a probe only for extended information
             if (!ModItems.hasAProbeSomewhere(player)) {
                 // No probe anywhere, switch EXTENDED to NORMAL
@@ -53,7 +53,7 @@ public class PacketGetEntityInfo implements IMessage {
                     mode = ProbeMode.NORMAL;
                 }
             }
-        } else if (ConfigSetup.needsProbe == PROBE_NEEDEDHARD && !ModItems.hasAProbeSomewhere(player)) {
+        } else if (Config.needsProbe == PROBE_NEEDEDHARD && !ModItems.hasAProbeSomewhere(player)) {
             // The server says we need a probe but we don't have one in our hands or on our head
             return null;
         }
@@ -66,7 +66,7 @@ public class PacketGetEntityInfo implements IMessage {
         for (IProbeConfigProvider configProvider : configProviders) {
             configProvider.getProbeConfig(probeConfig, player, world, entity, data);
         }
-        ConfigSetup.setRealConfig(probeConfig);
+        Config.setRealConfig(probeConfig);
 
         List<IProbeInfoEntityProvider> entityProviders = TheOneProbe.theOneProbeImp.getEntityProviders();
         for (IProbeInfoEntityProvider provider : entityProviders) {
