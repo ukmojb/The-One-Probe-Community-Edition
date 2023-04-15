@@ -36,6 +36,9 @@ repositories {
     maven {
         url = 'https://maven.cleanroommc.com/'
     }
+    maven {
+        url = 'https://maven.blamejared.com'
+    }
 }
 
 group= "mcjty.theoneprobe" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -69,6 +72,10 @@ dependencies {
     deobfCompile 'curse.maven:extrabotany-299086:3112313'
     deobfCompile 'curse.maven:baubles-227083:2518667'
     deobfCompile 'curse.maven:botanic_additions-310637:2939405'
+    deobfCompile "curse.maven:bookshelf-228525:2836960"
+
+    compile "net.darkhax.gamestages:GameStages-1.12.2:2.0.+:deobf"
+    compile "net.darkhax.orestages:OreStages-1.12.2:2.0.+:deobf"
 
     runtime 'curse.maven:hwyla-253449:2568751'
     runtime 'curse.maven:hammer-lib-247401:3611193'
