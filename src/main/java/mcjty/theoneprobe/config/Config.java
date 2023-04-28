@@ -151,9 +151,16 @@ public class Config {
         dontShowContentsUnlessSneaking = cfg.getStringList("dontShowContentsUnlessSneaking", CATEGORY_THEONEPROBE, dontShowContentsUnlessSneaking, "A list of blocks for which we don't show chest contents automatically except if sneaking");
         dontSendNBT = cfg.getStringList("dontSendNBT", CATEGORY_THEONEPROBE, dontSendNBT, "A list of blocks for which we don't send NBT over the network. This is mostly useful for blocks that have HUGE NBT in their pickblock (itemstack)");
 
+<<<<<<< Updated upstream:src/main/java/mcjty/theoneprobe/config/Config.java
         Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, compactEqualStacks, I18n.format("top.config.Botaniatop"));
         showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, compactEqualStacks, I18n.format("top.config.showBotaniaprogress"));
         testinprogress = cfg.getBoolean("testinprogress", CATEGORY_BOTANIA, compactEqualStacks, I18n.format("top.config.testinprogress"));
+=======
+        Botaniatop = cfg.getBoolean("BotaniaTop", CATEGORY_BOTANIA, compactEqualStacks, "是否开启植物魔法的top显示");
+        showBotaniaprogress = cfg.getBoolean("ShowBotaniaPprogress", CATEGORY_BOTANIA, compactEqualStacks, "决定显示植物魔法魔力的魔力条是否显示");
+        testinprogress = cfg.getBoolean("TestInProgress", CATEGORY_BOTANIA, compactEqualStacks, "决定显示魔力值是显示在魔力条中还是魔力条下面(若showBotaniaprogress为false，则本选项不生效)");
+
+>>>>>>> Stashed changes:src/main/java/mcjty/theoneprobe/config/ConfigSetup.java
 
 
         setupStyleConfig(cfg);
