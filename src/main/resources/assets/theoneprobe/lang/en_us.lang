@@ -76,13 +76,11 @@ top.Speed=Speed
 
 top.Collar=Collar
 
-
-#########################
-#        config         #
-#########################
-
-
-top.config.Botaniatop=Whether to enable Botania's top display
-top.config.showBotaniaprogress=Whether to show Botania's mana
-top.config.testinprogress=Whether the mana value should be displayed in or below the mana bar
-
+top.Career=Career
+top.CareerLevel=Career Level
+top.CareerLevel.1=1
+top.CareerLevel.2=2
+top.CareerLevel.3=3
+top.CareerLevel.4=4
+top.CareerLevel.5=5
+top.CareerLevel.6=6

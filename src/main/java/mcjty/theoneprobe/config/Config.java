@@ -152,15 +152,9 @@ public class Config {
         dontSendNBT = cfg.getStringList("dontSendNBT", CATEGORY_THEONEPROBE, dontSendNBT, "A list of blocks for which we don't send NBT over the network. This is mostly useful for blocks that have HUGE NBT in their pickblock (itemstack)");
 
 
-        Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, compactEqualStacks, I18n.format("top.config.Botaniatop"));
-        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, compactEqualStacks, I18n.format("top.config.showBotaniaprogress"));
-        testinprogress = cfg.getBoolean("testinprogress", CATEGORY_BOTANIA, compactEqualStacks, I18n.format("top.config.testinprogress"));
-
-        Botaniatop = cfg.getBoolean("BotaniaTop", CATEGORY_BOTANIA, compactEqualStacks, "是否开启植物魔法的top显示");
-        showBotaniaprogress = cfg.getBoolean("ShowBotaniaPprogress", CATEGORY_BOTANIA, compactEqualStacks, "决定显示植物魔法魔力的魔力条是否显示");
-        testinprogress = cfg.getBoolean("TestInProgress", CATEGORY_BOTANIA, compactEqualStacks, "决定显示魔力值是显示在魔力条中还是魔力条下面(若showBotaniaprogress为false，则本选项不生效)");
-
-
+        Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, compactEqualStacks, "Whether to enable Botania's top display");
+        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, compactEqualStacks, "Whether to show Botania's mana");
+        testinprogress = cfg.getBoolean("testinprogress", CATEGORY_BOTANIA, compactEqualStacks, "Whether the mana value should be displayed in or below the mana bar");
 
 
         setupStyleConfig(cfg);

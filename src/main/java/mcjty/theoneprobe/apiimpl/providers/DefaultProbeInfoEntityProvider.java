@@ -12,15 +12,18 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.UsernameCache;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.text.DecimalFormat;
 import java.util.Collection;
@@ -186,6 +189,11 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                 EnumDyeColor collarColor = ((EntityWolf) entity).getCollarColor();
                 probeInfo.text(LABEL + I18n.format("top.Collar") + ": " + INFO + collarColor.getName());
             }
+        }
+
+        if (entity instanceof EntityVillager) {
+            int careerLevel = ((EntityVillager) entity).serializeNBT().getInteger("CareerLevel");
+            probeInfo.text(I18n.format("top.CareerLevel") + ": " + I18n.format("top.CareerLevel." + careerLevel));
         }
     }
 }

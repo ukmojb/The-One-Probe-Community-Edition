@@ -21,11 +21,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.isNull;
 import static mcjty.theoneprobe.api.TextStyleClass.*;
 
 public class HarvestInfoTools {
@@ -80,13 +82,15 @@ public class HarvestInfoTools {
     static void showHarvestInfo(IProbeInfo probeInfo, World world, BlockPos pos, Block block, IBlockState blockState, EntityPlayer player) {
         boolean harvestable = block.canHarvestBlock(world, pos, player) && world.getBlockState(pos).getBlockHardness(world, pos) >= 0;
 
-        Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
-        if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
-            Block stageBlock = stageInfo.getSecond().getBlock();
-            if (stageBlock.canHarvestBlock(world, pos, player) && world.getBlockState(pos).getBlockHardness(world, pos) >= 0) {
-                harvestable = true;
-            } else {
-                harvestable = false;
+        if (Loader.isModLoaded("orestages")) {
+            Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
+            if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
+                Block stageBlock = stageInfo.getSecond().getBlock();
+                if (stageBlock.canHarvestBlock(world, pos, player) && world.getBlockState(pos).getBlockHardness(world, pos) >= 0) {
+                    harvestable = true;
+                } else {
+                    harvestable = false;
+                }
             }
         }
 
@@ -117,12 +121,16 @@ public class HarvestInfoTools {
         }
 
 
-        if (harvestTool != null) {
-            if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
-                IBlockState stageBlockState = stageInfo.getSecond();
-                Block stageBlock = stageInfo.getSecond().getBlock();
-                harvestTool = stageBlock.getHarvestTool(stageBlockState);
+        if (Loader.isModLoaded("orestages")) {
+            Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
+            if (harvestTool != null) {
+                if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
+                    IBlockState stageBlockState = stageInfo.getSecond();
+                    Block stageBlock = stageInfo.getSecond().getBlock();
+                    harvestTool = stageBlock.getHarvestTool(stageBlockState);
+                }
             }
+        }
 
             int harvestLevel = block.getHarvestLevel(blockState);
 
@@ -132,17 +140,20 @@ public class HarvestInfoTools {
             } else if (harvestLevel >= harvestLevels.length) {
 //                TheOneProbe.logger.info("HarvestLevel out of bounds (Max value " + harvestLevels.length + "). Found " + harvestLevel);
             } else {
-                if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
-                    IBlockState stageBlockState = stageInfo.getSecond();
-                    Block stageBlock = stageInfo.getSecond().getBlock();
-                    int stageharvestLevel = stageBlock.getHarvestLevel(stageBlockState);
-                    harvestName = harvestLevels[stageharvestLevel];
-                } else {
-                    harvestName = harvestLevels[harvestLevel];
+                if (Loader.isModLoaded("orestages")) {
+                    Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
+                    if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
+                        IBlockState stageBlockState = stageInfo.getSecond();
+                        Block stageBlock = stageInfo.getSecond().getBlock();
+                        int stageharvestLevel = stageBlock.getHarvestLevel(stageBlockState);
+                        harvestName = harvestLevels[stageharvestLevel];
+                    } else {
+                        harvestName = harvestLevels[harvestLevel];
+                    }
                 }
             }
             harvestTool = StringUtils.capitalize(harvestTool);
-        }
+
 
         boolean v = Config.harvestStyleVanilla;
         int offs = v ? 16 : 0;
@@ -163,8 +174,13 @@ public class HarvestInfoTools {
                 horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
                         .text(OK + ToolClassString + " (" + I18n.format("top.level") + " " + harvestName + ")");
             } else {
-                horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
-                        .text(OK + I18n.format("top.NoTool") + " (" + I18n.format("top.level") + " " + harvestName + ")");
+                if (isNull(harvestName)){
+                    horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
+                            .text(OK + I18n.format("top.NoTool"));
+                } else {
+                    horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
+                            .text(OK + I18n.format("top.NoTool") + " (" + I18n.format("top.level") + " " + harvestName + ")");
+                }
             }
 
         } else {
@@ -174,9 +190,6 @@ public class HarvestInfoTools {
             } else {
                 if (harvestTool != null) {
                     String ToolClassString;
-                    if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
-
-                    }
                     if (I18n.hasKey("top.toolclass." + harvestTool))
                         ToolClassString = I18n.format("top.toolclass." + harvestTool);
                     else
