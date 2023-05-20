@@ -7,7 +7,7 @@ import mcjty.theoneprobe.api.IProbeInfoEntityProvider;
 import mcjty.theoneprobe.api.ProbeMode;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
 import mcjty.theoneprobe.config.Config;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -38,11 +38,11 @@ public class DebugProbeInfoEntityProvider implements IProbeInfoEntityProvider {
                 float aiMoveSpeed = entityLivingBase.getAIMoveSpeed();
                 int revengeTimer = entityLivingBase.getRevengeTimer();
                 vertical
-                        .text(LABEL + I18n.format("top.Tot_armor") + ": " + INFO + totalArmorValue)
-                        .text(LABEL + I18n.format("top.Age") + ": " + INFO + age)
-                        .text(LABEL + I18n.format("top.Absorption") + ": " + INFO + absorptionAmount)
-                        .text(LABEL + I18n.format("top.AI_Move_Speed") + ": " + INFO + aiMoveSpeed)
-                        .text(LABEL + I18n.format("top.Revenge_Timer") + ": " + INFO + revengeTimer);
+                        .text(LABEL + I18n.translateToLocal("top.Tot_armor") + ": " + INFO + totalArmorValue)
+                        .text(LABEL + I18n.translateToLocal("top.Age") + ": " + INFO + age)
+                        .text(LABEL + I18n.translateToLocal("top.Absorption") + ": " + INFO + absorptionAmount)
+                        .text(LABEL + I18n.translateToLocal("top.AI_Move_Speed") + ": " + INFO + aiMoveSpeed)
+                        .text(LABEL + I18n.translateToLocal("top.Revenge_Timer") + ": " + INFO + revengeTimer);
             }
             if (entity instanceof EntityAgeable) {
                 if (vertical == null) {
@@ -52,7 +52,7 @@ public class DebugProbeInfoEntityProvider implements IProbeInfoEntityProvider {
                 EntityAgeable entityAgeable = (EntityAgeable) entity;
                 int growingAge = entityAgeable.getGrowingAge();
                 vertical
-                        .text(LABEL + I18n.format("top.Growing_Age") + ": " + INFO + growingAge);
+                        .text(LABEL + I18n.translateToLocal("top.Growing_Age") + ": " + INFO + growingAge);
             }
         }
     }

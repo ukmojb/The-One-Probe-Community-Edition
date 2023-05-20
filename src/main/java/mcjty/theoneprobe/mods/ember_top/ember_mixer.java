@@ -3,7 +3,7 @@ package mcjty.theoneprobe.mods.ember_top;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import teamroots.embers.tileentity.TileEntityMixerBottom;
@@ -23,7 +23,7 @@ public class ember_mixer implements IProbeInfoProvider {
             int yellow = Color.yellow.getRGB();
             int white = Color.white.getRGB();
             if (tileEntityMixerTop.capability.getEmber() > 0) {
-                probeInfo.progress(ember, max + 5, new ProgressStyle().prefix(I18n.format("random.power") + ":" + ember).suffix("/" + max)
+                probeInfo.progress(ember, max + 5, new ProgressStyle().prefix(I18n.translateToLocal("random.power") + ":" + ember).suffix("/" + max)
                         .width(110)
                         .numberFormat(NumberFormat.NONE)
                         .borderColor(yellow)

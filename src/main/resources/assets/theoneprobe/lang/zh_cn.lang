@@ -12,7 +12,7 @@ item.theoneprobe.probenote.name=The One Probe 阅读指南
 #itemGroup.Probe=The One Probe
 
 top.toolclass.Pickaxe=镐
-top.toolclass.Shovel=铲
+top.toolclass.Shovel=锹
 top.toolclass.Axe=斧
 top.toolclass.Sword=剑
 
@@ -83,5 +83,4 @@ top.CareerLevel.3=3
 top.CareerLevel.4=4
 top.CareerLevel.5=5
 top.CareerLevel.6=6
-
 

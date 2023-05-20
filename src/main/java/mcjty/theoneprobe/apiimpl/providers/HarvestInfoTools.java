@@ -12,7 +12,6 @@ import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -23,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.StringUtils;
+import net.minecraft.util.text.translation.I18n;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,9 +43,9 @@ public class HarvestInfoTools {
     };
 
     static {
-        testTools.put(I18n.format("top.toolclass.Shovel"), new ItemStack(Items.WOODEN_SHOVEL));
-        testTools.put(I18n.format("top.toolclass.Axe"), new ItemStack(Items.WOODEN_AXE));
-        testTools.put(I18n.format("top.toolclass.Pickaxe"), new ItemStack(Items.WOODEN_PICKAXE));
+        testTools.put(I18n.translateToLocal("top.toolclass.Shovel"), new ItemStack(Items.WOODEN_SHOVEL));
+        testTools.put(I18n.translateToLocal("top.toolclass.Axe"), new ItemStack(Items.WOODEN_AXE));
+        testTools.put(I18n.translateToLocal("top.toolclass.Pickaxe"), new ItemStack(Items.WOODEN_PICKAXE));
     }
 
     static void showHarvestLevel(IProbeInfo probeInfo, IBlockState blockState, Block block) {
@@ -166,40 +166,41 @@ public class HarvestInfoTools {
             if (harvestTool != null) {
                 String ToolClassString;
 
-                if (I18n.hasKey("top.toolclass." + harvestTool))
-                    ToolClassString = I18n.format("top.toolclass." + harvestTool);
+                if (I18n.canTranslate("top.toolclass." + harvestTool))
+                    ToolClassString = I18n.translateToLocal("top.toolclass." + harvestTool);
+//                ToolClassString = new ChatComponentTranslation("chat.fmltutor.time", world.getTotalWorldTime())
                 else
                     ToolClassString = harvestTool.substring(0, 1).toUpperCase() + harvestTool.substring(1);
 
                 horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
-                        .text(OK + ToolClassString + " (" + I18n.format("top.level") + " " + harvestName + ")");
+                        .text(OK + ToolClassString + " (" + I18n.translateToLocal("top.level") + " " + harvestName + ")");
             } else {
                 if (isNull(harvestName)){
                     horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
-                            .text(OK + I18n.format("top.NoTool"));
+                            .text(OK + I18n.translateToLocal("top.NoTool"));
                 } else {
                     horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
-                            .text(OK + I18n.format("top.NoTool") + " (" + I18n.format("top.level") + " " + harvestName + ")");
+                            .text(OK + I18n.translateToLocal("top.NoTool") + " (" + I18n.translateToLocal("top.level") + " " + harvestName + ")");
                 }
             }
 
         } else {
             if (harvestName == null || harvestName.isEmpty()) {
                 horizontal.icon(ICONS, 16, offs, dim, dim, iconStyle)
-                        .text(WARNING + ((harvestTool != null) ? harvestTool : I18n.format("top.NoTool")));
+                        .text(WARNING + ((harvestTool != null) ? harvestTool : I18n.translateToLocal("top.NoTool")));
             } else {
                 if (harvestTool != null) {
                     String ToolClassString;
-                    if (I18n.hasKey("top.toolclass." + harvestTool))
-                        ToolClassString = I18n.format("top.toolclass." + harvestTool);
+                    if (I18n.canTranslate("top.toolclass." + harvestTool))
+                        ToolClassString = I18n.translateToLocal("top.toolclass." + harvestTool);
                     else
                         ToolClassString = harvestTool.substring(0, 1).toUpperCase() + harvestTool.substring(1);
 
                     horizontal.icon(ICONS, 16, offs, dim, dim, iconStyle)
-                            .text(WARNING + ToolClassString + " (" + I18n.format("top.level") + " " + harvestName + ")");
+                            .text(WARNING + ToolClassString + " (" + I18n.translateToLocal("top.level") + " " + harvestName + ")");
                 } else {
                     horizontal.icon(ICONS, 16, offs, dim, dim, iconStyle)
-                            .text(WARNING + I18n.format("top.NoTool") + " (" + I18n.format("top.level") + " " + harvestName + ")");
+                            .text(WARNING + I18n.translateToLocal("top.NoTool") + " (" + I18n.translateToLocal("top.level") + " " + harvestName + ")");
                 }
             }
         }
