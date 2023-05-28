@@ -375,6 +375,7 @@ public class Config {
             cfg.addCustomCategoryComment(CATEGORY_THEONEPROBE, "The One Probe configuration");
             cfg.addCustomCategoryComment(CATEGORY_PROVIDERS, "Provider configuration");
             cfg.addCustomCategoryComment(CATEGORY_CLIENT, "Client-side settings");
+            cfg.addCustomCategoryComment(CATEGORY_BOTANIA, "botania settings");
             init(cfg);
         } catch (Exception e1) {
             TheOneProbe.setup.getLogger().log(Level.ERROR, "Problem loading config file!", e1);
