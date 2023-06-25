@@ -120,6 +120,7 @@ public class HarvestInfoTools {
             }
         }
 
+        int harvestLevel = block.getHarvestLevel(blockState);
 
         if (Loader.isModLoaded("orestages")) {
             Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
@@ -132,27 +133,25 @@ public class HarvestInfoTools {
             }
         }
 
-            int harvestLevel = block.getHarvestLevel(blockState);
-
-            if (harvestLevel < 0) {
-                // NOTE: When a block doesn't have an explicitly-set harvest tool, getHarvestLevel will return -1 for ANY tool. (Expected behavior)
+        if (harvestLevel < 0) {
+            // NOTE: When a block doesn't have an explicitly-set harvest tool, getHarvestLevel will return -1 for ANY tool. (Expected behavior)
 //                TheOneProbe.logger.info("HarvestLevel out of bounds (less than 0). Found " + harvestLevel);
-            } else if (harvestLevel >= harvestLevels.length) {
+        } else if (harvestLevel >= harvestLevels.length) {
 //                TheOneProbe.logger.info("HarvestLevel out of bounds (Max value " + harvestLevels.length + "). Found " + harvestLevel);
-            } else {
-                if (Loader.isModLoaded("orestages")) {
-                    Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
-                    if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
-                        IBlockState stageBlockState = stageInfo.getSecond();
-                        Block stageBlock = stageInfo.getSecond().getBlock();
-                        int stageharvestLevel = stageBlock.getHarvestLevel(stageBlockState);
-                        harvestName = harvestLevels[stageharvestLevel];
-                    } else {
-                        harvestName = harvestLevels[harvestLevel];
-                    }
+        } else {
+            harvestName = harvestLevels[harvestLevel];
+
+            if (Loader.isModLoaded("orestages")) {
+                Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
+                if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
+                    IBlockState stageBlockState = stageInfo.getSecond();
+                    Block stageBlock = stageInfo.getSecond().getBlock();
+                    int stageharvestLevel = stageBlock.getHarvestLevel(stageBlockState);
+                    harvestName = harvestLevels[stageharvestLevel];
                 }
             }
-            harvestTool = StringUtils.capitalize(harvestTool);
+        }
+        harvestTool = StringUtils.capitalize(harvestTool);
 
 
         boolean v = Config.harvestStyleVanilla;
