@@ -29,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
@@ -226,10 +227,10 @@ public class OverlayRenderer {
             float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
             if (damage > 0) {
                 if (Config.showBreakProgress == 2) {
-                    damageElement = new ElementText("" + TextFormatting.RED + "Progress " + (int) (damage * 100) + "%");
+                    damageElement = new ElementText("" + TextFormatting.RED + I18n.translateToLocal("top.Progress") + " " + (int) (damage * 100) + "%");
                 } else {
                     damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
-                            .prefix("Progress ")
+                            .prefix(I18n.translateToLocal("top.Progress") + " ")
                             .suffix("%")
                             .width(85)
                             .borderColor(0)
@@ -296,10 +297,10 @@ public class OverlayRenderer {
             DefaultProbeInfoProvider.showStandardBlockInfo(probeConfig, mode, probeInfo, blockState, block, world, blockPos, player, data);
         } catch (Exception e) {
             ThrowableIdentity.registerThrowable(e);
-            probeInfo.text(ERROR + "Error (see log for details)!");
+            probeInfo.text(ERROR+ I18n.translateToLocal("top.ErrorLog"));
         }
 
-        probeInfo.text(ERROR + "Waiting for server...");
+        probeInfo.text(ERROR + I18n.translateToLocal("top.Waiting"));
         return probeInfo;
     }
 
@@ -312,10 +313,10 @@ public class OverlayRenderer {
             DefaultProbeInfoEntityProvider.showStandardInfo(mode, probeInfo, entity, probeConfig);
         } catch (Exception e) {
             ThrowableIdentity.registerThrowable(e);
-            probeInfo.text(ERROR + "Error (see log for details)!");
+            probeInfo.text(ERROR+ I18n.translateToLocal("top.ErrorLog"));
         }
 
-        probeInfo.text(ERROR + "Waiting for server...");
+        probeInfo.text(ERROR + I18n.translateToLocal("top.Waiting"));
         return probeInfo;
     }
 

@@ -85,3 +85,7 @@ top.CareerLevel.4=4
 top.CareerLevel.5=5
 top.CareerLevel.6=6
 
+top.Progress=Progress
+
+top.Waiting=Waiting for server...
+top.ErrorLog=Error (see log for details)!
