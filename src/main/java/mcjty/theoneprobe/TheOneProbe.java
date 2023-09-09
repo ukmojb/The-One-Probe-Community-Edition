@@ -1,6 +1,6 @@
 package mcjty.theoneprobe;
 
-import ink.ikx.rt.impl.mods.crafttweaker.CraftTweakerExtension;
+
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.apiimpl.TheOneProbeImp;
 import mcjty.theoneprobe.items.ModItems;
