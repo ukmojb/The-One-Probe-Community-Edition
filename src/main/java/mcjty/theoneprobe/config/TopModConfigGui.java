@@ -1,8 +1,7 @@
 package mcjty.theoneprobe.config;
 
-import mcjty.theoneprobe.TheOneProbe;
 import com.google.common.collect.Lists;
-
+import mcjty.theoneprobe.TheOneProbe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;

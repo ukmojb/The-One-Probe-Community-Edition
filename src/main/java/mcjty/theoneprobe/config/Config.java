@@ -11,7 +11,6 @@ import mcjty.theoneprobe.apiimpl.styles.DefaultOverlayStyle;
 import mcjty.theoneprobe.setup.ModSetup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;

@@ -6,7 +6,9 @@ import mcjty.theoneprobe.gui.GuiConfig;
 import mcjty.theoneprobe.gui.GuiNote;
 import mcjty.theoneprobe.items.ModItems;
 import mcjty.theoneprobe.keys.KeyBindings;
+import mcjty.theoneprobe.mods.crt.api.GameStageShow;
 import mcjty.theoneprobe.rendering.OverlayRenderer;
+import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -50,6 +53,11 @@ public class ClientForgeEventHandlers {
             if (!Config.isVisible) {
                 return;
             }
+            if (Loader.isModLoaded("gamestages") && GameStageShow.topstage.containsKey("all")) {
+                if (!GameStageHelper.clientHasStage(Minecraft.getMinecraft().player, GameStageShow.topstage.get("all"))) {
+                    return;
+                }
+            }
         }
 
         if (hasItemInEitherHand(ModItems.creativeProbe)) {
@@ -75,6 +83,11 @@ public class ClientForgeEventHandlers {
         if (Config.extendedInMain) {
             if (hasItemInMainHand(ModItems.probe)) {
                 return ProbeMode.EXTENDED;
+            }
+        }
+        if (Loader.isModLoaded("gamestages") && GameStageShow.topstage.containsKey("extended")) {
+            if (!GameStageHelper.hasStage(Minecraft.getMinecraft().player, GameStageShow.topstage.get("extended"))) {
+                return ProbeMode.NORMAL;
             }
         }
         return player.isSneaking() ? ProbeMode.EXTENDED : ProbeMode.NORMAL;

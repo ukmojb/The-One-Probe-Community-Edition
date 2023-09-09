@@ -11,6 +11,7 @@ import mcjty.theoneprobe.mods.botania.ManaPool;
 import mcjty.theoneprobe.mods.botania.RuneAltar;
 import mcjty.theoneprobe.mods.botania.Spreader;
 import mcjty.theoneprobe.mods.botania.TerraPlate;
+import mcjty.theoneprobe.mods.crt.CrtTop;
 import mcjty.theoneprobe.mods.ember_top.*;
 import net.minecraftforge.fml.common.Loader;
 
@@ -53,6 +54,7 @@ public class TOPHandler {
             theOneProbeImp.registerProvider(new ember_funnel());
             theOneProbeImp.registerProvider(new ember_boiler());
         }
+        theOneProbeImp.registerProvider(new CrtTop());
     }
 }
 

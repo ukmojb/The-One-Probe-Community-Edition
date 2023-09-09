@@ -18,6 +18,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -33,23 +34,23 @@ import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDHARD;
 
 public class PacketGetInfo implements IMessage {
 
-    private int dim;
-    private BlockPos pos;
-    private ProbeMode mode;
-    private EnumFacing sideHit;
-    private Vec3d hitVec;
-    private ItemStack pickBlock;
+    public static int dim;
+    public static BlockPos pos;
+    public static ProbeMode mode;
+    public static EnumFacing sideHit;
+    public static Vec3d hitVec;
+    public static ItemStack pickBlock;
 
     public PacketGetInfo() {
     }
 
     public PacketGetInfo(int dim, BlockPos pos, ProbeMode mode, RayTraceResult mouseOver, ItemStack pickBlock) {
-        this.dim = dim;
-        this.pos = pos;
-        this.mode = mode;
-        this.sideHit = mouseOver.sideHit;
-        this.hitVec = mouseOver.hitVec;
-        this.pickBlock = pickBlock;
+        PacketGetInfo.dim = dim;
+        PacketGetInfo.pos = pos;
+        PacketGetInfo.mode = mode;
+        PacketGetInfo.sideHit = mouseOver.sideHit;
+        PacketGetInfo.hitVec = mouseOver.hitVec;
+        PacketGetInfo.pickBlock = pickBlock;
     }
 
     private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, BlockPos blockPos, EnumFacing sideHit, Vec3d hitVec, ItemStack pickBlock) {

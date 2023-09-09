@@ -11,10 +11,12 @@ import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoEntityProvider;
 import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoProvider;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import mcjty.theoneprobe.config.Config;
+import mcjty.theoneprobe.mods.crt.api.GameStageShow;
 import mcjty.theoneprobe.network.PacketGetEntityInfo;
 import mcjty.theoneprobe.network.PacketGetInfo;
 import mcjty.theoneprobe.network.PacketHandler;
 import mcjty.theoneprobe.network.ThrowableIdentity;
+import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -31,6 +33,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
@@ -100,7 +103,12 @@ public class OverlayRenderer {
         Vec3d vec31 = entity.getLook(partialTicks);
         Vec3d end = start.add(vec31.x * dist, vec31.y * dist, vec31.z * dist);
 
-        mouseOver = entity.getEntityWorld().rayTraceBlocks(start, end, Config.showLiquids);
+        if (Loader.isModLoaded("gamestages") && GameStageShow.topstage.containsKey("liquids")) {
+            if (GameStageHelper.hasStage(entity, GameStageShow.topstage.get("liquids"))) {
+                mouseOver = entity.getEntityWorld().rayTraceBlocks(start, end, Config.showLiquids);
+            }
+        }
+        mouseOver = entity.getEntityWorld().rayTraceBlocks(start, end, false);
         if (mouseOver == null) {
             return;
         }
@@ -223,20 +231,28 @@ public class OverlayRenderer {
         long time = System.currentTimeMillis();
 
         IElement damageElement = null;
-        if (Config.showBreakProgress > 0) {
-            float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
-            if (damage > 0) {
-                if (Config.showBreakProgress == 2) {
-                    damageElement = new ElementText("" + TextFormatting.RED + I18n.translateToLocal("top.Progress") + " " + (int) (damage * 100) + "%");
-                } else {
-                    damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
-                            .prefix(I18n.translateToLocal("top.Progress") + " ")
-                            .suffix("%")
-                            .width(85)
-                            .borderColor(0)
-                            .filledColor(0)
-                            .filledColor(0xff990000)
-                            .alternateFilledColor(0xff550000));
+        boolean pass = true;
+        if (Loader.isModLoaded("gamestages") && GameStageShow.topstage.containsKey("breakProgress")) {
+            if (!GameStageHelper.hasStage(Minecraft.getMinecraft().player, GameStageShow.topstage.get("breakProgress"))) {
+                pass = false;
+            }
+        }
+        if (pass) {
+            if (Config.showBreakProgress > 0) {
+                float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
+                if (damage > 0) {
+                    if (Config.showBreakProgress == 2) {
+                        damageElement = new ElementText("" + TextFormatting.RED + I18n.translateToLocal("top.Progress") + " " + (int) (damage * 100) + "%");
+                    } else {
+                        damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
+                                .prefix(I18n.translateToLocal("top.Progress") + " ")
+                                .suffix("%")
+                                .width(85)
+                                .borderColor(0)
+                                .filledColor(0)
+                                .filledColor(0xff990000)
+                                .alternateFilledColor(0xff550000));
+                    }
                 }
             }
         }

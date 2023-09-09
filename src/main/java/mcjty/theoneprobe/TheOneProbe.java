@@ -1,5 +1,6 @@
 package mcjty.theoneprobe;
 
+import ink.ikx.rt.impl.mods.crafttweaker.CraftTweakerExtension;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.apiimpl.TheOneProbeImp;
 import mcjty.theoneprobe.items.ModItems;
@@ -8,12 +9,10 @@ import mcjty.theoneprobe.setup.IProxy;
 import mcjty.theoneprobe.setup.ModSetup;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.*;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -59,7 +58,6 @@ public class TheOneProbe {
         TOPHandler.registerTips();
 
     }
-
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent e) {
         setup.postInit(e);

@@ -17,12 +17,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.StringUtils;
-import net.minecraft.util.text.translation.I18n;
 
 import java.util.HashMap;
 import java.util.Map;
