@@ -89,3 +89,12 @@ top.Progress=挖掘进度
 top.Waiting=别猴急，咱等会服务器不行？
 top.ErrorLog=嗯...救不回来了，日志走起!
 
+#  例子
+# "top.harvestLevel." + harvestLevel = 自定义挖掘等级名称
+#
+top.harvestLevel.null=无
+top.harvestLevel.0=石
+top.harvestLevel.1=铁
+top.harvestLevel.2=钻石
+top.harvestLevel.3=黑曜石
+

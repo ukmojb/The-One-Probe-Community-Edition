@@ -63,6 +63,9 @@ public class Config {
     public static boolean testinprogress = true;
     public static int showBreakProgress = 1;    // 0 == off, 1 == bar, 2 == text
     public static boolean harvestStyleVanilla = true;
+    public static boolean showCustomharvestLevelName = false;
+    public static boolean showEntityModel = true;
+    public static boolean showEntityInfo = true;
     public static int chestContentsBorderColor = 0xff006699;
     public static float tooltipScale = 1.0f;
     public static int rfbarFilledColor = 0xffdd0000;
@@ -205,6 +208,9 @@ public class Config {
         chestContentsBorderColor = parseColor(cfg.getString("chestContentsBorderColor", CATEGORY_CLIENT, Integer.toHexString(chestContentsBorderColor), "Color of the border of the chest contents box (0 to disable)"));
         showBreakProgress = cfg.getInt("showBreakProgress", CATEGORY_CLIENT, showBreakProgress, 0, 2, "0 means don't show break progress, 1 is show as bar, 2 is show as text");
         harvestStyleVanilla = cfg.getBoolean("harvestStyleVanilla", CATEGORY_CLIENT, harvestStyleVanilla, "true means shows harvestability with vanilla style icons");
+        showCustomharvestLevelName = cfg.getBoolean("showCustomharvestLevelName", CATEGORY_CLIENT, showCustomharvestLevelName, "true means shows Custom harvestLevel (you can chance name in the lang)");
+        showEntityModel = cfg.getBoolean("showEntityModel", CATEGORY_CLIENT, showEntityModel, "true means shows entity model");
+        showEntityInfo = cfg.getBoolean("showEntityInfo", CATEGORY_CLIENT, showEntityInfo, "true means shows entity info");
 
         Map<TextStyleClass, String> newformat = new HashMap<>();
         for (TextStyleClass styleClass : textStyleClasses.keySet()) {

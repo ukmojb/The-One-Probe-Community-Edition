@@ -55,15 +55,27 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
         String modid = Tools.getModName(entity);
 
         if (Tools.show(mode, config.getShowModName())) {
-            probeInfo.horizontal()
-                    .entity(entity)
-                    .vertical()
-                    .text(NAME + entity.getDisplayName().getFormattedText())
-                    .text(MODNAME + modid);
+            if (Config.showEntityModel){
+                probeInfo.horizontal()
+                        .entity(entity)
+                        .vertical()
+                        .text(NAME + entity.getDisplayName().getFormattedText())
+                        .text(MODNAME + modid);
+            } else{
+                probeInfo.horizontal()
+                        .vertical()
+                        .text(NAME + entity.getDisplayName().getFormattedText())
+                        .text(MODNAME + modid);
+            }
         } else {
-            probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
-                    .entity(entity)
-                    .text(NAME + entity.getDisplayName().getFormattedText());
+            if (Config.showEntityModel) {
+                probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
+                        .entity(entity)
+                        .text(NAME + entity.getDisplayName().getFormattedText());
+            } else {
+                probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
+                        .text(NAME + entity.getDisplayName().getFormattedText());
+            }
         }
     }
 

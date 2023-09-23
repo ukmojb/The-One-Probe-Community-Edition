@@ -20,6 +20,7 @@ public class ElementTextRender {
     }
 
     private static String stylifyString(String text) {
+        System.out.println(text + "---114514");
         while (text.contains(STARTLOC) && text.contains(ENDLOC)) {
             int start = text.indexOf(STARTLOC);
             int end = text.indexOf(ENDLOC);

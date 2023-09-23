@@ -6,5 +6,94 @@ item.theoneprobe.diamond_helmet_probe.name=Алмазный шлем с датч
 item.theoneprobe.gold_helmet_probe.name=Золотой шлем с датчиком
 item.theoneprobe.iron_helmet_probe.name=Железный шлем с датчиком
 item.theoneprobe.creativeprobe.name=Творческий датчик
+item.theoneprobe.probenote.name=The One Probe Инструкция
 
 itemGroup.Probe=The One Probe
+
+top.toolclass.Pickaxe=Кирка
+top.toolclass.Shovel=Лопата
+top.toolclass.Axe=Топор
+top.toolclass.Sword=Меч
+
+top.NoTool= Без инструмента
+top.level=уровень
+
+top.Fuel=Топливо
+top.Time=Время
+top.Ticks=Тики
+
+top.Mob=Моб
+
+top.Power=Мощность
+
+top.State=Состояние
+top.On=ВКЛ
+top.Off=ВЫКЛ
+
+top.Mode=Режим
+
+top.Delay=Delay
+
+top.Looked=Looked
+
+top.Liquid=Liquid
+
+top.RF=RF
+top.TE=TE
+
+top.Fully_grown=Полностью выросло
+top.Growth=Рост
+
+top.Growing_Age=Growing Age
+
+top.Tot_armor=Tot armor
+top.Age=Age
+top.Absorption=Absorption
+top.AI_Move_Speed=AI Move Speed
+top.Revenge_Timer=Revenge Timer
+
+top.Reg_Name=Reg_Name
+top.Unlocname=Unlocname
+top.Meta=Meta
+top.Class=Class
+top.Hardness=Hardness
+top.Power_W=Power W
+top.Light=Light
+
+top.Health=Здоровье
+top.Growing_time=Время роста
+top.Second=с
+top.Rotation=Rotation
+top.Empty=Пусто
+
+top.Unknown_owner=Unknown_owner
+top.Owned_by=Owned by
+top.Tameable=Tameable
+
+top.Jump_height=Jump height
+top.Speed=Скорость
+
+top.Collar=Collar
+
+top.Career=Career
+top.CareerLevel=Career Level
+top.CareerLevel.1=1
+top.CareerLevel.2=2
+top.CareerLevel.3=3
+top.CareerLevel.4=4
+top.CareerLevel.5=5
+top.CareerLevel.6=6
+
+top.Progress=Прогресс
+
+top.Waiting=Ожидание сервера...
+top.ErrorLog=Ошибка (смотри логи для деталей)!
+
+#  В качестве примера
+# "top.harvestLevel." + harvestLevel = Имя пользовательского уровня харвеста
+#
+top.harvestLevel.null=Нет
+top.harvestLevel.0=Камень
+top.harvestLevel.1=Железо
+top.harvestLevel.2=Алмаз
+top.harvestLevel.3=Обсидиан

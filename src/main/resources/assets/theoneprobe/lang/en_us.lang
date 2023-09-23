@@ -89,3 +89,13 @@ top.Progress=Progress
 
 top.Waiting=Waiting for server...
 top.ErrorLog=Error (see log for details)!
+
+
+#  Example
+# "top.harvestLevel." + harvestLevel = Custom harvestLevel name
+#
+top.harvestLevel.null=Null
+top.harvestLevel.0=Stone
+top.harvestLevel.1=Iron
+top.harvestLevel.2=Diamond
+top.harvestLevel.3=Obsidian

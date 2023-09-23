@@ -136,6 +136,11 @@ public class HarvestInfoTools {
         if (harvestLevel < 0) {
             // NOTE: When a block doesn't have an explicitly-set harvest tool, getHarvestLevel will return -1 for ANY tool. (Expected behavior)
 //                TheOneProbe.logger.info("HarvestLevel out of bounds (less than 0). Found " + harvestLevel);
+            if (Config.showCustomharvestLevelName) {
+                if (I18n.canTranslate("top.harvestLevel.null")) {
+                    harvestName = I18n.translateToLocal("top.harvestLevel.null");
+                }
+            }
         } else if (harvestLevel >= harvestLevels.length) {
 //                TheOneProbe.logger.info("HarvestLevel out of bounds (Max value " + harvestLevels.length + "). Found " + harvestLevel);
         } else {
@@ -148,6 +153,17 @@ public class HarvestInfoTools {
                     Block stageBlock = stageInfo.getSecond().getBlock();
                     int stageharvestLevel = stageBlock.getHarvestLevel(stageBlockState);
                     harvestName = harvestLevels[stageharvestLevel];
+                }
+            }
+            if (Config.showCustomharvestLevelName) {
+                if (harvestLevel != -1) {
+                    if (I18n.canTranslate("top.harvestLevel." + harvestLevel)) {
+                        harvestName = I18n.translateToLocal("top.harvestLevel." + harvestLevel);
+                    }
+                } else {
+                    if (I18n.canTranslate("top.harvestLevel.null")) {
+                        harvestName = I18n.translateToLocal("top.harvestLevel.null");
+                    }
                 }
             }
         }
@@ -181,6 +197,7 @@ public class HarvestInfoTools {
                     horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
                             .text(OK + I18n.translateToLocal("top.NoTool") + " (" + I18n.translateToLocal("top.level") + " " + harvestName + ")");
                 }
+
             }
 
         } else {
@@ -201,6 +218,7 @@ public class HarvestInfoTools {
                     horizontal.icon(ICONS, 16, offs, dim, dim, iconStyle)
                             .text(WARNING + I18n.translateToLocal("top.NoTool") + " (" + I18n.translateToLocal("top.level") + " " + harvestName + ")");
                 }
+
             }
         }
     }
