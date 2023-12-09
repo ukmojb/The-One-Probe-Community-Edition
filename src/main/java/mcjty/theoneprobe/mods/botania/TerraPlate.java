@@ -28,7 +28,7 @@ public class TerraPlate implements IProbeInfoProvider {
             int gray = Color.gray.getRGB();
             int white = Color.white.getRGB();
             if (Config.showBotaniaprogress) {
-                if (Config.testinprogress) {
+                if (Config.textinprogress) {
                     probeInfo.progress(mana, manamax, new ProgressStyle()
                             .prefix("Mana" + ":" + mana).suffix("/" + manamax)
                             .width(110)

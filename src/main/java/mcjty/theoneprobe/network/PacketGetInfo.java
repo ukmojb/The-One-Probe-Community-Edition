@@ -40,54 +40,19 @@ public class PacketGetInfo implements IMessage {
     public static EnumFacing sideHit;
     public static Vec3d hitVec;
     public static ItemStack pickBlock;
+    private static ProbeInfo probeInfo;
 
     public PacketGetInfo() {
     }
 
-    public PacketGetInfo(int dim, BlockPos pos, ProbeMode mode, RayTraceResult mouseOver, ItemStack pickBlock) {
+    public PacketGetInfo(int dim, BlockPos pos, ProbeMode mode, RayTraceResult mouseOver, ItemStack pickBlock, ProbeInfo probeInfo) {
         PacketGetInfo.dim = dim;
         PacketGetInfo.pos = pos;
         PacketGetInfo.mode = mode;
         PacketGetInfo.sideHit = mouseOver.sideHit;
         PacketGetInfo.hitVec = mouseOver.hitVec;
         PacketGetInfo.pickBlock = pickBlock;
-    }
-
-    private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, BlockPos blockPos, EnumFacing sideHit, Vec3d hitVec, ItemStack pickBlock) {
-        if (Config.needsProbe == PROBE_NEEDEDFOREXTENDED) {
-            // We need a probe only for extended information
-            if (!ModItems.hasAProbeSomewhere(player)) {
-                // No probe anywhere, switch EXTENDED to NORMAL
-                if (mode == ProbeMode.EXTENDED) {
-                    mode = ProbeMode.NORMAL;
-                }
-            }
-        } else if (Config.needsProbe == PROBE_NEEDEDHARD && !ModItems.hasAProbeSomewhere(player)) {
-            // The server says we need a probe but we don't have one in our hands
-            return null;
-        }
-
-        IBlockState state = world.getBlockState(blockPos);
-        ProbeInfo probeInfo = TheOneProbe.theOneProbeImp.create();
-        IProbeHitData data = new ProbeHitData(blockPos, hitVec, sideHit, pickBlock);
-
-        IProbeConfig probeConfig = TheOneProbe.theOneProbeImp.createProbeConfig();
-        List<IProbeConfigProvider> configProviders = TheOneProbe.theOneProbeImp.getConfigProviders();
-        for (IProbeConfigProvider configProvider : configProviders) {
-            configProvider.getProbeConfig(probeConfig, player, world, state, data);
-        }
-        Config.setRealConfig(probeConfig);
-
-        List<IProbeInfoProvider> providers = TheOneProbe.theOneProbeImp.getProviders();
-        for (IProbeInfoProvider provider : providers) {
-            try {
-                provider.addProbeInfo(mode, probeInfo, player, world, state, data);
-            } catch (Throwable e) {
-                ThrowableIdentity.registerThrowable(e);
-                probeInfo.text(LABEL + "Error: " + ERROR + provider.getID());
-            }
-        }
-        return probeInfo;
+        PacketGetInfo.probeInfo = probeInfo;
     }
 
     @Override
@@ -105,6 +70,9 @@ public class PacketGetInfo implements IMessage {
             hitVec = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
         }
         pickBlock = ByteBufUtils.readItemStack(buf);
+
+        probeInfo = new ProbeInfo();
+        probeInfo.fromBytes(buf);
     }
 
     @Override
@@ -132,6 +100,8 @@ public class PacketGetInfo implements IMessage {
             ItemStack copy = new ItemStack(pickBlock.getItem(), pickBlock.getCount(), pickBlock.getMetadata());
             ByteBufUtils.writeItemStack(buf, copy);
         }
+
+        probeInfo.toBytes(buf);
     }
 
     public static class Handler implements IMessageHandler<PacketGetInfo, IMessage> {
@@ -144,9 +114,7 @@ public class PacketGetInfo implements IMessage {
         private void handle(PacketGetInfo message, MessageContext ctx) {
             WorldServer world = DimensionManager.getWorld(message.dim);
             if (world != null) {
-                ProbeInfo probeInfo = getProbeInfo(ctx.getServerHandler().player,
-                        message.mode, world, message.pos, message.sideHit, message.hitVec, message.pickBlock);
-                PacketHandler.INSTANCE.sendTo(new PacketReturnInfo(message.dim, message.pos, probeInfo), ctx.getServerHandler().player);
+                PacketHandler.INSTANCE.sendTo(new PacketReturnInfo(message.dim, message.pos, message.probeInfo), ctx.getServerHandler().player);
             }
         }
     }

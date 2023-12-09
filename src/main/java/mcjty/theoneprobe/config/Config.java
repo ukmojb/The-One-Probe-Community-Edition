@@ -34,6 +34,8 @@ public class Config {
     public static String CATEGORY_PROVIDERS = "providers";
     public static String CATEGORY_CLIENT = "client";
     public static String CATEGORY_BOTANIA = "Botania";
+
+    public static String CATEGORY_THAUMCRAFT = "Thaumcraft";
     public static int needsProbe = PROBE_NEEDEDFOREXTENDED;
 
     public static boolean extendedInMain = false;
@@ -60,7 +62,8 @@ public class Config {
     public static boolean showDebugInfo = true;
     public static boolean Botaniatop = true;
     public static boolean showBotaniaprogress = true;
-    public static boolean testinprogress = true;
+    public static boolean textinprogress = true;
+    public static boolean requireGoggles = false;
     public static int showBreakProgress = 1;    // 0 == off, 1 == bar, 2 == text
     public static boolean harvestStyleVanilla = true;
     public static boolean showCustomharvestLevelName = false;
@@ -154,9 +157,11 @@ public class Config {
         dontSendNBT = cfg.getStringList("dontSendNBT", CATEGORY_THEONEPROBE, dontSendNBT, "A list of blocks for which we don't send NBT over the network. This is mostly useful for blocks that have HUGE NBT in their pickblock (itemstack)");
 
 
-        Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, compactEqualStacks, "Whether to enable Botania's top display");
-        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, compactEqualStacks, "Whether to show Botania's mana");
-        testinprogress = cfg.getBoolean("testinprogress", CATEGORY_BOTANIA, compactEqualStacks, "Whether the mana value should be displayed in or below the mana bar");
+        Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, Botaniatop, "Whether to enable Botania's top display");
+        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, showBotaniaprogress, "Whether to show Botania's mana");
+        textinprogress = cfg.getBoolean("textinprogress", CATEGORY_BOTANIA, textinprogress, "Whether the mana value should be displayed in or below the mana bar");
+
+        requireGoggles = cfg.getBoolean("textinprogress", CATEGORY_THAUMCRAFT, requireGoggles, "Should the goggles of revealing be required to see Thaumcraft information?");
 
 
         setupStyleConfig(cfg);

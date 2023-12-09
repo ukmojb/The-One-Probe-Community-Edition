@@ -77,4 +77,13 @@ public class TheOneProbe {
             }
         }
     }
+
+    public static int ELEM_ID_ASPECT = -1;
+
+    public static int getAspectElementId() {
+        if (ELEM_ID_ASPECT == -1) {
+            throw new IllegalStateException("Aspect element is not yet registered!");
+        }
+        return ELEM_ID_ASPECT;
+    }
 }

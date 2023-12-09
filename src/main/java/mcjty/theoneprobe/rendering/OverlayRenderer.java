@@ -11,6 +11,7 @@ import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoEntityProvider;
 import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoProvider;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import mcjty.theoneprobe.config.Config;
+import mcjty.theoneprobe.items.ModItems;
 import mcjty.theoneprobe.mods.crt.api.GameStageShow;
 import mcjty.theoneprobe.network.PacketGetEntityInfo;
 import mcjty.theoneprobe.network.PacketGetInfo;
@@ -27,6 +28,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -39,10 +41,14 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static mcjty.theoneprobe.api.TextStyleClass.ERROR;
+import static mcjty.theoneprobe.api.TextStyleClass.LABEL;
+import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDFOREXTENDED;
+import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDHARD;
 
 public class OverlayRenderer {
 
@@ -220,7 +226,12 @@ public class OverlayRenderer {
     }
 
     private static void requestEntityInfo(ProbeMode mode, RayTraceResult mouseOver, Entity entity, EntityPlayerSP player) {
-        PacketHandler.INSTANCE.sendToServer(new PacketGetEntityInfo(player.getEntityWorld().provider.getDimension(), mode, mouseOver, entity));
+        ProbeInfo info = ProbeInfo.getProbeInfo(player, mode, entity.world, entity, mouseOver.hitVec);
+        if (entity != null) {
+            PacketHandler.INSTANCE.sendToServer(new PacketGetEntityInfo(player.getEntityWorld().provider.getDimension(), mode, mouseOver, entity, info));
+        } else {
+            registerProbeInfo(entity.getPersistentID(), info);
+        }
     }
 
     private static void renderHUDBlock(ProbeMode mode, RayTraceResult mouseOver, double sw, double sh) {
@@ -346,15 +357,23 @@ public class OverlayRenderer {
         IBlockState blockState = world.getBlockState(blockPos);
         Block block = blockState.getBlock();
         ItemStack pickBlock = block.getPickBlock(blockState, mouseOver, world, blockPos, player);
+
         if (pickBlock == null || (!pickBlock.isEmpty() && pickBlock.getItem() == null)) {
             // Protection for some invalid items.
             pickBlock = ItemStack.EMPTY;
         }
-        if (pickBlock != null && (!pickBlock.isEmpty()) && Config.getDontSendNBTSet().contains(pickBlock.getItem().getRegistryName())) {
-            pickBlock = pickBlock.copy();
+
+        if (!pickBlock.isEmpty() && Config.getDontSendNBTSet().contains(pickBlock.getItem().getRegistryName())) {
             pickBlock.setTagCompound(null);
         }
-        PacketHandler.INSTANCE.sendToServer(new PacketGetInfo(world.provider.getDimension(), blockPos, mode, mouseOver, pickBlock));
+
+        ProbeInfo info = ProbeInfo.getProbeInfo(player, mode, world, blockPos, mouseOver.sideHit, mouseOver.hitVec, pickBlock);
+
+        if (world.getTileEntity(blockPos) != null) {
+            PacketHandler.INSTANCE.sendToServer(new PacketGetInfo(world.provider.getDimension(), blockPos, mode, mouseOver, pickBlock, info));
+        } else {
+            registerProbeInfo(world.provider.getDimension(), blockPos, info);
+        }
     }
 
     public static void renderOverlay(IOverlayStyle style, IProbeInfo probeInfo) {
@@ -456,5 +475,42 @@ public class OverlayRenderer {
         if (extra != null) {
             probeInfo.removeElement(extra);
         }
+    }
+
+    private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, BlockPos blockPos, EnumFacing sideHit, Vec3d hitVec, ItemStack pickBlock) {
+        if (Config.needsProbe == PROBE_NEEDEDFOREXTENDED) {
+            // We need a probe only for extended information
+            if (!ModItems.hasAProbeSomewhere(player)) {
+                // No probe anywhere, switch EXTENDED to NORMAL
+                if (mode == ProbeMode.EXTENDED) {
+                    mode = ProbeMode.NORMAL;
+                }
+            }
+        } else if (Config.needsProbe == PROBE_NEEDEDHARD && !ModItems.hasAProbeSomewhere(player)) {
+            // The server says we need a probe but we don't have one in our hands
+            return null;
+        }
+
+        IBlockState state = world.getBlockState(blockPos);
+        ProbeInfo probeInfo = TheOneProbe.theOneProbeImp.create();
+        IProbeHitData data = new ProbeHitData(blockPos, hitVec, sideHit, pickBlock);
+
+        IProbeConfig probeConfig = TheOneProbe.theOneProbeImp.createProbeConfig();
+        List<IProbeConfigProvider> configProviders = TheOneProbe.theOneProbeImp.getConfigProviders();
+        for (IProbeConfigProvider configProvider : configProviders) {
+            configProvider.getProbeConfig(probeConfig, player, world, state, data);
+        }
+        Config.setRealConfig(probeConfig);
+
+        List<IProbeInfoProvider> providers = TheOneProbe.theOneProbeImp.getProviders();
+        for (IProbeInfoProvider provider : providers) {
+            try {
+                provider.addProbeInfo(mode, probeInfo, player, world, state, data);
+            } catch (Throwable e) {
+                ThrowableIdentity.registerThrowable(e);
+                probeInfo.text(LABEL + "Error: " + ERROR + provider.getID());
+            }
+        }
+        return probeInfo;
     }
 }

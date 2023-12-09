@@ -13,6 +13,8 @@ import mcjty.theoneprobe.mods.botania.Spreader;
 import mcjty.theoneprobe.mods.botania.TerraPlate;
 import mcjty.theoneprobe.mods.crt.CrtTop;
 import mcjty.theoneprobe.mods.ember_top.*;
+import mcjty.theoneprobe.mods.thaumcraft.AspectElement;
+import mcjty.theoneprobe.mods.thaumcraft.ThaumHighlightInfoProvider;
 import net.minecraftforge.fml.common.Loader;
 
 public class TOPHandler {
@@ -54,7 +56,13 @@ public class TOPHandler {
             theOneProbeImp.registerProvider(new ember_funnel());
             theOneProbeImp.registerProvider(new ember_boiler());
         }
-        theOneProbeImp.registerProvider(new CrtTop());
+        if (Loader.isModLoaded("crafttweaker")) {
+            theOneProbeImp.registerProvider(new CrtTop());
+        }
+        if (Loader.isModLoaded("thaumcraft")) {
+            TheOneProbe.ELEM_ID_ASPECT = TheOneProbe.theOneProbeImp.registerElementFactory(new AspectElement.Factory());
+            theOneProbeImp.registerProvider(new ThaumHighlightInfoProvider());
+        }
     }
 }
 
