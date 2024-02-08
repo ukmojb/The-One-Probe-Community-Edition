@@ -30,6 +30,6 @@ public class ember_coppercell implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.power";
+        return "ember.power";
     }
 }

@@ -31,6 +31,6 @@ public class ember_pulser implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.pulser";
+        return "ember.pulser";
     }
 }

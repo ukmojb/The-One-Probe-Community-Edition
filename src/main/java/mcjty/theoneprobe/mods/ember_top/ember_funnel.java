@@ -31,6 +31,6 @@ public class ember_funnel implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.funnel";
+        return "ember.funnel";
     }
 }

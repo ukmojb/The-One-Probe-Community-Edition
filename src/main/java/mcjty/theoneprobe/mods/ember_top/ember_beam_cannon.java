@@ -31,6 +31,6 @@ public class ember_beam_cannon implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.beam.cannon";
+        return "ember.beam.cannon";
     }
 }

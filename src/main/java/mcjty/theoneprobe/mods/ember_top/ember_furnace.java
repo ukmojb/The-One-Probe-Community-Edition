@@ -31,6 +31,6 @@ public class ember_furnace implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.furnace";
+        return "ember.furnace";
     }
 }

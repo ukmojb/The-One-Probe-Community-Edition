@@ -31,6 +31,6 @@ public class ember_emberinjector implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.injector";
+        return "ember.injector";
     }
 }

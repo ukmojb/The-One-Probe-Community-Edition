@@ -50,6 +50,6 @@ public class DreamingManaPool implements IProbeInfoProvider {
 
     @Override
     public String getID() {
-        return "random.botanic_additions.DreamingManapool";
+        return "botanic_additions.DreamingManapool";
     }
 }

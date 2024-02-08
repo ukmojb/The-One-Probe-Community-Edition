@@ -23,7 +23,7 @@ public class ember_mixer implements IProbeInfoProvider {
             int yellow = Color.yellow.getRGB();
             int white = Color.white.getRGB();
             if (tileEntityMixerTop.capability.getEmber() > 0) {
-                probeInfo.progress(ember, max + 5, new ProgressStyle().prefix(I18n.translateToLocal("random.power") + ":" + ember).suffix("/" + max)
+                probeInfo.progress(ember, max + 5, new ProgressStyle().prefix(I18n.translateToLocal("power") + ":" + ember).suffix("/" + max)
                         .width(110)
                         .numberFormat(NumberFormat.NONE)
                         .borderColor(yellow)
@@ -68,6 +68,6 @@ public class ember_mixer implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.mixer";
+        return "ember.mixer";
     }
 }

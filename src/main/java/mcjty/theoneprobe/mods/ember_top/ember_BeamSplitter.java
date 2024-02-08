@@ -31,6 +31,6 @@ public class ember_BeamSplitter implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.beam.splitter";
+        return "ember.beam.splitter";
     }
 }

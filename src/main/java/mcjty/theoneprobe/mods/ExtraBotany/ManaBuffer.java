@@ -52,7 +52,7 @@ public class ManaBuffer implements IProbeInfoProvider {
 
     @Override
     public String getID() {
-        return "random.extrabotania.ManaBuffer";
+        return "extrabotania.ManaBuffer";
     }
 
 }

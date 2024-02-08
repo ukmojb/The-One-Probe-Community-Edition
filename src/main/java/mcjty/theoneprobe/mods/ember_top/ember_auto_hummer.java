@@ -33,6 +33,6 @@ public class ember_auto_hummer implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.auto.hammer";
+        return "ember.auto.hammer";
     }
 }

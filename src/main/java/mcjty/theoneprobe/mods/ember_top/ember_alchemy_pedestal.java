@@ -34,6 +34,6 @@ public class ember_alchemy_pedestal implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.alchemy.pedestal";
+        return "ember.alchemy.pedestal";
     }
 }

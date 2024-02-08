@@ -32,6 +32,6 @@ public class ember_crystal_cell implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.crystal.cell";
+        return "crystal.cell";
     }
 }

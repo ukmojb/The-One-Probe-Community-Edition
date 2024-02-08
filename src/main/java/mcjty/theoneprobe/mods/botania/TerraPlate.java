@@ -56,6 +56,6 @@ public class TerraPlate implements IProbeInfoProvider {
 
     @Override
     public String getID() {
-        return "random.botania.TerraPlate";
+        return "botania.TerraPlate";
     }
 }

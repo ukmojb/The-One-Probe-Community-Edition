@@ -98,3 +98,10 @@ top.harvestLevel.1=铁
 top.harvestLevel.2=钻石
 top.harvestLevel.3=黑曜石
 
+# mods
+
+top.bot.spark.dispersive=升级 : 弥散
+top.bot.spark.dominant=升级 : 聚集
+top.bot.spark.recessive=升级 : 扩散
+top.bot.spark.isolated=升级 : 隔绝
+

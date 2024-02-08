@@ -11,13 +11,10 @@ import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoEntityProvider;
 import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoProvider;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import mcjty.theoneprobe.config.Config;
-import mcjty.theoneprobe.items.ModItems;
-import mcjty.theoneprobe.mods.crt.api.GameStageShow;
 import mcjty.theoneprobe.network.PacketGetEntityInfo;
 import mcjty.theoneprobe.network.PacketGetInfo;
 import mcjty.theoneprobe.network.PacketHandler;
 import mcjty.theoneprobe.network.ThrowableIdentity;
-import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -28,31 +25,24 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static mcjty.theoneprobe.api.TextStyleClass.ERROR;
-import static mcjty.theoneprobe.api.TextStyleClass.LABEL;
-import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDFOREXTENDED;
-import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDHARD;
 
 public class OverlayRenderer {
 
-    private static Map<Pair<Integer, BlockPos>, Pair<Long, ProbeInfo>> cachedInfo = new HashMap<>();
+    private static Map<Pair<Integer,BlockPos>, Pair<Long, ProbeInfo>> cachedInfo = new HashMap<>();
     private static Map<UUID, Pair<Long, ProbeInfo>> cachedEntityInfo = new HashMap<>();
     private static long lastCleanupTime = 0;
 
@@ -105,16 +95,11 @@ public class OverlayRenderer {
         }
 
         EntityPlayerSP entity = Minecraft.getMinecraft().player;
-        Vec3d start = entity.getPositionEyes(partialTicks);
+        Vec3d start  = entity.getPositionEyes(partialTicks);
         Vec3d vec31 = entity.getLook(partialTicks);
         Vec3d end = start.add(vec31.x * dist, vec31.y * dist, vec31.z * dist);
 
-        if (Loader.isModLoaded("gamestages") && GameStageShow.topstage.containsKey("liquids")) {
-            if (GameStageHelper.hasStage(entity, GameStageShow.topstage.get("liquids"))) {
-                mouseOver = entity.getEntityWorld().rayTraceBlocks(start, end, Config.showLiquids);
-            }
-        }
-        mouseOver = entity.getEntityWorld().rayTraceBlocks(start, end, false);
+        mouseOver = entity.getEntityWorld().rayTraceBlocks(start, end, Config.showLiquids);
         if (mouseOver == null) {
             return;
         }
@@ -162,18 +147,13 @@ public class OverlayRenderer {
         if (entity == null) {
             return;
         }
-/*
-@todo
-        if (entity instanceof EntityDragonPart) {
-            EntityDragonPart part = (EntityDragonPart) entity;
-            if (part.entityDragonObj instanceof Entity) {
-                entity = (Entity) part.entityDragonObj;
-            }
-        }
-*/
-        if (!Config.showEntityInfo) {
-            return;
-        }
+//@todo
+//        if (entity instanceof EntityDragonPart) {
+//            EntityDragonPart part = (EntityDragonPart) entity;
+//            if (part.entityDragonObj instanceof Entity) {
+//                entity = (Entity) part.entityDragonObj;
+//            }
+//        }
 
         String entityString = EntityList.getEntityString(entity);
         if (entityString == null && !(entity instanceof EntityPlayer)) {
@@ -198,16 +178,16 @@ public class OverlayRenderer {
 
             if (lastPair != null && time < lastPairTime + Config.timeout) {
                 renderElements(lastPair.getRight(), Config.getDefaultOverlayStyle(), sw, sh, null);
-                lastRenderedTime = time;
+//                lastRenderedTime = time;
             } else if (Config.waitingForServerTimeout > 0 && lastRenderedTime != -1 && time > lastRenderedTime + Config.waitingForServerTimeout) {
                 // It has been a while. Show some info on client that we are
                 // waiting for server information
                 ProbeInfo info = getWaitingEntityInfo(mode, mouseOver, entity, player);
-                registerProbeInfo(uuid, info);
-                lastPair = Pair.of(time, info);
-                lastPairTime = time;
+//                registerProbeInfo(uuid, info);
+//                lastPair = Pair.of(time, info);
+//                lastPairTime = time;
                 renderElements(lastPair.getRight(), Config.getDefaultOverlayStyle(), sw, sh, null);
-                lastRenderedTime = time;
+//                lastRenderedTime = time;
             }
         } else {
             if (time > cacheEntry.getLeft() + Config.timeout) {
@@ -226,12 +206,8 @@ public class OverlayRenderer {
     }
 
     private static void requestEntityInfo(ProbeMode mode, RayTraceResult mouseOver, Entity entity, EntityPlayerSP player) {
-        ProbeInfo info = ProbeInfo.getProbeInfo(player, mode, entity.world, entity, mouseOver.hitVec);
-        if (entity != null) {
-            PacketHandler.INSTANCE.sendToServer(new PacketGetEntityInfo(player.getEntityWorld().provider.getDimension(), mode, mouseOver, entity, info));
-        } else {
-            registerProbeInfo(entity.getPersistentID(), info);
-        }
+        ProbeInfo info = ProbeInfo.getProbeInfo(player, mode, player.world, entity, mouseOver.hitVec);
+        PacketHandler.INSTANCE.sendToServer(new PacketGetEntityInfo(player.getEntityWorld().provider.getDimension(), mode, mouseOver, entity, info));
     }
 
     private static void renderHUDBlock(ProbeMode mode, RayTraceResult mouseOver, double sw, double sh) {
@@ -247,28 +223,20 @@ public class OverlayRenderer {
         long time = System.currentTimeMillis();
 
         IElement damageElement = null;
-        boolean pass = true;
-        if (Loader.isModLoaded("gamestages") && GameStageShow.topstage.containsKey("breakProgress")) {
-            if (!GameStageHelper.hasStage(Minecraft.getMinecraft().player, GameStageShow.topstage.get("breakProgress"))) {
-                pass = false;
-            }
-        }
-        if (pass) {
-            if (Config.showBreakProgress > 0) {
-                float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
-                if (damage > 0) {
-                    if (Config.showBreakProgress == 2) {
-                        damageElement = new ElementText("" + TextFormatting.RED + I18n.translateToLocal("top.Progress") + " " + (int) (damage * 100) + "%");
-                    } else {
-                        damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
-                                .prefix(I18n.translateToLocal("top.Progress") + " ")
-                                .suffix("%")
-                                .width(85)
-                                .borderColor(0)
-                                .filledColor(0)
-                                .filledColor(0xff990000)
-                                .alternateFilledColor(0xff550000));
-                    }
+        if (Config.showBreakProgress > 0) {
+            float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
+            if (damage > 0) {
+                if (Config.showBreakProgress == 2) {
+                    damageElement = new ElementText("" + TextFormatting.RED + "Progress " + (int) (damage * 100) + "%");
+                } else {
+                    damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
+                            .prefix("Progress ")
+                            .suffix("%")
+                            .width(85)
+                            .borderColor(0)
+                            .filledColor(0)
+                            .filledColor(0xff990000)
+                            .alternateFilledColor(0xff550000));
                 }
             }
         }
@@ -329,10 +297,10 @@ public class OverlayRenderer {
             DefaultProbeInfoProvider.showStandardBlockInfo(probeConfig, mode, probeInfo, blockState, block, world, blockPos, player, data);
         } catch (Exception e) {
             ThrowableIdentity.registerThrowable(e);
-            probeInfo.text(ERROR+ I18n.translateToLocal("top.ErrorLog"));
+            probeInfo.text(ERROR + "Error (see log for details)!");
         }
 
-        probeInfo.text(ERROR + I18n.translateToLocal("top.Waiting"));
+        probeInfo.text(ERROR + "Waiting for server...");
         return probeInfo;
     }
 
@@ -345,10 +313,10 @@ public class OverlayRenderer {
             DefaultProbeInfoEntityProvider.showStandardInfo(mode, probeInfo, entity, probeConfig);
         } catch (Exception e) {
             ThrowableIdentity.registerThrowable(e);
-            probeInfo.text(ERROR+ I18n.translateToLocal("top.ErrorLog"));
+            probeInfo.text(ERROR + "Error (see log for details)!");
         }
 
-        probeInfo.text(ERROR + I18n.translateToLocal("top.Waiting"));
+        probeInfo.text(ERROR + "Waiting for server...");
         return probeInfo;
     }
 
@@ -357,23 +325,16 @@ public class OverlayRenderer {
         IBlockState blockState = world.getBlockState(blockPos);
         Block block = blockState.getBlock();
         ItemStack pickBlock = block.getPickBlock(blockState, mouseOver, world, blockPos, player);
-
         if (pickBlock == null || (!pickBlock.isEmpty() && pickBlock.getItem() == null)) {
             // Protection for some invalid items.
             pickBlock = ItemStack.EMPTY;
         }
-
-        if (!pickBlock.isEmpty() && Config.getDontSendNBTSet().contains(pickBlock.getItem().getRegistryName())) {
+        if (pickBlock != null && (!pickBlock.isEmpty()) && Config.getDontSendNBTSet().contains(pickBlock.getItem().getRegistryName())) {
+            pickBlock = pickBlock.copy();
             pickBlock.setTagCompound(null);
         }
-
         ProbeInfo info = ProbeInfo.getProbeInfo(player, mode, world, blockPos, mouseOver.sideHit, mouseOver.hitVec, pickBlock);
-
-        if (world.getTileEntity(blockPos) != null) {
-            PacketHandler.INSTANCE.sendToServer(new PacketGetInfo(world.provider.getDimension(), blockPos, mode, mouseOver, pickBlock, info));
-        } else {
-            registerProbeInfo(world.provider.getDimension(), blockPos, info);
-        }
+        PacketHandler.INSTANCE.sendToServer(new PacketGetInfo(world.provider.getDimension(), blockPos, mode, mouseOver, pickBlock, info));
     }
 
     public static void renderOverlay(IOverlayStyle style, IProbeInfo probeInfo) {
@@ -394,7 +355,7 @@ public class OverlayRenderer {
 
     private static void cleanupCachedBlocks(long time) {
         // It has been a while. Time to clean up unused cached pairs.
-        Map<Pair<Integer, BlockPos>, Pair<Long, ProbeInfo>> newCachedInfo = new HashMap<>();
+        Map<Pair<Integer,BlockPos>, Pair<Long, ProbeInfo>> newCachedInfo = new HashMap<>();
         for (Map.Entry<Pair<Integer, BlockPos>, Pair<Long, ProbeInfo>> entry : cachedInfo.entrySet()) {
             long t = entry.getValue().getLeft();
             if (time < t + Config.timeout + 1000) {
@@ -462,9 +423,9 @@ public class OverlayRenderer {
 
         if (thick > 0) {
             if (offset > 0) {
-                RenderHelper.drawThickBeveledBox(x, y, x + w - 1, y + h - 1, thick, style.getBoxColor(), style.getBoxColor(), style.getBoxColor());
+                RenderHelper.drawThickBeveledBox(x, y, x + w-1, y + h-1, thick, style.getBoxColor(), style.getBoxColor(), style.getBoxColor());
             }
-            RenderHelper.drawThickBeveledBox(x + offset, y + offset, x + w - 1 - offset, y + h - 1 - offset, thick, style.getBorderColor(), style.getBorderColor(), style.getBoxColor());
+            RenderHelper.drawThickBeveledBox(x+offset, y+offset, x + w-1-offset, y + h-1-offset, thick, style.getBorderColor(), style.getBorderColor(), style.getBoxColor());
         }
 
         if (!Minecraft.getMinecraft().isGamePaused()) {
@@ -475,42 +436,5 @@ public class OverlayRenderer {
         if (extra != null) {
             probeInfo.removeElement(extra);
         }
-    }
-
-    private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, BlockPos blockPos, EnumFacing sideHit, Vec3d hitVec, ItemStack pickBlock) {
-        if (Config.needsProbe == PROBE_NEEDEDFOREXTENDED) {
-            // We need a probe only for extended information
-            if (!ModItems.hasAProbeSomewhere(player)) {
-                // No probe anywhere, switch EXTENDED to NORMAL
-                if (mode == ProbeMode.EXTENDED) {
-                    mode = ProbeMode.NORMAL;
-                }
-            }
-        } else if (Config.needsProbe == PROBE_NEEDEDHARD && !ModItems.hasAProbeSomewhere(player)) {
-            // The server says we need a probe but we don't have one in our hands
-            return null;
-        }
-
-        IBlockState state = world.getBlockState(blockPos);
-        ProbeInfo probeInfo = TheOneProbe.theOneProbeImp.create();
-        IProbeHitData data = new ProbeHitData(blockPos, hitVec, sideHit, pickBlock);
-
-        IProbeConfig probeConfig = TheOneProbe.theOneProbeImp.createProbeConfig();
-        List<IProbeConfigProvider> configProviders = TheOneProbe.theOneProbeImp.getConfigProviders();
-        for (IProbeConfigProvider configProvider : configProviders) {
-            configProvider.getProbeConfig(probeConfig, player, world, state, data);
-        }
-        Config.setRealConfig(probeConfig);
-
-        List<IProbeInfoProvider> providers = TheOneProbe.theOneProbeImp.getProviders();
-        for (IProbeInfoProvider provider : providers) {
-            try {
-                provider.addProbeInfo(mode, probeInfo, player, world, state, data);
-            } catch (Throwable e) {
-                ThrowableIdentity.registerThrowable(e);
-                probeInfo.text(LABEL + "Error: " + ERROR + provider.getID());
-            }
-        }
-        return probeInfo;
     }
 }

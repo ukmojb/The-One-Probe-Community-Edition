@@ -54,6 +54,6 @@ public class RuneAltar implements IProbeInfoProvider {
 
     @Override
     public String getID() {
-        return "random.botania.RuneAltar";
+        return "botania.RuneAltar";
     }
 }

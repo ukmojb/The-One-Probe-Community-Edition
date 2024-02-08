@@ -7,10 +7,9 @@ import mcjty.theoneprobe.mods.BotanicAdditions.DreamingManaPool;
 import mcjty.theoneprobe.mods.BotanicAdditions.ElvenAltar;
 import mcjty.theoneprobe.mods.ExtraBotany.ManaBuffer;
 import mcjty.theoneprobe.mods.ExtraBotany.QuantumManaBuffer;
-import mcjty.theoneprobe.mods.botania.ManaPool;
-import mcjty.theoneprobe.mods.botania.RuneAltar;
-import mcjty.theoneprobe.mods.botania.Spreader;
-import mcjty.theoneprobe.mods.botania.TerraPlate;
+import mcjty.theoneprobe.mods.botania.*;
+import mcjty.theoneprobe.mods.botaniverse.MoreManaPool;
+import mcjty.theoneprobe.mods.botaniverse.MoreSpark;
 import mcjty.theoneprobe.mods.crt.CrtTop;
 import mcjty.theoneprobe.mods.ember_top.*;
 import mcjty.theoneprobe.mods.thaumcraft.AspectElement;
@@ -26,10 +25,15 @@ public class TOPHandler {
                 theOneProbeImp.registerProvider(new Spreader());
                 theOneProbeImp.registerProvider(new TerraPlate());
                 theOneProbeImp.registerProvider(new RuneAltar());
+                theOneProbeImp.registerEntityProvider(new Spark());
             }
             if (Loader.isModLoaded("extrabotany")) {
                 theOneProbeImp.registerProvider(new ManaBuffer());
                 theOneProbeImp.registerProvider(new QuantumManaBuffer());
+            }
+            if (Loader.isModLoaded("botaniverse")) {
+                theOneProbeImp.registerProvider(new MoreManaPool());
+                theOneProbeImp.registerEntityProvider(new MoreSpark());
             }
             if (Loader.isModLoaded("botanicadds")) {
                 theOneProbeImp.registerProvider(new DreamingManaPool());

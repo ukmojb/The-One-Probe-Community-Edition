@@ -31,6 +31,6 @@ public class ember_reactor implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.reactor";
+        return "ember.reactor";
     }
 }

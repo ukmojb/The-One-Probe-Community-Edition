@@ -31,6 +31,6 @@ public class ember_stamper implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.stamper";
+        return "ember.stamper";
     }
 }

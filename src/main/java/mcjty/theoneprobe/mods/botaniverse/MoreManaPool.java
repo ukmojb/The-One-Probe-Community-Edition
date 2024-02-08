@@ -1,22 +1,27 @@
-package mcjty.theoneprobe.mods.botania;
+package mcjty.theoneprobe.mods.botaniverse;
 
-
+/**
+ * Created by IntelliJ IDEA.
+ *
+ * @Author : wdcftgg
+ * @create 2023/12/16 18:43
+ */
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import mcjty.theoneprobe.config.Config;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import vazkii.botania.common.block.tile.mana.TilePool;
+import com.aeternal.botaniverse.blocks.tiles.TileMorePool;
 
 import java.awt.*;
 
-public class ManaPool implements IProbeInfoProvider {
+public class MoreManaPool implements IProbeInfoProvider {
 
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
-        if (world.getTileEntity(data.getPos()) instanceof TilePool) {
-            TilePool tile = (TilePool) world.getTileEntity(data.getPos());
+        if (world.getTileEntity(data.getPos()) instanceof TileMorePool) {
+            TileMorePool tile = (TileMorePool) world.getTileEntity(data.getPos());
 
             final int mana = (int) tile.getCurrentMana();
             final int manamax = (int) tile.manaCap;
@@ -52,6 +57,6 @@ public class ManaPool implements IProbeInfoProvider {
 
     @Override
     public String getID() {
-        return "botania.pool";
+        return "botaniverse.pool";
     }
 }

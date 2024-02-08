@@ -31,6 +31,6 @@ public class ember_cinder_plinth implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.cinder.plinth";
+        return "ember.cinder.plinth";
     }
 }

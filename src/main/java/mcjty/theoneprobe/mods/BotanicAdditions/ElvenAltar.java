@@ -50,6 +50,6 @@ public class ElvenAltar implements IProbeInfoProvider {
 
     @Override
     public String getID() {
-        return "random.botanic_additions.ElvenAltar";
+        return "botanic_additions.ElvenAltar";
     }
 }

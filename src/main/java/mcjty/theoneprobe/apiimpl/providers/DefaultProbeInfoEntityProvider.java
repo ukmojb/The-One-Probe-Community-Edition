@@ -54,6 +54,7 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
     public static void showStandardInfo(ProbeMode mode, IProbeInfo probeInfo, Entity entity, IProbeConfig config) {
         String modid = Tools.getModName(entity);
 
+
         if (Tools.show(mode, config.getShowModName())) {
             if (Config.showEntityModel){
                 probeInfo.horizontal()
@@ -111,6 +112,7 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
 
                 if (mode == ProbeMode.EXTENDED) {
                     probeInfo.text(LABEL + I18n.translateToLocal("top.Health") + ": " + INFOIMP + health + " / " + maxHealth);
+
                 }
 
                 if (armor > 0) {

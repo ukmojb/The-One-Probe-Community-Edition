@@ -18,6 +18,10 @@ buildscript {
         maven {
             url = 'https://maven.cleanroommc.com/'
         }
+        maven {
+            name = "Forestry, IC², Binnie's"
+            url = "https://maven.ic2.player.to"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -59,7 +63,7 @@ minecraft {
 }
 
 runClient {
-    args '--username', 'sddsd2332'
+    args '--username', 'wdcftgg'
     jvmArgs '-Xms4G', '-Xmx8G'
 }
 
@@ -75,15 +79,60 @@ dependencies {
     deobfCompile 'curse.maven:extrabotany-299086:3112313'
     deobfCompile 'curse.maven:baubles-227083:2518667'
     deobfCompile 'curse.maven:botanic_additions-310637:2939405'
+    deobfCompile 'curse.maven:botaniverse-944656:4945200'
     deobfCompile "curse.maven:bookshelf-228525:2836960"
     deobfCompile "curse.maven:thaumcraft-223628:2629023"
+    deobfCompile "curse.maven:AE2UnofficialExtendedLife-570458:4961400"
     deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.682"
-
+//    compile "curse.maven:industrialcraft2-242638:3838713"
+//    compile "curse.maven:OpenComputers-223008:4630537"
+//    compile "curse.maven:MooFluids-74254:2643469"
+//    compile "curse.maven:roost-277711:2702080"
+//    compile "curse.maven:lycanitesmobs-224770:4486512"
+//    compile "curse.maven:rustic-256141:3107974"
+//    compile "curse.maven:architecturecraft-277631:4344128"
+//    compile "curse.maven:UnlimitedChiselWorks-278493:3319307"
+//    compile "curse.maven:forestry-59751:2556566"
+//    compile "curse.maven:Mantle-74924:2713386"
+//    compileOnly("curse.maven:StevesCarts-253462:2539158" ) { transitive = false }
+//    compile "curse.maven:BloodMagic-224791:2822288"
+//    compile "curse.maven:Buildcraft-61811:2796760"
+//    compileOnly("curse.maven:ProjectRed-228702:2745545") { transitive = false }
+//    compileOnly("curse.maven:binnie_mods-223525:2916129") { transitive = false }
+//
     compile "net.darkhax.gamestages:GameStages-1.12.2:2.0.+:deobf"
     compile "net.darkhax.orestages:OreStages-1.12.2:2.0.+:deobf"
+//
+//    runtime 'curse.maven:hwyla-253449:2568751'
+//    runtime 'curse.maven:hammer-lib-247401:3611193'
+//
+//
+//
+//    compile("curse.maven:TConstruct-74072:2902483") { transitive = false }
+//
+//    runtime "curse.maven:RebornCore-237903:3330308"
+//
+//    runtime "curse.maven:GuideAPI-228832:2645992"
+//
+//    runtime "curse.maven:Cucumber-272335:2645867"
+//    compile "curse.maven:MysticalAgriculture-246640:2704562"
+//
+//    runtime "curse.maven:CTM-267602:2915363"
+//    compile "curse.maven:Chisel-235279:2915375"
+//
+//    compile "curse.maven:Chameleon-230497:2450900"
+//    compile "curse.maven:StorageDrawers-223852:4655859"
+//
+//    compile "curse.maven:bdlib-70496:4675629"
+//    compile "curse.maven:advanced_generators-223622:2516219"
+//
+//    runtime "curse.maven:CodeChickenLib-242818:2779848"
+//    runtime "curse.maven:CoFHWorld-271384:2920434"
+//    runtime "curse.maven:ThermalFoundation-222880:2926428"
+//    compile "curse.maven:ThermalExpansion-69163:2926431"
+//    compile "curse.maven:ThermalDynamics-227443:2920505"
+//    compile "curse.maven:CoFHCore-69162:2920433"
 
-    runtime 'curse.maven:hwyla-253449:2568751'
-    runtime 'curse.maven:hammer-lib-247401:3611193'
 }
 
 jar {

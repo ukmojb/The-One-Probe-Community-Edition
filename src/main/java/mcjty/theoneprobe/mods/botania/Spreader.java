@@ -52,6 +52,6 @@ public class Spreader implements IProbeInfoProvider {
 
     @Override
     public String getID() {
-        return "random.botania.Spreader";
+        return "botania.Spreader";
     }
 }

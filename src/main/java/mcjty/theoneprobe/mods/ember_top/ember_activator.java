@@ -31,6 +31,6 @@ public class ember_activator implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember.activator";
+        return "ember.activator";
     }
 }

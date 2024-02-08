@@ -52,6 +52,6 @@ public class QuantumManaBuffer implements IProbeInfoProvider {
 
     @Override
     public String getID() {
-        return "random.extrabotania.QuantumManaBuffer";
+        return "extrabotania.QuantumManaBuffer";
     }
 }

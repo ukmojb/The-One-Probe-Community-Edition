@@ -31,6 +31,6 @@ public class ember_boiler implements IProbeInfoProvider {
     }
 
     public String getID() {
-        return "random.ember." + this;
+        return "ember." + this;
     }
 }

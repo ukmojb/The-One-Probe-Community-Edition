@@ -99,3 +99,19 @@ top.harvestLevel.0=Stone
 top.harvestLevel.1=Iron
 top.harvestLevel.2=Diamond
 top.harvestLevel.3=Obsidian
+
+# mods
+
+top.bot.spark.dispersive=upgrade : dispersive
+top.bot.spark.dominant=upgrade : dominant
+top.bot.spark.recessive=upgrade : recessive
+top.bot.spark.isolated=upgrade : isolated
+
+
+
+
+
+
+
+
+
