@@ -38,11 +38,11 @@ public class DebugProbeInfoEntityProvider implements IProbeInfoEntityProvider {
                 float aiMoveSpeed = entityLivingBase.getAIMoveSpeed();
                 int revengeTimer = entityLivingBase.getRevengeTimer();
                 vertical
-                        .text(LABEL + I18n.translateToLocal("top.Tot_armor") + ": " + INFO + totalArmorValue)
-                        .text(LABEL + I18n.translateToLocal("top.Age") + ": " + INFO + age)
-                        .text(LABEL + I18n.translateToLocal("top.Absorption") + ": " + INFO + absorptionAmount)
-                        .text(LABEL + I18n.translateToLocal("top.AI_Move_Speed") + ": " + INFO + aiMoveSpeed)
-                        .text(LABEL + I18n.translateToLocal("top.Revenge_Timer") + ": " + INFO + revengeTimer);
+                        .text(LABEL + "{*top.Tot_armor*}" + ": " + INFO + totalArmorValue)
+                        .text(LABEL + "{*top.Age*}" + ": " + INFO + age)
+                        .text(LABEL + "{*top.Absorption*}" + ": " + INFO + absorptionAmount)
+                        .text(LABEL + "{*top.AI_Move_Speed*}" + ": " + INFO + aiMoveSpeed)
+                        .text(LABEL + "{*top.Revenge_Timer*}" + ": " + INFO + revengeTimer);
             }
             if (entity instanceof EntityAgeable) {
                 if (vertical == null) {
@@ -52,7 +52,7 @@ public class DebugProbeInfoEntityProvider implements IProbeInfoEntityProvider {
                 EntityAgeable entityAgeable = (EntityAgeable) entity;
                 int growingAge = entityAgeable.getGrowingAge();
                 vertical
-                        .text(LABEL + I18n.translateToLocal("top.Growing_Age") + ": " + INFO + growingAge);
+                        .text(LABEL + "{*top.Growing_Age*}" + ": " + INFO + growingAge);
             }
         }
     }

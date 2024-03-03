@@ -111,7 +111,7 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                 probeInfo.progress(health, maxHealth, probeInfo.defaultProgressStyle().lifeBar(true).showText(false).width(150).height(10));
 
                 if (mode == ProbeMode.EXTENDED) {
-                    probeInfo.text(LABEL + I18n.translateToLocal("top.Health") + ": " + INFOIMP + health + " / " + maxHealth);
+                    probeInfo.text(LABEL + "{*top.Health*}" + ": " + INFOIMP + health + " / " + maxHealth);
 
                 }
 
@@ -123,7 +123,7 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             if (Tools.show(mode, config.getShowMobGrowth()) && entity instanceof EntityAgeable) {
                 int age = ((EntityAgeable) entity).getGrowingAge();
                 if (age < 0) {
-                    probeInfo.text(LABEL + I18n.translateToLocal("top.Growing_time") + ": " + ((age * -1) / 20) + I18n.translateToLocal("top.Second"));
+                    probeInfo.text(LABEL + "{*top.Growing_time*}" + ": " + ((age * -1) / 20) + "{*top.Second*}");
                 }
             }
 
@@ -159,10 +159,10 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                         .item(stack, new ItemStyle().width(16).height(16))
                         .text(INFO + stack.getDisplayName());
                 if (mode == ProbeMode.EXTENDED) {
-                    probeInfo.text(LABEL + I18n.translateToLocal("top.Rotation") + ": " + INFO + itemFrame.getRotation());
+                    probeInfo.text(LABEL + "{*top.Rotation*}" + ": " + INFO + itemFrame.getRotation());
                 }
             } else {
-                probeInfo.text(LABEL + I18n.translateToLocal("top.Empty"));
+                probeInfo.text(LABEL + "{*top.Empty*}");
             }
         }
 
@@ -177,12 +177,12 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             if (ownerId != null) {
                 String username = UsernameCache.getLastKnownUsername(ownerId);
                 if (username == null) {
-                    probeInfo.text(WARNING + I18n.translateToLocal("top.Unknown_owner"));
+                    probeInfo.text(WARNING + "{*top.Unknown_owner*}");
                 } else {
-                    probeInfo.text(LABEL + I18n.translateToLocal("top.Owned_by") + ": " + INFO + username);
+                    probeInfo.text(LABEL + "{*top.Owned_by*}" + ": " + INFO + username);
                 }
             } else if (entity instanceof EntityTameable) {
-                probeInfo.text(LABEL + I18n.translateToLocal("top.Tameable"));
+                probeInfo.text(LABEL + "{*top.Tameable*}");
             }
         }
 
@@ -190,22 +190,22 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             if (entity instanceof EntityHorse) {
                 double jumpStrength = ((EntityHorse) entity).getHorseJumpStrength();
                 double jumpHeight = -0.1817584952 * jumpStrength * jumpStrength * jumpStrength + 3.689713992 * jumpStrength * jumpStrength + 2.128599134 * jumpStrength - 0.343930367;
-                probeInfo.text(LABEL + I18n.translateToLocal("top.Jump_height") + ": " + INFO + dfCommas.format(jumpHeight));
+                probeInfo.text(LABEL + "{*top.Jump_height*}" + ": " + INFO + dfCommas.format(jumpHeight));
                 IAttributeInstance iattributeinstance = ((EntityHorse) entity).getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-                probeInfo.text(LABEL + I18n.translateToLocal("top.Speed") + ": " + INFO + dfCommas.format(iattributeinstance.getAttributeValue()));
+                probeInfo.text(LABEL + "{*top.Speed*}" + ": " + INFO + dfCommas.format(iattributeinstance.getAttributeValue()));
             }
         }
 
         if (entity instanceof EntityWolf && Config.showCollarColor) {
             if (((EntityWolf) entity).isTamed()) {
                 EnumDyeColor collarColor = ((EntityWolf) entity).getCollarColor();
-                probeInfo.text(LABEL + I18n.translateToLocal("top.Collar") + ": " + INFO + collarColor.getName());
+                probeInfo.text(LABEL + "{*top.Collar*}" + ": " + INFO + collarColor.getName());
             }
         }
 
         if (entity instanceof EntityVillager) {
             int careerLevel = ((EntityVillager) entity).serializeNBT().getInteger("CareerLevel");
-            probeInfo.text(I18n.translateToLocal("top.CareerLevel") + ": " + I18n.translateToLocal("top.CareerLevel." + careerLevel));
+            probeInfo.text("{*top.CareerLevel*}" + ": " + "{*top.CareerLevel." + careerLevel + "*}");
         }
     }
 }

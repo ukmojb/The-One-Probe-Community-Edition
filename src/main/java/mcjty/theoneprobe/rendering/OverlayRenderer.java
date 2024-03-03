@@ -206,8 +206,7 @@ public class OverlayRenderer {
     }
 
     private static void requestEntityInfo(ProbeMode mode, RayTraceResult mouseOver, Entity entity, EntityPlayerSP player) {
-        ProbeInfo info = ProbeInfo.getProbeInfo(player, mode, player.world, entity, mouseOver.hitVec);
-        PacketHandler.INSTANCE.sendToServer(new PacketGetEntityInfo(player.getEntityWorld().provider.getDimension(), mode, mouseOver, entity, info));
+        PacketHandler.INSTANCE.sendToServer(new PacketGetEntityInfo(player.getEntityWorld().provider.getDimension(), mode, mouseOver, entity));
     }
 
     private static void renderHUDBlock(ProbeMode mode, RayTraceResult mouseOver, double sw, double sh) {
@@ -333,8 +332,7 @@ public class OverlayRenderer {
             pickBlock = pickBlock.copy();
             pickBlock.setTagCompound(null);
         }
-        ProbeInfo info = ProbeInfo.getProbeInfo(player, mode, world, blockPos, mouseOver.sideHit, mouseOver.hitVec, pickBlock);
-        PacketHandler.INSTANCE.sendToServer(new PacketGetInfo(world.provider.getDimension(), blockPos, mode, mouseOver, pickBlock, info));
+        PacketHandler.INSTANCE.sendToServer(new PacketGetInfo(world.provider.getDimension(), blockPos, mode, mouseOver, pickBlock));
     }
 
     public static void renderOverlay(IOverlayStyle style, IProbeInfo probeInfo) {

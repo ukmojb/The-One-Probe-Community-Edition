@@ -33,17 +33,15 @@ public class PacketGetEntityInfo implements IMessage {
     private static UUID uuid;
     private static ProbeMode mode;
     private static Vec3d hitVec;
-    private static ProbeInfo probeInfo;
 
     public PacketGetEntityInfo() {
     }
 
-    public PacketGetEntityInfo(int dim, ProbeMode mode, RayTraceResult mouseOver, Entity entity, ProbeInfo probeInfo) {
+    public PacketGetEntityInfo(int dim, ProbeMode mode, RayTraceResult mouseOver, Entity entity) {
         PacketGetEntityInfo.dim = dim;
         PacketGetEntityInfo.uuid = entity.getPersistentID();
         PacketGetEntityInfo.mode = mode;
         PacketGetEntityInfo.hitVec = mouseOver.hitVec;
-        PacketGetEntityInfo.probeInfo = probeInfo;
     }
 
 
@@ -55,8 +53,6 @@ public class PacketGetEntityInfo implements IMessage {
         if (buf.readBoolean()) {
             hitVec = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
         }
-        probeInfo = new ProbeInfo();
-        probeInfo.fromBytes(buf);
     }
 
     @Override
@@ -73,7 +69,6 @@ public class PacketGetEntityInfo implements IMessage {
             buf.writeDouble(hitVec.y);
             buf.writeDouble(hitVec.z);
         }
-        probeInfo.toBytes(buf);
     }
 
     public static class Handler implements IMessageHandler<PacketGetEntityInfo, IMessage> {
@@ -88,10 +83,46 @@ public class PacketGetEntityInfo implements IMessage {
             if (world != null) {
                 Entity entity = world.getEntityFromUuid(message.uuid);
                 if (entity != null) {
-                    PacketHandler.INSTANCE.sendTo(new PacketReturnEntityInfo(message.uuid, message.probeInfo), ctx.getServerHandler().player);
+                    ProbeInfo probeInfo = getProbeInfo(ctx.getServerHandler().player, message.mode, world, entity, message.hitVec);
+                    PacketHandler.INSTANCE.sendTo(new PacketReturnEntityInfo(message.uuid, probeInfo), ctx.getServerHandler().player);
                 }
             }
         }
     }
 
+    private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, Entity entity, Vec3d hitVec) {
+        if (Config.needsProbe == PROBE_NEEDEDFOREXTENDED) {
+            // We need a probe only for extended information
+            if (!ModItems.hasAProbeSomewhere(player)) {
+                // No probe anywhere, switch EXTENDED to NORMAL
+                if (mode == ProbeMode.EXTENDED) {
+                    mode = ProbeMode.NORMAL;
+                }
+            }
+        } else if (Config.needsProbe == PROBE_NEEDEDHARD && !ModItems.hasAProbeSomewhere(player)) {
+            // The server says we need a probe but we don't have one in our hands or on our head
+            return null;
+        }
+
+        ProbeInfo probeInfo = TheOneProbe.theOneProbeImp.create();
+        IProbeHitEntityData data = new ProbeHitEntityData(hitVec);
+
+        IProbeConfig probeConfig = TheOneProbe.theOneProbeImp.createProbeConfig();
+        List<IProbeConfigProvider> configProviders = TheOneProbe.theOneProbeImp.getConfigProviders();
+        for (IProbeConfigProvider configProvider : configProviders) {
+            configProvider.getProbeConfig(probeConfig, player, world, entity, data);
+        }
+        Config.setRealConfig(probeConfig);
+
+        List<IProbeInfoEntityProvider> entityProviders = TheOneProbe.theOneProbeImp.getEntityProviders();
+        for (IProbeInfoEntityProvider provider : entityProviders) {
+            try {
+                provider.addProbeEntityInfo(mode, probeInfo, player, world, entity, data);
+            } catch (Throwable e) {
+                ThrowableIdentity.registerThrowable(e);
+                probeInfo.text(LABEL + "Error: " + ERROR + provider.getID());
+            }
+        }
+        return probeInfo;
+    }
 }

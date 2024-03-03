@@ -48,6 +48,7 @@ public class ChestInfoTools {
         }
 
         if (Tools.show(mode, chestMode)) {
+        probeInfo.text("22222");
             if (stacks == null) {
                 stacks = new ArrayList<>();
                 getChestContents(world, pos, stacks);
