@@ -1,14 +1,10 @@
 package mcjty.theoneprobe.mods.crt.api;
 
 import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.block.IBlockState;
-import mcjty.theoneprobe.api.ProbeMode;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.

@@ -74,16 +74,8 @@ dependencies {
     deobfCompile 'curse.maven:HadEnoughItems-557549:4451828'
     deobfCompile 'curse.maven:redstone_flux-270789:2920436'
     deobfCompile 'curse.maven:tesla-244651:2487962'
-    deobfCompile 'curse.maven:embers-rekindled-300777:3695248'
-    deobfCompile 'curse.maven:botania-225643:3330934'
-    deobfCompile 'curse.maven:extrabotany-299086:3112313'
-    deobfCompile 'curse.maven:baubles-227083:2518667'
-    deobfCompile 'curse.maven:botanic_additions-310637:2939405'
-    deobfCompile 'curse.maven:botaniverse-944656:4945200'
-    deobfCompile "curse.maven:bookshelf-228525:2836960"
-    deobfCompile "curse.maven:thaumcraft-223628:2629023"
-    deobfCompile "curse.maven:AE2UnofficialExtendedLife-570458:4961400"
     deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.682"
+    deobfCompile 'curse.maven:baubles-227083:2518667'
 //    compile "curse.maven:industrialcraft2-242638:3838713"
 //    compile "curse.maven:OpenComputers-223008:4630537"
 //    compile "curse.maven:MooFluids-74254:2643469"
@@ -100,6 +92,7 @@ dependencies {
 //    compileOnly("curse.maven:ProjectRed-228702:2745545") { transitive = false }
 //    compileOnly("curse.maven:binnie_mods-223525:2916129") { transitive = false }
 //
+    compile "curse.maven:bookshelf-228525:2836960"
     compile "net.darkhax.gamestages:GameStages-1.12.2:2.0.+:deobf"
     compile "net.darkhax.orestages:OreStages-1.12.2:2.0.+:deobf"
 //
@@ -120,8 +113,8 @@ dependencies {
 //    runtime "curse.maven:CTM-267602:2915363"
 //    compile "curse.maven:Chisel-235279:2915375"
 //
-//    compile "curse.maven:Chameleon-230497:2450900"
-//    compile "curse.maven:StorageDrawers-223852:4655859"
+    compile "curse.maven:Chameleon-230497:2450900"
+    compile "curse.maven:StorageDrawers-223852:4655859"
 //
 //    compile "curse.maven:bdlib-70496:4675629"
 //    compile "curse.maven:advanced_generators-223622:2516219"

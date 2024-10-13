@@ -68,6 +68,8 @@ public class Config {
     public static boolean harvestStyleVanilla = true;
     public static boolean showCustomharvestLevelName = false;
     public static boolean showEntityModel = true;
+    public static boolean showEntityHealth = true;
+    public static boolean showEntityArmor = true;
     public static boolean showEntityInfo = true;
     public static int chestContentsBorderColor = 0xff006699;
     public static float tooltipScale = 1.0f;
@@ -156,14 +158,6 @@ public class Config {
         dontShowContentsUnlessSneaking = cfg.getStringList("dontShowContentsUnlessSneaking", CATEGORY_THEONEPROBE, dontShowContentsUnlessSneaking, "A list of blocks for which we don't show chest contents automatically except if sneaking");
         dontSendNBT = cfg.getStringList("dontSendNBT", CATEGORY_THEONEPROBE, dontSendNBT, "A list of blocks for which we don't send NBT over the network. This is mostly useful for blocks that have HUGE NBT in their pickblock (itemstack)");
 
-
-        Botaniatop = cfg.getBoolean("Botaniatop", CATEGORY_BOTANIA, Botaniatop, "Whether to enable Botania's top display");
-        showBotaniaprogress = cfg.getBoolean("showBotaniaprogress", CATEGORY_BOTANIA, showBotaniaprogress, "Whether to show Botania's mana");
-        textinprogress = cfg.getBoolean("textinprogress", CATEGORY_BOTANIA, textinprogress, "Whether the mana value should be displayed in or below the mana bar");
-
-        requireGoggles = cfg.getBoolean("textinprogress", CATEGORY_THAUMCRAFT, requireGoggles, "Should the goggles of revealing be required to see Thaumcraft information?");
-
-
         setupStyleConfig(cfg);
     }
 
@@ -216,6 +210,8 @@ public class Config {
         showCustomharvestLevelName = cfg.getBoolean("showCustomharvestLevelName", CATEGORY_CLIENT, showCustomharvestLevelName, "true means shows Custom harvestLevel (you can chance name in the lang)");
         showEntityModel = cfg.getBoolean("showEntityModel", CATEGORY_CLIENT, showEntityModel, "true means shows entity model");
         showEntityInfo = cfg.getBoolean("showEntityInfo", CATEGORY_CLIENT, showEntityInfo, "true means shows entity info");
+        showEntityHealth = cfg.getBoolean("showEntityHealth", CATEGORY_CLIENT, showEntityHealth, "true means shows entity health");
+        showEntityArmor = cfg.getBoolean("showEntityArmor", CATEGORY_CLIENT, showEntityArmor, "true means shows entity armor value");
 
         Map<TextStyleClass, String> newformat = new HashMap<>();
         for (TextStyleClass styleClass : textStyleClasses.keySet()) {

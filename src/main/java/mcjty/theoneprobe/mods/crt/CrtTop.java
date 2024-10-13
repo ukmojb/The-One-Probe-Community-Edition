@@ -1,7 +1,6 @@
 package mcjty.theoneprobe.mods.crt;
 
 import crafttweaker.api.minecraft.CraftTweakerMC;
-import crafttweaker.api.world.IWorld;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
@@ -10,7 +9,6 @@ import mcjty.theoneprobe.mods.crt.api.AddProbeInfo;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import teamroots.embers.compat.crafttweaker.Mixer;
 
 import java.util.Objects;
 

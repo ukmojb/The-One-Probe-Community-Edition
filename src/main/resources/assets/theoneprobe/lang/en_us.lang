@@ -107,8 +107,56 @@ top.bot.spark.dominant=upgrade : dominant
 top.bot.spark.recessive=upgrade : recessive
 top.bot.spark.isolated=upgrade : isolated
 
+top.aspects=Symbol:
+top.ash=Ash
+top.power=Ash Energy
+top.east.fluid=Fluid to the East
+top.west.fluid=Fluid to the West
+top.south.fluid=Fluid to the South
+top.north.fluid=Fluid to the North
 
 
+top.furnace_fuel=Smelts
+top.items=Items
+top.no_fuel=No Fuel
+top.growth_finished=Fully Grown
+top.growth=Growth:
+top.empty=Empty
+top.jukebox_record=Playing
+top.cauldron_fill_1=Bottle
+top.cauldron_fill_2=Bottles
+top.breeding_cooldown=Breeding Cooldown:
+top.tamed=Tamed
+top.not_tamed=Not Tamed
+top.sitting=Sitting
+top.standing=Standing
+top.tnt_fuse=Fuse:
+top.enchanting_power=Enchanting Power:
+top.chicken_egg=Egg Time:
+
+# units
+top.unit.ticks=Ticks
+
+# mod compat
+
+# dynamic trees
+top.dynamic_trees.soil_life=Soil Life:
+top.dynamic_trees.species=Species:
+
+# apotheosis
+top.apotheosis.delay=Delay:
+top.apotheosis.spawn_count=Spawn Count:
+top.apotheosis.max_nearby=Max Nearby:
+top.apotheosis.player_range=Player Range:
+top.apotheosis.spawn_range=Spawn Range:
+top.apotheosis.ignores_players=Ignores Players
+top.apotheosis.ignores_conditions=Ignores Spawn Conditions
+top.apotheosis.ignores_cap=Ignores Spawn Cap
+top.apotheosis.requires_redstone=Requires Redstone
+
+# projecte
+top.projecte.emc=EMC:
+top.projecte.contained_emc=Contained EMC:
 
 
 

@@ -9,23 +9,29 @@ import mcjty.theoneprobe.config.Config;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.item.EntityMinecartContainer;
+import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.UsernameCache;
-
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraft.item.Item;
 import java.text.DecimalFormat;
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
 
 import static mcjty.theoneprobe.api.IProbeInfo.ENDLOC;
 import static mcjty.theoneprobe.api.IProbeInfo.STARTLOC;
@@ -34,6 +40,8 @@ import static mcjty.theoneprobe.api.TextStyleClass.*;
 public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider {
 
     private static DecimalFormat dfCommas = new DecimalFormat("##.#");
+    private final List<ItemStack> stacks = new ArrayList<>();
+    private final Set<Item> foundItems = new HashSet<>();
 
     public static String getPotionDurationString(PotionEffect effect, float factor) {
         if (effect.getDuration() == 32767) {
@@ -51,21 +59,32 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
         return i < 10 ? j + ":0" + i : j + ":" + i;
     }
 
+    public static String getName(Entity entity) {
+        if (entity.hasCustomName()) {
+            return entity.getCustomNameTag();
+        } else {
+            String s = EntityList.getEntityString(entity);
+            if (s == null) {
+                s = "generic";
+            }
+
+            return "{*entity." + s + ".name*}";
+        }
+    }
+
     public static void showStandardInfo(ProbeMode mode, IProbeInfo probeInfo, Entity entity, IProbeConfig config) {
         String modid = Tools.getModName(entity);
-
-
         if (Tools.show(mode, config.getShowModName())) {
-            if (Config.showEntityModel){
+            if (Config.showEntityModel) {
                 probeInfo.horizontal()
                         .entity(entity)
                         .vertical()
-                        .text(NAME + entity.getDisplayName().getFormattedText())
+                        .text(NAME + getName(entity))
                         .text(MODNAME + modid);
-            } else{
+            } else {
                 probeInfo.horizontal()
                         .vertical()
-                        .text(NAME + entity.getDisplayName().getFormattedText())
+                        .text(NAME + getName(entity))
                         .text(MODNAME + modid);
             }
         } else {
@@ -89,6 +108,8 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
     public void addProbeEntityInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, Entity entity, IProbeHitEntityData data) {
         IProbeConfig config = Config.getRealConfig();
 
+        if (!Config.showEntityInfo) return;
+
         boolean handled = false;
         for (IEntityDisplayOverride override : TheOneProbe.theOneProbeImp.getEntityOverrides()) {
             if (override.overrideStandardInfo(mode, probeInfo, player, world, entity, data)) {
@@ -108,14 +129,15 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                 int maxHealth = (int) livingBase.getMaxHealth();
                 int armor = livingBase.getTotalArmorValue();
 
-                probeInfo.progress(health, maxHealth, probeInfo.defaultProgressStyle().lifeBar(true).showText(false).width(150).height(10));
-
-                if (mode == ProbeMode.EXTENDED) {
-                    probeInfo.text(LABEL + "{*top.Health*}" + ": " + INFOIMP + health + " / " + maxHealth);
-
+                if (Config.showEntityHealth) {
+                    probeInfo.progress(health, maxHealth, probeInfo.defaultProgressStyle().lifeBar(true).showText(false).width(150).height(10));
                 }
 
-                if (armor > 0) {
+                if (mode == ProbeMode.EXTENDED && Config.showEntityHealth) {
+                    probeInfo.text(LABEL + "{*top.Health*}" + ": " + INFOIMP + health + " / " + maxHealth);
+                }
+
+                if (armor > 0 && Config.showEntityArmor) {
                     probeInfo.progress(armor, armor, probeInfo.defaultProgressStyle().armorBar(true).showText(false).width(80).height(10));
                 }
             }
@@ -206,6 +228,107 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
         if (entity instanceof EntityVillager) {
             int careerLevel = ((EntityVillager) entity).serializeNBT().getInteger("CareerLevel");
             probeInfo.text("{*top.CareerLevel*}" + ": " + "{*top.CareerLevel." + careerLevel + "*}");
+        }
+
+        if (entity instanceof EntityTameable) {
+            EntityTameable tameable = (EntityTameable) entity;
+
+            if (tameable.isTamed()) {
+                probeInfo.text(TextStyleClass.OK + "{*top.tamed*}");
+                probeInfo.text(TextStyleClass.LABEL + (tameable.isSitting() ? "{*top.sitting*}" : "{*top.standing*}"));
+            } else {
+                probeInfo.text(TextStyleClass.LABEL + "{*top.not_tamed*}");
+            }
+        }
+
+        if (entity instanceof EntityTNTPrimed) {
+            probeInfo.text(TextStyleClass.LABEL + "{*top.tnt_fuse*} " + TextStyleClass.WARNING + Tools.ticksToElapsedTime(((EntityTNTPrimed) entity).getFuse()));
+        }
+
+        if (entity instanceof EntityChicken) {
+            EntityChicken chicken = (EntityChicken) entity;
+            probeInfo.text(TextStyleClass.LABEL + "{*top.chicken_egg*} " + TextStyleClass.INFOIMP + Tools.ticksToElapsedTime(chicken.timeUntilNextEgg));
+        }
+
+        if (entity instanceof AbstractChestHorse && ((AbstractChestHorse) entity).hasChest()) {
+            int maxSlots;
+            if (entity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+                IItemHandler capability = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+                if (capability == null) {
+                    stacks.clear();
+                    foundItems.clear();
+                    return;
+                }
+
+                maxSlots = capability.getSlots();
+                // start at 3 to ignore armor/saddle
+                for (int i = 3; i < maxSlots; i++) {
+                    Tools.addItemStack(stacks, foundItems, capability.getStackInSlot(i));
+                }
+            } else {
+                NBTTagCompound compound = entity.writeToNBT(new NBTTagCompound());
+                if (!compound.hasKey("Items")) {
+                    stacks.clear();
+                    foundItems.clear();
+                    return;
+                }
+
+                NBTTagList list = compound.getTagList("Items", 10);
+                for (int i = 0; i < list.tagCount(); i++) {
+                    NBTTagCompound tagCompound = list.getCompoundTagAt(i);
+                    int slot = tagCompound.getByte("Slot") & 255;
+
+                    // start at 3 to ignore armor/saddle
+                    if (slot > 2) Tools.addItemStack(stacks, foundItems, new ItemStack(tagCompound));
+                }
+            }
+            if (!stacks.isEmpty()) Tools.showChestContents(probeInfo, stacks, mode);
+            stacks.clear();
+            foundItems.clear();
+        }
+
+        if (entity instanceof EntityAnimal) {
+            EntityAnimal animal = (EntityAnimal) entity;
+            int age = animal.getGrowingAge();
+
+            // adult
+            if (age > 0) {
+                probeInfo.text(TextStyleClass.LABEL + "{*top.breeding_cooldown*} " + TextStyleClass.INFOIMP + Tools.ticksToElapsedTime(age));
+            }
+        }
+
+        if (entity instanceof EntityPainting) {
+            NBTTagCompound compound = entity.writeToNBT(new NBTTagCompound());
+            if (compound.hasKey("Motive")) {
+                probeInfo.text(TextStyleClass.INFO + TextFormatting.ITALIC.toString() +
+                        org.apache.commons.lang3.StringUtils.join(org.apache.commons.lang3.StringUtils.splitByCharacterTypeCamelCase(compound.getString("Motive")), ' '));
+            }
+        }
+
+        if (entity instanceof EntityMinecartContainer) {
+            int maxSlots;
+            if (entity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+                IItemHandler capability = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+                if (capability == null) {
+                    stacks.clear();
+                    foundItems.clear();
+                    return;
+                }
+
+                maxSlots = capability.getSlots();
+                for (int i = 0; i < maxSlots; i++) {
+                    Tools.addItemStack(stacks, foundItems, capability.getStackInSlot(i));
+                }
+            } else {
+                IInventory inventory = (IInventory) entity;
+                maxSlots = inventory.getSizeInventory();
+                for (int i = 0; i < maxSlots; i++) {
+                    Tools.addItemStack(stacks, foundItems, inventory.getStackInSlot(i));
+                }
+            }
+            if (!stacks.isEmpty()) Tools.showChestContents(probeInfo, stacks, mode);
+            stacks.clear();
+            foundItems.clear();
         }
     }
 }

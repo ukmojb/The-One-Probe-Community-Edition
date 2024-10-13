@@ -100,15 +100,3 @@ top.harvestLevel.3=黑曜石
 
 # mods
 
-top.bot.spark.dispersive=升级 : 弥散
-top.bot.spark.dominant=升级 : 聚集
-top.bot.spark.recessive=升级 : 扩散
-top.bot.spark.isolated=升级 : 隔绝
-
-random.aspectus=象征:
-random.ash=灰烬:
-random.power=灰烬能量
-random.east.fluid=东面流体
-random.west.fluid=西面流体
-random.south.fluid=南面流体
-random.north.fluid=北面流体

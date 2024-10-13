@@ -12,6 +12,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -48,7 +49,6 @@ public class ChestInfoTools {
         }
 
         if (Tools.show(mode, chestMode)) {
-        probeInfo.text("22222");
             if (stacks == null) {
                 stacks = new ArrayList<>();
                 getChestContents(world, pos, stacks);
@@ -93,7 +93,7 @@ public class ChestInfoTools {
             for (ItemStack stackInSlot : stacks) {
                 horizontal = vertical.horizontal(new LayoutStyle().spacing(10).alignment(ElementAlignment.ALIGN_CENTER));
                 horizontal.item(stackInSlot, new ItemStyle().width(16).height(16))
-                        .text(INFO + stackInSlot.getDisplayName());
+                        .itemLabel(stackInSlot);
             }
         } else {
             for (ItemStack stackInSlot : stacks) {
@@ -118,7 +118,17 @@ public class ChestInfoTools {
         try {
             if (te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
                 IItemHandler capability = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-                maxSlots = capability.getSlots();
+                if (capability != null) {
+                    maxSlots = capability.getSlots();
+                } else {
+                    for (EnumFacing facing : EnumFacing.VALUES) {
+                        capability = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
+                        if (capability != null) {
+                            maxSlots = capability.getSlots();
+                            break;
+                        }
+                    }
+                }
                 for (int i = 0; i < maxSlots; i++) {
                     addItemStack(stacks, foundItems, capability.getStackInSlot(i));
                 }

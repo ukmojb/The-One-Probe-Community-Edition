@@ -144,9 +144,9 @@ public class OverlayRenderer {
 
     private static void renderHUDEntity(ProbeMode mode, RayTraceResult mouseOver, double sw, double sh) {
         Entity entity = mouseOver.entityHit;
-        if (entity == null) {
-            return;
-        }
+        if (entity == null) return;
+        if (!Config.showEntityInfo) return;
+
 //@todo
 //        if (entity instanceof EntityDragonPart) {
 //            EntityDragonPart part = (EntityDragonPart) entity;

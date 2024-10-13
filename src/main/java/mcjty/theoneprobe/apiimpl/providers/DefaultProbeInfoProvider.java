@@ -15,14 +15,16 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
+import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.MobSpawnerBaseLogic;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBrewingStand;
-import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.tileentity.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -159,6 +161,10 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
         if (Tools.show(mode, config.getShowMobSpawnerSetting())) {
             showMobSpawnerInfo(probeInfo, world, data, block);
         }
+
+        showEnchantingPower(probeInfo, blockState, world, data);
+        showCauldron(probeInfo, blockState, world, data);
+        showJukebox(probeInfo, blockState, world, data);
     }
 
     private void showBrewingStandInfo(IProbeInfo probeInfo, World world, IProbeHitData data, Block block) {
@@ -183,7 +189,8 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
             TileEntity te = world.getTileEntity(data.getPos());
             if (te instanceof TileEntityMobSpawner) {
                 MobSpawnerBaseLogic logic = ((TileEntityMobSpawner) te).getSpawnerBaseLogic();
-                String mobName = logic.getCachedEntity().getName();
+
+                String mobName = Tools.getCachedEntity(logic).getName();
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle()
                         .alignment(ElementAlignment.ALIGN_CENTER))
                         .text(LABEL + "{*top.Mob*}" + ": " + INFO + mobName);
@@ -251,7 +258,7 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
     private void addFluidInfo(IProbeInfo probeInfo, ProbeConfig config, FluidStack fluidStack, int maxContents) {
         int contents = fluidStack == null ? 0 : fluidStack.amount;
         if (fluidStack != null) {
-            probeInfo.text(NAME + "{*top.Liquid*}" + ": " + fluidStack.getLocalizedName());
+            probeInfo.text(TextStyleClass.NAME + "{*top.Liquid*}" + ": " + fluidStack.getLocalizedName());
         }
         if (config.getTankMode() == 1) {
             probeInfo.progress(contents, maxContents,
@@ -262,7 +269,7 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
                             .borderColor(Config.tankbarBorderColor)
                             .numberFormat(Config.tankFormat));
         } else {
-            probeInfo.text(PROGRESS + ElementProgress.format(contents, Config.tankFormat, "mB"));
+            probeInfo.text(TextStyleClass.PROGRESS + ElementProgress.format(contents, Config.tankFormat, "mB"));
         }
     }
 
@@ -317,6 +324,76 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
                 }
             }
             return;
+        }
+    }
+
+    private void showEnchantingPower(IProbeInfo probeInfo, IBlockState blockState, World world, IProbeHitData data) {
+        float enchantingPower = ForgeHooks.getEnchantPower(world, data.getPos());
+        if (blockState.getBlock().hasTileEntity(blockState) && world.getTileEntity(data.getPos()) instanceof TileEntityEnchantmentTable) {
+            BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(data.getPos());
+            enchantingPower = 0.0F;
+            for (int x = -1; x <= 1; x++) {
+                for (int z = -1; z <= 1; z++) {
+                    if ((x != 0 || z != 0) && world.isAirBlock(pos.add(z, 0, x)) && world.isAirBlock(pos.add(z, 1, x))) {
+                        enchantingPower += ForgeHooks.getEnchantPower(world, pos.add(z * 2, 0, x * 2));
+                        enchantingPower += ForgeHooks.getEnchantPower(world, pos.add(z * 2, 1, x * 2));
+                        if (z != 0 && x != 0) {
+                            enchantingPower += ForgeHooks.getEnchantPower(world, pos.add(z * 2, 0, x));
+                            enchantingPower += ForgeHooks.getEnchantPower(world, pos.add(z * 2, 1, x));
+                            enchantingPower += ForgeHooks.getEnchantPower(world, pos.add(z, 0, x * 2));
+                            enchantingPower += ForgeHooks.getEnchantPower(world, pos.add(z, 1, x * 2));
+                        }
+                    }
+                }
+            }
+        }
+        if (enchantingPower > 0.0F) {
+            probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
+                    .item(new ItemStack(Items.ENCHANTED_BOOK))
+                    .text(TextStyleClass.LABEL + "{*top.enchanting_power*} " + TextFormatting.LIGHT_PURPLE + Tools.FORMAT.format(enchantingPower));
+        }
+    }
+    private void showCauldron(IProbeInfo probeInfo, IBlockState blockState, World world, IProbeHitData data) {
+        if (blockState.getBlock() instanceof BlockCauldron) {
+            for (IProperty<?> property : blockState.getProperties().keySet()) {
+                if (!"level".equals(property.getName())) continue;
+                if (property.getValueClass() == Integer.class) {
+                    //noinspection unchecked
+                    IProperty<Integer> integerProperty = (IProperty<Integer>) property;
+                    int fill = blockState.getValue(integerProperty);
+                    int maxFill = Collections.max(integerProperty.getAllowedValues());
+
+                    IProbeInfo horizontalPane = probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER));
+
+                    if (fill > 0) {
+                        horizontalPane.item((fill == maxFill) ? new ItemStack(Items.WATER_BUCKET) : PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER));
+                        horizontalPane.text(TextStyleClass.LABEL + "" + fill + ((fill == 1) ? " {*top.cauldron_fill_1*}" : " {*top.cauldron_fill_2*}"));
+                    } else {
+                        horizontalPane.item(new ItemStack(Items.BUCKET));
+                        horizontalPane.text(TextStyleClass.LABEL + "{*top.empty*} ");
+                    }
+                    return;
+                }
+            }
+        }
+    }
+    private void showJukebox(IProbeInfo probeInfo, IBlockState blockState, World world, IProbeHitData data) {
+        if (blockState.getBlock() instanceof BlockJukebox) {
+            TileEntity tileEntity = world.getTileEntity(data.getPos());
+            if (tileEntity instanceof BlockJukebox.TileEntityJukebox) {
+                BlockJukebox.TileEntityJukebox jukebox = (BlockJukebox.TileEntityJukebox) tileEntity;
+
+                ItemStack record = jukebox.getRecord();
+                if (record.isEmpty()) {
+                    probeInfo.text(TextStyleClass.WARNING + "{*top.empty*}");
+                    return;
+                }
+
+                IProbeInfo horizontalPane = probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER));
+                horizontalPane.item(record);
+                String recordName = (record.getItem() instanceof ItemRecord) ? ((ItemRecord) record.getItem()).getRecordNameLocal() : record.getDisplayName();
+                horizontalPane.text(TextStyleClass.INFO + "{*top.jukebox_record*} " +"{*" + recordName + "*}");
+            }
         }
     }
 }

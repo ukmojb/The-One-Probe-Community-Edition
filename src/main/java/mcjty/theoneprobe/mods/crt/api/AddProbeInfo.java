@@ -2,11 +2,9 @@ package mcjty.theoneprobe.mods.crt.api;
 
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.block.IBlockState;
-import crafttweaker.api.world.IWorld;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
-import net.minecraft.world.World;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
