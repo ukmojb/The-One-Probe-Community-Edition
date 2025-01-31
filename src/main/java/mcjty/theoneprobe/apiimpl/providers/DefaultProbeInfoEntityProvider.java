@@ -27,6 +27,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.UsernameCache;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraft.item.Item;
@@ -226,8 +227,15 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
         }
 
         if (entity instanceof EntityVillager) {
-            int careerLevel = ((EntityVillager) entity).serializeNBT().getInteger("CareerLevel");
-            probeInfo.text("{*top.CareerLevel*}" + ": " + "{*top.CareerLevel." + careerLevel + "*}");
+            EntityVillager villager = (EntityVillager) entity;
+            int careerId = villager.serializeNBT().getInteger("Career");
+            VillagerRegistry.VillagerCareer career = villager.getProfessionForge().getCareer(careerId);
+
+            int careerLevel = villager.serializeNBT().getInteger("CareerLevel");
+
+            if (Config.showVillagerCareer) probeInfo.text("{*top.Career*}" + ": " + "{*top.Career." + career.getName() + "*}");
+
+            if (Config.showVillagerCareerLevel) probeInfo.text("{*top.CareerLevel*}" + ": " + "{*top.CareerLevel." + careerLevel + "*}");
         }
 
         if (entity instanceof EntityTameable) {

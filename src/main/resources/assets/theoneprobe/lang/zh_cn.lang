@@ -76,6 +76,21 @@ top.Speed=速度
 
 top.Collar=项圈颜色
 
+top.Career=村民职业
+top.Career.farmer=农民
+top.Career.fisherman=渔夫
+top.Career.shepherd=牧羊人
+top.Career.fletcher=制箭师
+top.Career.librarian=图书管理员
+top.Career.cleric=牧师
+top.Career.armor=盔甲匠
+top.Career.weapon=武器匠
+top.Career.tool=工具匠
+top.Career.butcher=屠夫
+top.Career.leather=皮匠
+top.Career.nitwit=傻子
+top.Career.cartographer=制图师
+
 top.CareerLevel=村民职业等级
 top.CareerLevel.1=1
 top.CareerLevel.2=2

@@ -22,7 +22,6 @@ public class TopModConfigGui extends GuiConfig {
         List<IConfigElement> list = Lists.newArrayList();
 
         list.add(new ConfigElement(Config.mainConfig.getCategory(Config.CATEGORY_CLIENT)));
-        list.add(new ConfigElement(Config.mainConfig.getCategory(Config.CATEGORY_BOTANIA)));
         list.add(new ConfigElement(Config.mainConfig.getCategory(Config.CATEGORY_PROVIDERS)));
         list.add(new ConfigElement(Config.mainConfig.getCategory(Config.CATEGORY_THEONEPROBE)));
 

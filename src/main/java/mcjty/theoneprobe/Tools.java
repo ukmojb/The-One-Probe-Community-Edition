@@ -6,6 +6,7 @@ import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
 import mcjty.theoneprobe.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.projectile.EntityFishHook;
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -141,5 +143,18 @@ public class Tools {
         }
 
         return cachedEntity;
+    }
+
+    public static String getName(Entity entity) {
+        if (entity.hasCustomName()) {
+            return entity.getCustomNameTag();
+        } else {
+            String s = EntityList.getEntityString(entity);
+            if (s == null) {
+                s = "generic";
+            }
+
+            return "{*entity." + s + ".name*}";
+        }
     }
 }

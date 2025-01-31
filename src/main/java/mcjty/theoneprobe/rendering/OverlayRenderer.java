@@ -11,10 +11,12 @@ import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoEntityProvider;
 import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoProvider;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import mcjty.theoneprobe.config.Config;
+import mcjty.theoneprobe.mods.crt.api.GameStageShow;
 import mcjty.theoneprobe.network.PacketGetEntityInfo;
 import mcjty.theoneprobe.network.PacketGetInfo;
 import mcjty.theoneprobe.network.PacketHandler;
 import mcjty.theoneprobe.network.ThrowableIdentity;
+import net.darkhax.gamestages.GameStageHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -30,6 +32,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
@@ -38,7 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static mcjty.theoneprobe.api.TextStyleClass.ERROR;
+import static mcjty.theoneprobe.api.TextStyleClass.*;
 
 public class OverlayRenderer {
 
@@ -74,6 +77,7 @@ public class OverlayRenderer {
         float dist = Config.probeDistance;
 
         RayTraceResult mouseOver = Minecraft.getMinecraft().objectMouseOver;
+
         if (mouseOver != null) {
             if (mouseOver.typeOfHit == RayTraceResult.Type.ENTITY) {
                 GlStateManager.pushMatrix();
@@ -222,20 +226,32 @@ public class OverlayRenderer {
         long time = System.currentTimeMillis();
 
         IElement damageElement = null;
-        if (Config.showBreakProgress > 0) {
-            float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
-            if (damage > 0) {
-                if (Config.showBreakProgress == 2) {
-                    damageElement = new ElementText("" + TextFormatting.RED + "Progress " + (int) (damage * 100) + "%");
-                } else {
-                    damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
-                            .prefix("Progress ")
-                            .suffix("%")
-                            .width(85)
-                            .borderColor(0)
-                            .filledColor(0)
-                            .filledColor(0xff990000)
-                            .alternateFilledColor(0xff550000));
+        boolean noHasStage = true;
+
+        if (Loader.isModLoaded("gamestages") && GameStageShow.topstage.containsKey("breakProgress")) {
+            if (!GameStageHelper.hasStage(Minecraft.getMinecraft().player, GameStageShow.topstage.get("breakProgress"))) {
+                noHasStage = false;
+            }
+        }
+
+        if (noHasStage) {
+            if (Config.showBreakProgress > 0) {
+                float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
+                if (damage > 0) {
+                    if (Config.showBreakProgress == 2) {
+                        damageElement = new ElementText(TextFormatting.RED + "Progress" + " " + (int) (damage * 100) + "%");
+                    } else {
+//                        probeInfo.text(LABEL + "{*top.Health*}" + ": " + INFOIMP + health + " / " + maxHealth);
+
+                        damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
+                                .prefix("Progress" + " ")
+                                .suffix("%")
+                                .width(85)
+                                .borderColor(0)
+                                .filledColor(0)
+                                .filledColor(0xff990000)
+                                .alternateFilledColor(0xff550000));
+                    }
                 }
             }
         }

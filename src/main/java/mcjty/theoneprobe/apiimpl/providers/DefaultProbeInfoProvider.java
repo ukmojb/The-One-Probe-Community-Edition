@@ -190,7 +190,8 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
             if (te instanceof TileEntityMobSpawner) {
                 MobSpawnerBaseLogic logic = ((TileEntityMobSpawner) te).getSpawnerBaseLogic();
 
-                String mobName = Tools.getCachedEntity(logic).getName();
+                String mobName = Tools.getName(Tools.getCachedEntity(logic));
+                probeInfo.text(mobName);
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle()
                         .alignment(ElementAlignment.ALIGN_CENTER))
                         .text(LABEL + "{*top.Mob*}" + ": " + INFO + mobName);

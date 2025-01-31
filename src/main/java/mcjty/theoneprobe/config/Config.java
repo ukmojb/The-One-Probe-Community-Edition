@@ -33,9 +33,6 @@ public class Config {
     public static String CATEGORY_THEONEPROBE = "theoneprobe";
     public static String CATEGORY_PROVIDERS = "providers";
     public static String CATEGORY_CLIENT = "client";
-    public static String CATEGORY_BOTANIA = "Botania";
-
-    public static String CATEGORY_THAUMCRAFT = "Thaumcraft";
     public static int needsProbe = PROBE_NEEDEDFOREXTENDED;
 
     public static boolean extendedInMain = false;
@@ -55,15 +52,13 @@ public class Config {
     public static String[] dontShowContentsUnlessSneaking = {};
     public static String[] dontSendNBT = {};
     public static float probeDistance = 6;
+    public static boolean showVillagerCareer = true;
+    public static boolean showVillagerCareerLevel = true;
     public static boolean showLiquids = false;
     public static boolean isVisible = true;
     public static boolean compactEqualStacks = true;
     public static boolean holdKeyToMakeVisible = false;
     public static boolean showDebugInfo = true;
-    public static boolean Botaniatop = true;
-    public static boolean showBotaniaprogress = true;
-    public static boolean textinprogress = true;
-    public static boolean requireGoggles = false;
     public static int showBreakProgress = 1;    // 0 == off, 1 == bar, 2 == text
     public static boolean harvestStyleVanilla = true;
     public static boolean showCustomharvestLevelName = false;
@@ -212,6 +207,8 @@ public class Config {
         showEntityInfo = cfg.getBoolean("showEntityInfo", CATEGORY_CLIENT, showEntityInfo, "true means shows entity info");
         showEntityHealth = cfg.getBoolean("showEntityHealth", CATEGORY_CLIENT, showEntityHealth, "true means shows entity health");
         showEntityArmor = cfg.getBoolean("showEntityArmor", CATEGORY_CLIENT, showEntityArmor, "true means shows entity armor value");
+        showVillagerCareer = cfg.getBoolean("showVillagerCareer", CATEGORY_CLIENT, showVillagerCareer, "true means shows villager career");
+        showVillagerCareerLevel = cfg.getBoolean("showVillagerCareerLevel", CATEGORY_CLIENT, showVillagerCareerLevel, "true means shows villager career level");
 
         Map<TextStyleClass, String> newformat = new HashMap<>();
         for (TextStyleClass styleClass : textStyleClasses.keySet()) {
@@ -381,7 +378,6 @@ public class Config {
             cfg.addCustomCategoryComment(CATEGORY_THEONEPROBE, "The One Probe configuration");
             cfg.addCustomCategoryComment(CATEGORY_PROVIDERS, "Provider configuration");
             cfg.addCustomCategoryComment(CATEGORY_CLIENT, "Client-side settings");
-            cfg.addCustomCategoryComment(CATEGORY_BOTANIA, "botania settings");
             init(cfg);
         } catch (Exception e1) {
             TheOneProbe.setup.getLogger().log(Level.ERROR, "Problem loading config file!", e1);

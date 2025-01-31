@@ -77,6 +77,20 @@ top.Speed=Speed
 top.Collar=Collar
 
 top.Career=Career
+top.Career.farmer=Farmer
+top.Career.fisherman=Fisherman
+top.Career.shepherd=Shepherd
+top.Career.fletcher=Fletcher
+top.Career.librarian=Librarian
+top.Career.cleric=Cleric
+top.Career.armor=Armorer
+top.Career.weapon=Weapon Smith
+top.Career.tool=Tool Smith
+top.Career.butcher=Butcher
+top.Career.leather=Leatherworker
+top.Career.nitwit=Nitwit
+top.Career.cartographer=Cartographer
+
 top.CareerLevel=Career Level
 top.CareerLevel.1=1
 top.CareerLevel.2=2
