@@ -1,22 +1,26 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
 name: Build mod
-on: [ push, pull_request, workflow_dispatch ]
+
+on: [push, pull_request]
+
 jobs:
   build:
-    name: Build mod
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'adopt'
-        java-version: '8'
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew -Pnet.minecraftforge.gradle.disableUpdateChecker=true build
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: TheOneProbe-CE
-        path: build/libs
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build the mod
+        run: ./gradlew --no-daemon build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TheOneProbe-CE
+          path: build/libs
