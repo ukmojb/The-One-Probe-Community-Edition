@@ -5,7 +5,9 @@ import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.styles.ItemStyle;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
+import mcjty.theoneprobe.compat.event.SpecialNameEvent;
 import mcjty.theoneprobe.config.Config;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -26,6 +28,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -64,9 +67,14 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
         if (entity.hasCustomName()) {
             return entity.getCustomNameTag();
         } else {
-            String s = EntityList.getEntityString(entity);
+            String s;
+
+            SpecialNameEvent event = new SpecialNameEvent(entity);
+            MinecraftForge.EVENT_BUS.post(event);
+            s = event.getSpacialName();
+
             if (s == null) {
-                s = "generic";
+                s = EntityList.getEntityString(entity) == null ? "generic" : EntityList.getEntityString(entity);
             }
 
             return "{*entity." + s + ".name*}";
@@ -92,10 +100,10 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             if (Config.showEntityModel) {
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
                         .entity(entity)
-                        .text(NAME + entity.getDisplayName().getFormattedText());
+                        .text(NAME + getName(entity));
             } else {
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
-                        .text(NAME + entity.getDisplayName().getFormattedText());
+                        .text(NAME + getName(entity));
             }
         }
     }

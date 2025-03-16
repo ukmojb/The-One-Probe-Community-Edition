@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.event.*;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Mod(modid = TheOneProbe.MODID, name = "TheOneProbe",
+@Mod(modid = TheOneProbe.MODID, name = "TheOneProbeCE",
         dependencies =
                 "after:forge@[" + TheOneProbe.MIN_FORGE11_VER + ",);" +
                         "after:tesla",
@@ -26,7 +26,7 @@ import java.util.function.Function;
         guiFactory = "mcjty.theoneprobe.config.TopModGuiFactory")
 public class TheOneProbe {
     public static final String MODID = "theoneprobe";
-    public static final String VERSION = "1.4.28";
+    public static final String VERSION = "1.4.29";
     public static final String MIN_FORGE11_VER = "13.19.0.2176";
 
     @SidedProxy(clientSide = "mcjty.theoneprobe.setup.ClientProxy", serverSide = "mcjty.theoneprobe.setup.ServerProxy")

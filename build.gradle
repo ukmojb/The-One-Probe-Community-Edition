@@ -76,6 +76,7 @@ dependencies {
     deobfCompile 'curse.maven:tesla-244651:2487962'
     deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.682"
     deobfCompile 'curse.maven:baubles-227083:2518667'
+    compile 'curse.maven:Ancient Warfare2-224602:3293318'
 //    compile "curse.maven:industrialcraft2-242638:3838713"
 //    compile "curse.maven:OpenComputers-223008:4630537"
 //    compile "curse.maven:MooFluids-74254:2643469"
@@ -119,7 +120,7 @@ dependencies {
 //    compile "curse.maven:bdlib-70496:4675629"
 //    compile "curse.maven:advanced_generators-223622:2516219"
 //
-//    runtime "curse.maven:CodeChickenLib-242818:2779848"
+    runtime "curse.maven:CodeChickenLib-242818:2779848"
 //    runtime "curse.maven:CoFHWorld-271384:2920434"
 //    runtime "curse.maven:ThermalFoundation-222880:2926428"
 //    compile "curse.maven:ThermalExpansion-69163:2926431"
