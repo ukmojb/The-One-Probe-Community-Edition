@@ -52,6 +52,7 @@ public class Config {
     public static String[] dontShowContentsUnlessSneaking = {};
     public static String[] dontSendNBT = {};
     public static float probeDistance = 6;
+    public static boolean probeEntityDistance = false;
     public static boolean showVillagerCareer = true;
     public static boolean showVillagerCareerLevel = true;
     public static boolean showLiquids = false;
@@ -159,7 +160,7 @@ public class Config {
     private static void initDefaultConfig(Configuration cfg) {
         defaultConfig.showModName(IProbeConfig.ConfigMode.values()[cfg.getInt("showModName", CATEGORY_THEONEPROBE, defaultConfig.getShowModName().ordinal(), 0, 2, "Show mod name (0 = not, 1 = always, 2 = sneak)")]);
         defaultConfig.showHarvestLevel(IProbeConfig.ConfigMode.values()[cfg.getInt("showHarvestLevel", CATEGORY_THEONEPROBE, defaultConfig.getShowHarvestLevel().ordinal(), 0, 2, "Show harvest level (0 = not, 1 = always, 2 = sneak)")]);
-        defaultConfig.showCanBeHarvested(IProbeConfig.ConfigMode.values()[cfg.getInt("showCanBeHarvested", CATEGORY_THEONEPROBE, defaultConfig.getShowHarvestLevel().ordinal(), 0, 2, "Show if the block can be harvested (0 = not, 1 = always, 2 = sneak)")]);
+        defaultConfig.showCanBeHarvested(IProbeConfig.ConfigMode.values()[cfg.getInt("showCanBeHarvested", CATEGORY_THEONEPROBE, defaultConfig.getShowCanBeHarvested().ordinal(), 0, 2, "Show if the block can be harvested (0 = not, 1 = always, 2 = sneak)")]);
         defaultConfig.showCropPercentage(IProbeConfig.ConfigMode.values()[cfg.getInt("showCropPercentage", CATEGORY_THEONEPROBE, defaultConfig.getShowCropPercentage().ordinal(), 0, 2, "Show the growth level of crops (0 = not, 1 = always, 2 = sneak)")]);
         defaultConfig.showChestContents(IProbeConfig.ConfigMode.values()[cfg.getInt("showChestContents", CATEGORY_THEONEPROBE, defaultConfig.getShowChestContents().ordinal(), 0, 2, "Show chest contents (0 = not, 1 = always, 2 = sneak)")]);
         defaultConfig.showChestContentsDetailed(IProbeConfig.ConfigMode.values()[cfg.getInt("showChestContentsDetailed", CATEGORY_THEONEPROBE, defaultConfig.getShowChestContentsDetailed().ordinal(), 0, 2, "Show chest contents in detail (0 = not, 1 = always, 2 = sneak), used only if number of items is below 'showItemDetailThresshold'")]);
@@ -209,6 +210,7 @@ public class Config {
         showEntityArmor = cfg.getBoolean("showEntityArmor", CATEGORY_CLIENT, showEntityArmor, "true means shows entity armor value");
         showVillagerCareer = cfg.getBoolean("showVillagerCareer", CATEGORY_CLIENT, showVillagerCareer, "true means shows villager career");
         showVillagerCareerLevel = cfg.getBoolean("showVillagerCareerLevel", CATEGORY_CLIENT, showVillagerCareerLevel, "true means shows villager career level");
+        probeEntityDistance = cfg.getBoolean("probeEntityDistance", CATEGORY_CLIENT, probeEntityDistance, "true means that the probeDistance option will take effect for entity");
 
         Map<TextStyleClass, String> newformat = new HashMap<>();
         for (TextStyleClass styleClass : textStyleClasses.keySet()) {
@@ -370,15 +372,19 @@ public class Config {
         return dontSendNBTSet;
     }
 
+
     public static void init() {
         mainConfig = new Configuration(new File(ModSetup.modConfigDir.getPath(), "theoneprobe.cfg"));
-        Configuration cfg = mainConfig;
+        reload(mainConfig);
+    }
+
+    public static void reload(Configuration mainConfig) {
         try {
-            cfg.load();
-            cfg.addCustomCategoryComment(CATEGORY_THEONEPROBE, "The One Probe configuration");
-            cfg.addCustomCategoryComment(CATEGORY_PROVIDERS, "Provider configuration");
-            cfg.addCustomCategoryComment(CATEGORY_CLIENT, "Client-side settings");
-            init(cfg);
+            mainConfig.load();
+            mainConfig.addCustomCategoryComment(CATEGORY_THEONEPROBE, "The One Probe configuration");
+            mainConfig.addCustomCategoryComment(CATEGORY_PROVIDERS, "Provider configuration");
+            mainConfig.addCustomCategoryComment(CATEGORY_CLIENT, "Client-side settings");
+            init(mainConfig);
         } catch (Exception e1) {
             TheOneProbe.setup.getLogger().log(Level.ERROR, "Problem loading config file!", e1);
         }

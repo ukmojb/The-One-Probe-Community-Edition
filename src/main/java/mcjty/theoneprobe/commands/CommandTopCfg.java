@@ -14,6 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.config.Configuration;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
@@ -47,6 +48,7 @@ public class CommandTopCfg implements ICommand {
         SUBCOMMANDS.put("dontcompactequalstacks", s -> Config.setCompactEqualStacks(false));
         SUBCOMMANDS.put("extendedinmain", s -> Config.setExtendedInMain(true));
         SUBCOMMANDS.put("defaultinmain", s -> Config.setExtendedInMain(false));
+        SUBCOMMANDS.put("reload", s -> Config.reload(Config.mainConfig));
     }
 
     private static void setPos(String[] args) {

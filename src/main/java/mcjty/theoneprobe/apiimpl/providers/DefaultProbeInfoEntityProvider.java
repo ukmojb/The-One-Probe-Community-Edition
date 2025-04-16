@@ -44,8 +44,10 @@ import static mcjty.theoneprobe.api.TextStyleClass.*;
 public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider {
 
     private static DecimalFormat dfCommas = new DecimalFormat("##.#");
-    private final List<ItemStack> stacks = new ArrayList<>();
-    private final Set<Item> foundItems = new HashSet<>();
+    private final List<ItemStack> ChestHorsestacks = new ArrayList<>();
+    private final Set<Item> ChestHorsefoundItems = new HashSet<>();
+    private final List<ItemStack> MinecartContainerstacks = new ArrayList<>();
+    private final Set<Item> MinecartContainerfoundItems = new HashSet<>();
 
     public static String getPotionDurationString(PotionEffect effect, float factor) {
         if (effect.getDuration() == 32767) {
@@ -271,21 +273,21 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             if (entity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
                 IItemHandler capability = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
                 if (capability == null) {
-                    stacks.clear();
-                    foundItems.clear();
+                    ChestHorsestacks.clear();
+                    ChestHorsefoundItems.clear();
                     return;
                 }
 
                 maxSlots = capability.getSlots();
                 // start at 3 to ignore armor/saddle
                 for (int i = 3; i < maxSlots; i++) {
-                    Tools.addItemStack(stacks, foundItems, capability.getStackInSlot(i));
+                    Tools.addItemStack(ChestHorsestacks, ChestHorsefoundItems, capability.getStackInSlot(i));
                 }
             } else {
                 NBTTagCompound compound = entity.writeToNBT(new NBTTagCompound());
                 if (!compound.hasKey("Items")) {
-                    stacks.clear();
-                    foundItems.clear();
+                    ChestHorsestacks.clear();
+                    ChestHorsefoundItems.clear();
                     return;
                 }
 
@@ -295,12 +297,12 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                     int slot = tagCompound.getByte("Slot") & 255;
 
                     // start at 3 to ignore armor/saddle
-                    if (slot > 2) Tools.addItemStack(stacks, foundItems, new ItemStack(tagCompound));
+                    if (slot > 2) Tools.addItemStack(ChestHorsestacks, ChestHorsefoundItems, new ItemStack(tagCompound));
                 }
             }
-            if (!stacks.isEmpty()) Tools.showChestContents(probeInfo, stacks, mode);
-            stacks.clear();
-            foundItems.clear();
+            if (!ChestHorsestacks.isEmpty()) Tools.showChestContents(probeInfo, ChestHorsestacks, mode);
+            ChestHorsestacks.clear();
+            ChestHorsefoundItems.clear();
         }
 
         if (entity instanceof EntityAnimal) {
@@ -326,25 +328,25 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             if (entity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
                 IItemHandler capability = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
                 if (capability == null) {
-                    stacks.clear();
-                    foundItems.clear();
+                    MinecartContainerstacks.clear();
+                    MinecartContainerfoundItems.clear();
                     return;
                 }
 
                 maxSlots = capability.getSlots();
                 for (int i = 0; i < maxSlots; i++) {
-                    Tools.addItemStack(stacks, foundItems, capability.getStackInSlot(i));
+                    Tools.addItemStack(MinecartContainerstacks, MinecartContainerfoundItems, capability.getStackInSlot(i));
                 }
             } else {
                 IInventory inventory = (IInventory) entity;
                 maxSlots = inventory.getSizeInventory();
                 for (int i = 0; i < maxSlots; i++) {
-                    Tools.addItemStack(stacks, foundItems, inventory.getStackInSlot(i));
+                    Tools.addItemStack(MinecartContainerstacks, MinecartContainerfoundItems, inventory.getStackInSlot(i));
                 }
             }
-            if (!stacks.isEmpty()) Tools.showChestContents(probeInfo, stacks, mode);
-            stacks.clear();
-            foundItems.clear();
+            if (!MinecartContainerstacks.isEmpty()) Tools.showChestContents(probeInfo, MinecartContainerstacks, mode);
+            MinecartContainerstacks.clear();
+            MinecartContainerfoundItems.clear();
         }
     }
 }
