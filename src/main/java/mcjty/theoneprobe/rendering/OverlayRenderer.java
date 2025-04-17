@@ -171,7 +171,7 @@ public class OverlayRenderer {
         long time = System.currentTimeMillis();
 
 //         Enables probeDistance to control the display as well
-        if (player.getDistance(entity) > Config.probeDistance) return;
+        if (player.getDistance(entity) > Config.probeDistance && Config.probeEntityDistance) return;
 
         Pair<Long, ProbeInfo> cacheEntry = cachedEntityInfo.get(uuid);
         if (cacheEntry == null || cacheEntry.getValue() == null) {

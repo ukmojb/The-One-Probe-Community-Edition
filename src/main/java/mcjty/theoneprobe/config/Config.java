@@ -137,6 +137,8 @@ public class Config {
         waitingForServerTimeout = cfg.getInt("waitingForServerTimeout", CATEGORY_THEONEPROBE, waitingForServerTimeout, -1, 100000, "The amount of milliseconds to wait before showing a 'fetch from server' info on the client (if the server is slow to respond) (-1 to disable this feature)");
         maxPacketToServer = cfg.getInt("maxPacketToServer", CATEGORY_THEONEPROBE, maxPacketToServer, -1, 32768, "The maximum packet size to send an itemstack from client to server. Reduce this if you have issues with network lag caused by TOP");
         probeDistance = cfg.getFloat("probeDistance", CATEGORY_THEONEPROBE, probeDistance, 0.1f, 200f, "Distance at which the probe works");
+        probeEntityDistance = cfg.getBoolean("probeEntityDistance", CATEGORY_CLIENT, probeEntityDistance, "true means that the probeDistance option will take effect for entity");
+
         initDefaultConfig(cfg);
 
         showDebugInfo = cfg.getBoolean("showDebugInfo", CATEGORY_THEONEPROBE, showDebugInfo, "If true show debug info with creative probe");
@@ -210,7 +212,6 @@ public class Config {
         showEntityArmor = cfg.getBoolean("showEntityArmor", CATEGORY_CLIENT, showEntityArmor, "true means shows entity armor value");
         showVillagerCareer = cfg.getBoolean("showVillagerCareer", CATEGORY_CLIENT, showVillagerCareer, "true means shows villager career");
         showVillagerCareerLevel = cfg.getBoolean("showVillagerCareerLevel", CATEGORY_CLIENT, showVillagerCareerLevel, "true means shows villager career level");
-        probeEntityDistance = cfg.getBoolean("probeEntityDistance", CATEGORY_CLIENT, probeEntityDistance, "true means that the probeDistance option will take effect for entity");
 
         Map<TextStyleClass, String> newformat = new HashMap<>();
         for (TextStyleClass styleClass : textStyleClasses.keySet()) {
