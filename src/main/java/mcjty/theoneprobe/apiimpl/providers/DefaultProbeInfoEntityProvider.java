@@ -79,6 +79,11 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                 s = EntityList.getEntityString(entity) == null ? "generic" : EntityList.getEntityString(entity);
             }
 
+            if (entity instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) entity;
+                return player.getName();
+            }
+
             return "{*entity." + s + ".name*}";
         }
     }
