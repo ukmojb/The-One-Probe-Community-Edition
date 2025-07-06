@@ -1,10 +1,7 @@
 package mcjty.theoneprobe.compat.event;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.Event;
-
-import javax.annotation.Nonnull;
 
 public class SpecialNameEvent extends Event {
 

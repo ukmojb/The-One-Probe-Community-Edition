@@ -2,26 +2,13 @@ package mcjty.theoneprobe.apiimpl;
 
 import io.netty.buffer.ByteBuf;
 import mcjty.theoneprobe.TheOneProbe;
-import mcjty.theoneprobe.api.*;
+import mcjty.theoneprobe.api.ElementAlignment;
+import mcjty.theoneprobe.api.IElement;
+import mcjty.theoneprobe.api.IElementFactory;
 import mcjty.theoneprobe.apiimpl.elements.ElementVertical;
-import mcjty.theoneprobe.config.Config;
-import mcjty.theoneprobe.items.ModItems;
-import mcjty.theoneprobe.network.ThrowableIdentity;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static mcjty.theoneprobe.api.TextStyleClass.*;
-import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDFOREXTENDED;
-import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDHARD;
 
 public class ProbeInfo extends ElementVertical {
 
