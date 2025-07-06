@@ -84,7 +84,7 @@ public class HarvestInfoTools {
 
         if (Loader.isModLoaded("orestages")) {
             Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
-            if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
+            if (stageInfo != null && player != null && !GameStageHelper.hasStage(player, stageInfo.getFirst())) {
                 Block stageBlock = stageInfo.getSecond().getBlock();
                 if (stageBlock.canHarvestBlock(world, pos, player) && world.getBlockState(pos).getBlockHardness(world, pos) >= 0) {
                     harvestable = true;
@@ -125,7 +125,7 @@ public class HarvestInfoTools {
         if (Loader.isModLoaded("orestages")) {
             Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
             if (harvestTool != null) {
-                if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
+                if (stageInfo != null && player != null && !GameStageHelper.hasStage(player, stageInfo.getFirst())) {
                     IBlockState stageBlockState = stageInfo.getSecond();
                     Block stageBlock = stageInfo.getSecond().getBlock();
                     harvestTool = stageBlock.getHarvestTool(stageBlockState);
@@ -148,7 +148,7 @@ public class HarvestInfoTools {
 
             if (Loader.isModLoaded("orestages")) {
                 Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
-                if (stageInfo != null && !GameStageHelper.clientHasStage(PlayerUtils.getClientPlayer(), stageInfo.getFirst())) {
+                if (stageInfo != null && player != null && !GameStageHelper.hasStage(player, stageInfo.getFirst())) {
                     IBlockState stageBlockState = stageInfo.getSecond();
                     Block stageBlock = stageInfo.getSecond().getBlock();
                     int stageharvestLevel = stageBlock.getHarvestLevel(stageBlockState);
@@ -209,9 +209,7 @@ public class HarvestInfoTools {
                     horizontal.icon(ICONS, 16, offs, dim, dim, iconStyle)
                             .text(WARNING + "{*top.NoTool*}" + " (" + "{*top.level*}" + " " + harvestName + ")");
                 }
-
             }
         }
     }
-
 }
