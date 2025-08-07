@@ -1,6 +1,7 @@
 package mcjty.theoneprobe.mods.crt.api;
 
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.world.IVector3d;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -24,7 +25,7 @@ public interface IProbeHitData {
     BlockPos getPos();
 
     @ZenMethod
-    Vec3d getHitVec();
+    IVector3d getHitVec();
 
     @ZenMethod
     EnumFacing getSideHit();
