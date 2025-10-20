@@ -14,11 +14,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nonnull;
@@ -27,6 +29,8 @@ import java.util.*;
 
 import static mcjty.theoneprobe.api.IProbeConfig.ConfigMode.EXTENDED;
 import static mcjty.theoneprobe.api.IProbeConfig.ConfigMode.NORMAL;
+import static mcjty.theoneprobe.api.IProbeInfo.ENDLOC;
+import static mcjty.theoneprobe.api.IProbeInfo.STARTLOC;
 
 public class Tools {
 
@@ -152,5 +156,46 @@ public class Tools {
 
             return "{*entity." + s + ".name*}";
         }
+    }
+
+    public static String stylifyString(String text) {
+        while (text.contains(STARTLOC) && text.contains(ENDLOC)) {
+            int start = text.indexOf(STARTLOC);
+            int end = text.indexOf(ENDLOC);
+            if (start < end) {
+                // Translation is needed
+                String left = text.substring(0, start);
+                String middle = text.substring(start + 2, end);
+                middle = I18n.translateToLocal(middle).trim();
+                String right = text.substring(end + 2);
+                text = left + middle + right;
+            } else {
+                break;
+            }
+        }
+        if (text.contains("{=")) {
+            Set<TextStyleClass> stylesNeedingContext = EnumSet.noneOf(TextStyleClass.class);
+            TextStyleClass context = null;
+            for (TextStyleClass styleClass : Config.textStyleClasses.keySet()) {
+                if (text.contains(styleClass.toString())) {
+                    String replacement = Config.getTextStyle(styleClass);
+                    if ("context".equals(replacement)) {
+                        stylesNeedingContext.add(styleClass);
+                    } else if (context == null) {
+                        context = styleClass;
+                        text = StringUtils.replace(text, styleClass.toString(), replacement);
+                    } else {
+                        text = StringUtils.replace(text, styleClass.toString(), replacement);
+                    }
+                }
+            }
+            if (context != null) {
+                for (TextStyleClass styleClass : stylesNeedingContext) {
+                    String replacement = Config.getTextStyle(context);
+                    text = StringUtils.replace(text, styleClass.toString(), replacement);
+                }
+            }
+        }
+        return text;
     }
 }

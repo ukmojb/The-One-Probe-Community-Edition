@@ -1,5 +1,6 @@
 package mcjty.theoneprobe.apiimpl.client;
 
+import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.IProgressStyle;
 import mcjty.theoneprobe.apiimpl.elements.ElementProgress;
 import mcjty.theoneprobe.rendering.RenderHelper;
@@ -37,7 +38,8 @@ public class ElementProgressRender {
         }
 
         if (style.isShowText()) {
-            RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 2, style.getPrefix() + ElementProgress.format(current, style.getNumberFormat(), style.getSuffix()));
+            // 增加{*与*}的翻译
+            RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 2, Tools.stylifyString(style.getPrefix()) + ElementProgress.format(current, style.getNumberFormat(), Tools.stylifyString(style.getSuffix())));
         }
     }
 

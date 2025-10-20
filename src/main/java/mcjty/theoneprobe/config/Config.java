@@ -52,6 +52,7 @@ public class Config {
     public static String[] dontShowContentsUnlessSneaking = {};
     public static String[] dontSendNBT = {};
     public static float probeDistance = 6;
+    public static boolean probeAccommodateReach = false;
     public static boolean probeEntityDistance = false;
     public static boolean showVillagerCareer = true;
     public static boolean showVillagerCareerLevel = true;
@@ -90,6 +91,8 @@ public class Config {
     private static int boxFillColor = 0x55006699;
     private static int boxThickness = 2;
     private static int boxOffset = 0;
+
+    public static TopDisplayTheme displayTheme;
     private static IOverlayStyle defaultOverlayStyle;
     private static ProbeConfig defaultConfig = new ProbeConfig();
     private static IProbeConfig realConfig;
@@ -138,6 +141,7 @@ public class Config {
         maxPacketToServer = cfg.getInt("maxPacketToServer", CATEGORY_THEONEPROBE, maxPacketToServer, -1, 32768, "The maximum packet size to send an itemstack from client to server. Reduce this if you have issues with network lag caused by TOP");
         probeDistance = cfg.getFloat("probeDistance", CATEGORY_THEONEPROBE, probeDistance, 0.1f, 200f, "Distance at which the probe works");
         probeEntityDistance = cfg.getBoolean("probeEntityDistance", CATEGORY_CLIENT, probeEntityDistance, "true means that the probeDistance option will take effect for entity");
+        probeAccommodateReach = cfg.getBoolean("probeAccommodateReach", CATEGORY_CLIENT, probeAccommodateReach, "true means that the player's reach distance will override the value of the probeDistance option.");
 
         initDefaultConfig(cfg);
 
@@ -223,6 +227,25 @@ public class Config {
         textStyleClasses = newformat;
 
         extendedInMain = cfg.getBoolean("extendedInMain", CATEGORY_CLIENT, extendedInMain, "If true the probe will automatically show extended information if it is in your main hand (so not required to sneak)");
+
+        displayTheme = TopDisplayTheme.valueOf(cfg.getString("DisplayTheme",
+                CATEGORY_CLIENT, TopDisplayTheme.NULL.name(),
+                "This setting lets you choose a predefined theme for display. \n" +
+                        "When set to NULL, the option is ignored. \n" +
+                        "Choosing any other theme will override the individual settings for Box Border, Fill Color, Thickness, and Offset.\n" +
+                        "All theme : NULL, JADE"));
+
+
+        handleTheme();
+    }
+
+    private static void handleTheme() {
+        if (displayTheme != TopDisplayTheme.NULL) {
+            boxBorderColor = displayTheme.displayBoxBorderColor;
+            boxFillColor = displayTheme.displayBoxFillColor;
+            boxOffset = displayTheme.displayBoxOffset;
+            boxThickness = displayTheme.displayBoxThickness;
+        }
     }
 
     public static void setTextStyle(TextStyleClass styleClass, String style) {
@@ -390,6 +413,6 @@ public class Config {
             TheOneProbe.setup.getLogger().log(Level.ERROR, "Problem loading config file!", e1);
         }
     }
+
+
 }
-
-

@@ -283,6 +283,16 @@ public class RenderHelper {
     }
 
     /**
+     * Draw a extra border. x2 and y2 are not included.
+     */
+    public static void drawExtraBorder(int x1, int y1, int x2, int y2, int thickness, int extraBorderColor) {
+        Gui.drawRect(x1, y1 - 1, x2, y1 + thickness - 1, extraBorderColor);
+        Gui.drawRect(x1 - 1, y1, x1 + thickness - 1, y2, extraBorderColor);
+        Gui.drawRect(x2 - thickness + 1, y1, x2 + 1, y2, extraBorderColor);
+        Gui.drawRect(x1, y2 - thickness + 1, x2, y2 + 1, extraBorderColor);
+    }
+
+    /**
      * Draws a textured rectangle at the stored z-value. Args: x, y, u, v, width, height
      */
     public static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, int twidth, int theight) {

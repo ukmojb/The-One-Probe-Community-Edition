@@ -11,6 +11,7 @@ import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoEntityProvider;
 import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoProvider;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import mcjty.theoneprobe.config.Config;
+import mcjty.theoneprobe.config.TopDisplayTheme;
 import mcjty.theoneprobe.mods.crt.api.GameStageShow;
 import mcjty.theoneprobe.network.PacketGetEntityInfo;
 import mcjty.theoneprobe.network.PacketGetInfo;
@@ -25,6 +26,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -170,8 +172,13 @@ public class OverlayRenderer {
         EntityPlayerSP player = Minecraft.getMinecraft().player;
         long time = System.currentTimeMillis();
 
+        IAttributeInstance reachAttribute = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE);
+
+        double currentReach = reachAttribute.getAttributeValue();
+
 //         Enables probeDistance to control the display as well
-        if (player.getDistance(entity) > Config.probeDistance && Config.probeEntityDistance) return;
+        if (player.getDistance(entity) > (Config.probeAccommodateReach ? currentReach : Config.probeDistance)
+                && Config.probeEntityDistance) return;
 
         Pair<Long, ProbeInfo> cacheEntry = cachedEntityInfo.get(uuid);
         if (cacheEntry == null || cacheEntry.getValue() == null) {
@@ -241,13 +248,27 @@ public class OverlayRenderer {
             if (Config.showBreakProgress > 0) {
                 float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
                 if (damage > 0) {
+//                    if (Config.showBreakProgress == 2) {
+//                        damageElement = new ElementText(TextFormatting.RED + "Progress" + " " + (int) (damage * 100) + "%");
+//                    } else {
+////                        probeInfo.text(LABEL + "{*top.Health*}" + ": " + INFOIMP + health + " / " + maxHealth);
+//
+//                        damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
+//                                .prefix("Progress" + " ")
+//                                .suffix("%")
+//                                .width(85)
+//                                .borderColor(0)
+//                                .filledColor(0)
+//                                .filledColor(0xff990000)
+//                                .alternateFilledColor(0xff550000));
+//                    }
                     if (Config.showBreakProgress == 2) {
-                        damageElement = new ElementText(TextFormatting.RED + "Progress" + " " + (int) (damage * 100) + "%");
+                        damageElement = new ElementText(TextFormatting.RED + "{*top.Progress*}" + " " + (int) (damage * 100) + "%");
                     } else {
 //                        probeInfo.text(LABEL + "{*top.Health*}" + ": " + INFOIMP + health + " / " + maxHealth);
 
                         damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
-                                .prefix("Progress" + " ")
+                                .prefix("{*top.Progress*}" + " ")
                                 .suffix("%")
                                 .width(85)
                                 .borderColor(0)
@@ -440,9 +461,14 @@ public class OverlayRenderer {
 
         if (thick > 0) {
             if (offset > 0) {
-                RenderHelper.drawThickBeveledBox(x, y, x + w-1, y + h-1, thick, style.getBoxColor(), style.getBoxColor(), style.getBoxColor());
+                RenderHelper.drawThickBeveledBox(x, y, x + w - 1, y + h - 1, thick, style.getBoxColor(), style.getBoxColor(), style.getBoxColor());
             }
+
             RenderHelper.drawThickBeveledBox(x+offset, y+offset, x + w-1-offset, y + h-1-offset, thick, style.getBorderColor(), style.getBorderColor(), style.getBoxColor());
+
+            if (Config.displayTheme == TopDisplayTheme.JADE)
+                RenderHelper.drawExtraBorder(x, y, x + w - 1, y + h - 1, thick, 0xFF121212);
+
         }
 
         if (!Minecraft.getMinecraft().isGamePaused()) {
