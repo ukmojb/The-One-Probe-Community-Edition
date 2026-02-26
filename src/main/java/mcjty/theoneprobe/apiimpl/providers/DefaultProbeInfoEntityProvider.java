@@ -7,6 +7,7 @@ import mcjty.theoneprobe.apiimpl.styles.ItemStyle;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
 import mcjty.theoneprobe.compat.event.SpecialNameEvent;
 import mcjty.theoneprobe.config.Config;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -28,9 +29,11 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.UsernameCache;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.shadowmage.ancientwarfare.npc.entity.NpcBase;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -80,6 +83,13 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) entity;
                 return player.getName();
+            }
+
+            if (Loader.isModLoaded("ancientwarfare")) {
+                if (entity instanceof NpcBase) {
+                    NpcBase npc = (NpcBase) entity;
+                    s = "ancientwarfarenpc." + npc.getNpcFullType();
+                }
             }
 
             return "{*entity." + s + ".name*}";
@@ -241,12 +251,15 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
 
         if (entity instanceof EntityVillager) {
             EntityVillager villager = (EntityVillager) entity;
-            int careerId = villager.serializeNBT().getInteger("Career");
+            int careerId = villager.serializeNBT().getInteger("Career") - 1;
             VillagerRegistry.VillagerCareer career = villager.getProfessionForge().getCareer(careerId);
 
             int careerLevel = villager.serializeNBT().getInteger("CareerLevel");
 
-            if (Config.showVillagerCareer) probeInfo.text("{*top.Career*}" + ": " + "{*top.Career." + career.getName() + "*}");
+            if (Config.showVillagerCareer) {
+                probeInfo.text("{*top.Career*}" + ": " + "{*entity.Villager." + career.getName() + "*}");
+                probeInfo.text("{*top.Career*}" + ": " + "entity.Villager." + career.getName() + "");
+            }
 
             if (Config.showVillagerCareerLevel) probeInfo.text("{*top.CareerLevel*}" + ": " + "{*top.CareerLevel." + careerLevel + "*}");
         }

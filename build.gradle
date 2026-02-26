@@ -86,7 +86,8 @@ dependencies {
 //    compile "curse.maven:architecturecraft-277631:4344128"
 //    compile "curse.maven:UnlimitedChiselWorks-278493:3319307"
 //    compile "curse.maven:forestry-59751:2556566"
-//    compile "curse.maven:Mantle-74924:2713386"
+    compile "curse.maven:Mantle-74924:2713386"
+    deobfCompile "curse.maven:Tinkers' Construct 2-74072:2902483"
 //    compileOnly("curse.maven:StevesCarts-253462:2539158" ) { transitive = false }
 //    compile "curse.maven:BloodMagic-224791:2822288"
 //    compile "curse.maven:Buildcraft-61811:2796760"
