@@ -11,7 +11,6 @@ import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoEntityProvider;
 import mcjty.theoneprobe.apiimpl.providers.DefaultProbeInfoProvider;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import mcjty.theoneprobe.config.Config;
-import mcjty.theoneprobe.config.TopDisplayTheme;
 import mcjty.theoneprobe.mods.crt.api.GameStageShow;
 import mcjty.theoneprobe.network.PacketGetEntityInfo;
 import mcjty.theoneprobe.network.PacketGetInfo;
@@ -58,6 +57,15 @@ public class OverlayRenderer {
 
     // When the server delays too long we also show some preliminary information already
     private static long lastRenderedTime = -1;
+    private static float animatedBoxX = Float.NaN;
+    private static float animatedBoxY = Float.NaN;
+    private static float animatedBoxW = Float.NaN;
+    private static float animatedBoxH = Float.NaN;
+    private static long animatedBoxLastUpdateTime = 0L;
+    private static long animatedBoxLastRenderTime = 0L;
+    private static final long BOX_ANIMATION_RESET_TIMEOUT_MS = 600L;
+    private static final float BOX_ANIMATION_SPEED = 42.0f;
+    private static final float BOX_ANIMATION_STEP_SECONDS = 1.0f / 200.0f;
 
     public static void registerProbeInfo(int dim, BlockPos pos, ProbeInfo probeInfo) {
         if (probeInfo == null) {
@@ -245,28 +253,12 @@ public class OverlayRenderer {
         }
 
         if (noHasStage) {
-            if (Config.showBreakProgress > 0) {
+            if (Config.showBreakProgress > 0 && !Config.isJadeTheme()) {
                 float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
                 if (damage > 0) {
-//                    if (Config.showBreakProgress == 2) {
-//                        damageElement = new ElementText(TextFormatting.RED + "Progress" + " " + (int) (damage * 100) + "%");
-//                    } else {
-////                        probeInfo.text(LABEL + "{*top.Health*}" + ": " + INFOIMP + health + " / " + maxHealth);
-//
-//                        damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
-//                                .prefix("Progress" + " ")
-//                                .suffix("%")
-//                                .width(85)
-//                                .borderColor(0)
-//                                .filledColor(0)
-//                                .filledColor(0xff990000)
-//                                .alternateFilledColor(0xff550000));
-//                    }
                     if (Config.showBreakProgress == 2) {
                         damageElement = new ElementText(TextFormatting.RED + "{*top.Progress*}" + " " + (int) (damage * 100) + "%");
                     } else {
-//                        probeInfo.text(LABEL + "{*top.Health*}" + ": " + INFOIMP + health + " / " + maxHealth);
-
                         damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
                                 .prefix("{*top.Progress*}" + " ")
                                 .suffix("%")
@@ -424,9 +416,6 @@ public class OverlayRenderer {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableLighting();
 
-//        final ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
-//        final int scaledWidth = scaledresolution.getScaledWidth();
-//        final int scaledHeight = scaledresolution.getScaledHeight();
         int scaledWidth = (int) sw;
         int scaledHeight = (int) sh;
 
@@ -459,15 +448,84 @@ public class OverlayRenderer {
             y = (scaledHeight - h) / 2;
         }
 
+        int drawX = x;
+        int drawY = y;
+        int drawW = w;
+        int drawH = h;
+        if (thick > 0 && Config.boxResizeAnimation) {
+            long now = System.currentTimeMillis();
+            boolean resetAnimation = Float.isNaN(animatedBoxW) || now - animatedBoxLastRenderTime > BOX_ANIMATION_RESET_TIMEOUT_MS;
+            if (resetAnimation) {
+                animatedBoxX = x;
+                animatedBoxY = y;
+                animatedBoxW = w;
+                animatedBoxH = h;
+                animatedBoxLastUpdateTime = now;
+            } else {
+                float dt = Math.min((now - animatedBoxLastUpdateTime) / 1000.0f, 0.2f);
+                while (dt > 0.0f) {
+                    float step = Math.min(dt, BOX_ANIMATION_STEP_SECONDS);
+                    animatedBoxX = animateBoxValue(animatedBoxX, x, step);
+                    animatedBoxY = animateBoxValue(animatedBoxY, y, step);
+                    animatedBoxW = animateBoxValue(animatedBoxW, w, step);
+                    animatedBoxH = animateBoxValue(animatedBoxH, h, step);
+                    dt -= step;
+                }
+
+                // Pixel-aware snap: avoid a late 1px jump at the end of easing.
+                if (Math.abs(animatedBoxX - x) < 0.2f) {
+                    animatedBoxX = x;
+                }
+                if (Math.abs(animatedBoxY - y) < 0.2f) {
+                    animatedBoxY = y;
+                }
+                if (Math.abs(animatedBoxW - w) < 0.2f) {
+                    animatedBoxW = w;
+                }
+                if (Math.abs(animatedBoxH - h) < 0.2f) {
+                    animatedBoxH = h;
+                }
+                animatedBoxLastUpdateTime = now;
+            }
+            animatedBoxLastRenderTime = now;
+            float animatedRight = animatedBoxX + animatedBoxW;
+            float animatedBottom = animatedBoxY + animatedBoxH;
+            int drawLeft = quantizeLowerEdge(animatedBoxX, x);
+            int drawTop = quantizeLowerEdge(animatedBoxY, y);
+            int drawRight = quantizeUpperEdge(animatedRight, x + w);
+            int drawBottom = quantizeUpperEdge(animatedBottom, y + h);
+            if (drawRight <= drawLeft) {
+                drawRight = drawLeft + 1;
+            }
+            if (drawBottom <= drawTop) {
+                drawBottom = drawTop + 1;
+            }
+            drawX = drawLeft;
+            drawY = drawTop;
+            drawW = drawRight - drawLeft;
+            drawH = drawBottom - drawTop;
+        } else if (thick > 0) {
+            animatedBoxX = Float.NaN;
+            animatedBoxY = Float.NaN;
+            animatedBoxW = Float.NaN;
+            animatedBoxH = Float.NaN;
+            animatedBoxLastUpdateTime = 0L;
+            animatedBoxLastRenderTime = 0L;
+        }
+
         if (thick > 0) {
             if (offset > 0) {
-                RenderHelper.drawThickBeveledBox(x, y, x + w - 1, y + h - 1, thick, style.getBoxColor(), style.getBoxColor(), style.getBoxColor());
+                RenderHelper.drawThickBeveledBox(drawX, drawY, drawX + drawW - 1, drawY + drawH - 1, thick, style.getBoxColor(), style.getBoxColor(), style.getBoxColor());
             }
 
-            RenderHelper.drawThickBeveledBox(x+offset, y+offset, x + w-1-offset, y + h-1-offset, thick, style.getBorderColor(), style.getBorderColor(), style.getBoxColor());
+            RenderHelper.drawThickBeveledBox(drawX + offset, drawY + offset, drawX + drawW - 1 - offset, drawY + drawH - 1 - offset, thick, style.getBorderColor(), style.getBorderColor(), style.getBoxColor());
 
-            if (Config.displayTheme == TopDisplayTheme.JADE)
-                RenderHelper.drawExtraBorder(x, y, x + w - 1, y + h - 1, thick, 0xFF121212);
+            if (Config.isJadeTheme()) {
+                RenderHelper.drawExtraBorder(drawX, drawY, drawX + drawW - 1, drawY + drawH - 1, thick, 0x88121212);
+
+                float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
+                RenderHelper.drawJadeBreakProgress(drawX, drawY, drawX + drawW - 1, drawY + drawH - 1, thick, 0xFFFFFFFF, damage);
+            }
 
         }
 
@@ -475,9 +533,22 @@ public class OverlayRenderer {
             RenderHelper.rot += .5f;
         }
 
-        probeInfo.render(x + margin, y + margin);
+        probeInfo.render(drawX + margin, drawY + margin);
         if (extra != null) {
             probeInfo.removeElement(extra);
         }
+    }
+
+    private static float animateBoxValue(float current, float target, float dt) {
+        float lerp = 1.0f - (float) Math.exp(-BOX_ANIMATION_SPEED * dt);
+        return current + (target - current) * lerp;
+    }
+
+    private static int quantizeLowerEdge(float current, float target) {
+        return target >= current ? (int) Math.floor(current) : (int) Math.ceil(current);
+    }
+
+    private static int quantizeUpperEdge(float current, float target) {
+        return target >= current ? (int) Math.ceil(current) : (int) Math.floor(current);
     }
 }

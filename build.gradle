@@ -95,8 +95,8 @@ dependencies {
 //    compileOnly("curse.maven:binnie_mods-223525:2916129") { transitive = false }
 //
     compile "curse.maven:bookshelf-228525:2836960"
-    compile "net.darkhax.gamestages:GameStages-1.12.2:2.0.+:deobf"
-    compile "net.darkhax.orestages:OreStages-1.12.2:2.0.+:deobf"
+    compile "curse.maven:GameStages-268655:2951840"
+    compile "curse.maven:OreStages-290201:2640414"
 //
 //    runtime 'curse.maven:hwyla-253449:2568751'
 //    runtime 'curse.maven:hammer-lib-247401:3611193'

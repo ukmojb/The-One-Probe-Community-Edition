@@ -1,11 +1,9 @@
 package mcjty.theoneprobe.config;
 
-import javax.annotation.Nullable;
-
 public enum TopDisplayTheme {
 
-    NULL(0,0, 0, 0),
-    JADE(0xFF383838,0xFF242424, 1, 0);
+    VANILLA(0,0, 0, 0),
+    JADE(0x88383838,0x88242424, 1, 0);
 
     TopDisplayTheme(int boxBorderColor, int boxFillColor, int boxThickness, int boxOffset) {
         this.displayBoxBorderColor = boxBorderColor;

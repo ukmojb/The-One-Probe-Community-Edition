@@ -57,7 +57,7 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
                 ItemStack bucketStack = FluidUtil.getFilledBucket(fluidStack);
 
                 IProbeInfo horizontal = probeInfo.horizontal();
-                if (fluidStack.isFluidEqual(FluidUtil.getFluidContained(bucketStack))) {
+                if (fluidStack.isFluidEqual(FluidUtil.getFluidContained(bucketStack)) && Config.showLiquidWithBucket) {
                     horizontal.item(bucketStack);
                 } else {
                     horizontal.icon(fluid.getStill(), -1, -1, 16, 16, probeInfo.defaultIconStyle().width(20));
@@ -125,14 +125,18 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
             showGrowthLevel(probeInfo, blockState);
         }
 
-        boolean showHarvestLevel = Tools.show(mode, config.getShowHarvestLevel());
-        boolean showHarvested = Tools.show(mode, config.getShowCanBeHarvested());
-        if (showHarvested && showHarvestLevel) {
+        if (Config.isJadeTheme()) {
             HarvestInfoTools.showHarvestInfo(probeInfo, world, pos, block, blockState, player);
-        } else if (showHarvestLevel) {
-            HarvestInfoTools.showHarvestLevel(probeInfo, blockState, block);
-        } else if (showHarvested) {
-            HarvestInfoTools.showCanBeHarvested(probeInfo, world, pos, block, player);
+        } else {
+            boolean showHarvestLevel = Tools.show(mode, config.getShowHarvestLevel());
+            boolean showHarvested = Tools.show(mode, config.getShowCanBeHarvested());
+            if (showHarvested && showHarvestLevel) {
+                HarvestInfoTools.showHarvestInfo(probeInfo, world, pos, block, blockState, player);
+            } else if (showHarvestLevel) {
+                HarvestInfoTools.showHarvestLevel(probeInfo, blockState, block);
+            } else if (showHarvested) {
+                HarvestInfoTools.showCanBeHarvested(probeInfo, world, pos, block, player);
+            }
         }
 
         if (Tools.show(mode, config.getShowRedstone())) {

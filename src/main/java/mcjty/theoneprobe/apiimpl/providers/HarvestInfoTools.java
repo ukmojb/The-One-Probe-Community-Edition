@@ -135,7 +135,7 @@ public class HarvestInfoTools {
         if (harvestLevel < 0) {
             // NOTE: When a block doesn't have an explicitly-set harvest tool, getHarvestLevel will return -1 for ANY tool. (Expected behavior)
 //                TheOneProbe.logger.info("HarvestLevel out of bounds (less than 0). Found " + harvestLevel);
-            if (Config.showCustomharvestLevelName) {
+            if (Config.showCustomHarvestLevelName) {
                 if (I18n.canTranslate("top.harvestLevel.null")) {
                     harvestName = "{*top.harvestLevel.null*}";
                 }
@@ -154,7 +154,7 @@ public class HarvestInfoTools {
                     harvestName = harvestLevels[stageharvestLevel];
                 }
             }
-            if (Config.showCustomharvestLevelName)
+            if (Config.showCustomHarvestLevelName)
                     harvestName = "{*top.harvestLevel." + harvestLevel + "*}";
 
         }

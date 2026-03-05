@@ -1,18 +1,8 @@
 package mcjty.theoneprobe.apiimpl.client;
 
 import mcjty.theoneprobe.Tools;
-import mcjty.theoneprobe.api.TextStyleClass;
-import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.rendering.RenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.translation.I18n;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.EnumSet;
-import java.util.Set;
-
-import static mcjty.theoneprobe.api.IProbeInfo.ENDLOC;
-import static mcjty.theoneprobe.api.IProbeInfo.STARTLOC;
 
 public class ElementTextRender {
 

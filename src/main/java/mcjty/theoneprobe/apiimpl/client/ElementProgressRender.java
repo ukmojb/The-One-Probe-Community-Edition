@@ -3,6 +3,7 @@ package mcjty.theoneprobe.apiimpl.client;
 import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.IProgressStyle;
 import mcjty.theoneprobe.apiimpl.elements.ElementProgress;
+import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.rendering.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,28 +19,46 @@ public class ElementProgressRender {
             renderLifeBar(current, x, y, w, h);
         } else if (style.isArmorBar()) {
             renderArmorBar(current, x, y, w, h);
+        } else if (Config.isJadeTheme()) {
+            renderJadeBar(style, current, max, x, y, w, h);
         } else {
-            RenderHelper.drawThickBeveledBox(x, y, x + w, y + h, 1, style.getBorderColor(), style.getBorderColor(), style.getBackgroundColor());
-            if (current > 0 && max > 0) {
-                // Determine the progress bar width, but limit it to the size of the element (minus 2).
-                int dx = (int) Math.min((current * (w - 2) / max), w - 2);
-
-                if (style.getFilledColor() == style.getAlternatefilledColor()) {
-                    if (dx > 0) {
-                        RenderHelper.drawThickBeveledBox(x + 1, y + 1, x + dx + 1, y + h - 1, 1, style.getFilledColor(), style.getFilledColor(), style.getFilledColor());
-                    }
-                } else {
-                    for (int xx = x + 1; xx <= x + dx + 1; xx++) {
-                        int color = (xx & 1) == 0 ? style.getFilledColor() : style.getAlternatefilledColor();
-                        RenderHelper.drawVerticalLine(xx, y + 1, y + h - 1, color);
-                    }
-                }
-            }
+            renderDefaultBar(style, current, max, x, y, w, h);
         }
 
         if (style.isShowText()) {
-            // 增加{*与*}的翻译
             RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 2, Tools.stylifyString(style.getPrefix()) + ElementProgress.format(current, style.getNumberFormat(), Tools.stylifyString(style.getSuffix())));
+        }
+    }
+
+    private static void renderDefaultBar(IProgressStyle style, long current, long max, int x, int y, int w, int h) {
+        RenderHelper.drawThickBeveledBox(x, y, x + w, y + h, 1, style.getBorderColor(), style.getBorderColor(), style.getBackgroundColor());
+        fillBar(style, current, max, x, y, w, h);
+    }
+
+    private static void renderJadeBar(IProgressStyle style, long current, long max, int x, int y, int w, int h) {
+        int borderColor = style.getBorderColor() == 0 ? 0xFF383838 : style.getBorderColor();
+        int backgroundColor = style.getBackgroundColor() == 0 ? 0xFF242424 : style.getBackgroundColor();
+        RenderHelper.drawThickBeveledBox(x, y, x + w, y + h, 1, borderColor, borderColor, backgroundColor);
+        fillBar(style, current, max, x, y, w, h);
+    }
+
+    private static void fillBar(IProgressStyle style, long current, long max, int x, int y, int w, int h) {
+        if (current <= 0 || max <= 0) {
+            return;
+        }
+
+        int dx = (int) Math.min((current * (w - 2) / max), w - 2);
+        if (dx <= 0) {
+            return;
+        }
+
+        if (style.getFilledColor() == style.getAlternatefilledColor()) {
+            RenderHelper.drawThickBeveledBox(x + 1, y + 1, x + dx + 1, y + h - 1, 1, style.getFilledColor(), style.getFilledColor(), style.getFilledColor());
+        } else {
+            for (int xx = x + 1; xx <= x + dx + 1; xx++) {
+                int color = (xx & 1) == 0 ? style.getFilledColor() : style.getAlternatefilledColor();
+                RenderHelper.drawVerticalLine(xx, y + 1, y + h - 1, color);
+            }
         }
     }
 

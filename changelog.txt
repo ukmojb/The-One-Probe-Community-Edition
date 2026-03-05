@@ -20,3 +20,21 @@ https://github.com/lyuxc-unknow/ember_top
 1.0.4
 更新:
 支持植物魔法(Botania)
+
+1.12-1.3.7
+更新:
+- 新增 JADE 主题统一判断：Config.isJadeTheme()，并将相关渲染逻辑切换为该判断。
+- JADE 模式下信息展示对齐 Jade 1.12.2：包含挖掘进度、所需挖掘等级等显示行为。
+- 重写 drawJadeBreakProgress，新增 float damage 参数，进度条改为“左侧固定、向右增长”。
+- JADE 挖掘白条增加淡入淡出透明度动画，并修复方块破坏瞬间白条长度异常（保持完整长度后再淡出）。
+- Tooltip 外框新增尺寸过渡动画（信息增减时不再瞬变），并增加配置项 boxResizeAnimation 控制开关。
+- 优化外框过渡连续性与收敛表现，修复末尾回缩/末端突跳问题。
+- 调整外框动画速度：缩小时不再更快，缩放使用同一收敛速度。
+- JADE 模式下进度条/边框视觉细节调整（额外边框、透明度、颜色风格对齐）。
+- 物品数量显示在 JADE 模式下改为短数字样式（k/m/b/t）。
+- 液体显示新增配置 showLiquidWithBucket（可切换桶图标或直接液体图标）。
+- JADE 模式下收割信息显示逻辑调整：统一优先显示 harvest 相关信息。
+- 修复/清理若干细节：收割等级配置命名统一（showCustomHarvestLevelName）、村民职业重复文本移除、无用导入清理。
+- 主题枚举由 NULL 调整为 VANILLA，并更新主题默认说明。
+- 依赖调整：GameStages/OreStages 改为 curse.maven 坐标。
+- 版本号更新：1.12-1.3.7。

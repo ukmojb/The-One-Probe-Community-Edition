@@ -57,13 +57,15 @@ public class Config {
     public static boolean showVillagerCareer = true;
     public static boolean showVillagerCareerLevel = true;
     public static boolean showLiquids = false;
+    public static boolean showLiquidWithBucket = true;
     public static boolean isVisible = true;
     public static boolean compactEqualStacks = true;
     public static boolean holdKeyToMakeVisible = false;
     public static boolean showDebugInfo = true;
     public static int showBreakProgress = 1;    // 0 == off, 1 == bar, 2 == text
+    public static boolean boxResizeAnimation = false;
     public static boolean harvestStyleVanilla = true;
-    public static boolean showCustomharvestLevelName = false;
+    public static boolean showCustomHarvestLevelName = false;
     public static boolean showEntityModel = true;
     public static boolean showEntityHealth = true;
     public static boolean showEntityArmor = true;
@@ -117,6 +119,10 @@ public class Config {
 
     public static IProbeConfig getRealConfig() {
         return realConfig;
+    }
+
+    public static boolean isJadeTheme() {
+        return displayTheme == TopDisplayTheme.JADE;
     }
 
     public static void setRealConfig(IProbeConfig config) {
@@ -202,14 +208,16 @@ public class Config {
         boxThickness = cfg.getInt("boxThickness", CATEGORY_CLIENT, boxThickness, 0, 20, "Thickness of the border of the box (0 to disable)");
         boxOffset = cfg.getInt("boxOffset", CATEGORY_CLIENT, boxOffset, 0, 20, "How much the border should be offset (i.e. to create an 'outer' border)");
         showLiquids = cfg.getBoolean("showLiquids", CATEGORY_CLIENT, showLiquids, "If true show liquid information when the probe hits liquid first");
+        showLiquidWithBucket = cfg.getBoolean("showLiquidWithBucket", CATEGORY_CLIENT, showLiquidWithBucket, "If it is true, the liquid will be displayed as a barrel containing that liquid; otherwise, it will simply display the liquid directly.");
         isVisible = cfg.getBoolean("isVisible", CATEGORY_CLIENT, isVisible, "Toggle default probe visibility (client can override)");
         holdKeyToMakeVisible = cfg.getBoolean("holdKeyToMakeVisible", CATEGORY_CLIENT, holdKeyToMakeVisible, "If true then the probe hotkey must be held down to show the tooltip");
         compactEqualStacks = cfg.getBoolean("compactEqualStacks", CATEGORY_CLIENT, compactEqualStacks, "If true equal stacks will be compacted in the chest contents overlay");
         tooltipScale = cfg.getFloat("tooltipScale", CATEGORY_CLIENT, tooltipScale, 0.4f, 5.0f, "The scale of the tooltips, 1 is default, 2 is smaller");
         chestContentsBorderColor = parseColor(cfg.getString("chestContentsBorderColor", CATEGORY_CLIENT, Integer.toHexString(chestContentsBorderColor), "Color of the border of the chest contents box (0 to disable)"));
         showBreakProgress = cfg.getInt("showBreakProgress", CATEGORY_CLIENT, showBreakProgress, 0, 2, "0 means don't show break progress, 1 is show as bar, 2 is show as text");
+        boxResizeAnimation = cfg.getBoolean("boxResizeAnimation", CATEGORY_CLIENT, boxResizeAnimation, "If true the probe box smoothly animates size changes when displayed information changes");
         harvestStyleVanilla = cfg.getBoolean("harvestStyleVanilla", CATEGORY_CLIENT, harvestStyleVanilla, "true means shows harvestability with vanilla style icons");
-        showCustomharvestLevelName = cfg.getBoolean("showCustomharvestLevelName", CATEGORY_CLIENT, showCustomharvestLevelName, "true means shows Custom harvestLevel (you can chance name in the lang)");
+        showCustomHarvestLevelName = cfg.getBoolean("showCustomHarvestLevelName", CATEGORY_CLIENT, showCustomHarvestLevelName, "true means shows Custom harvestLevel (you can chance name in the lang)");
         showEntityModel = cfg.getBoolean("showEntityModel", CATEGORY_CLIENT, showEntityModel, "true means shows entity model");
         showEntityInfo = cfg.getBoolean("showEntityInfo", CATEGORY_CLIENT, showEntityInfo, "true means shows entity info");
         showEntityHealth = cfg.getBoolean("showEntityHealth", CATEGORY_CLIENT, showEntityHealth, "true means shows entity health");
@@ -229,22 +237,24 @@ public class Config {
         extendedInMain = cfg.getBoolean("extendedInMain", CATEGORY_CLIENT, extendedInMain, "If true the probe will automatically show extended information if it is in your main hand (so not required to sneak)");
 
         displayTheme = TopDisplayTheme.valueOf(cfg.getString("DisplayTheme",
-                CATEGORY_CLIENT, TopDisplayTheme.NULL.name(),
+                CATEGORY_CLIENT, TopDisplayTheme.VANILLA.name(),
                 "This setting lets you choose a predefined theme for display. \n" +
-                        "When set to NULL, the option is ignored. \n" +
+                        "When set to VANILLA, the option is ignored. \n" +
                         "Choosing any other theme will override the individual settings for Box Border, Fill Color, Thickness, and Offset.\n" +
-                        "All theme : NULL, JADE"));
+                        "All theme : VANILLA, JADE"));
 
 
         handleTheme();
     }
 
     private static void handleTheme() {
-        if (displayTheme != TopDisplayTheme.NULL) {
-            boxBorderColor = displayTheme.displayBoxBorderColor;
-            boxFillColor = displayTheme.displayBoxFillColor;
-            boxOffset = displayTheme.displayBoxOffset;
-            boxThickness = displayTheme.displayBoxThickness;
+        switch (displayTheme) {
+            case JADE:
+                boxBorderColor = displayTheme.displayBoxBorderColor;
+                boxFillColor = displayTheme.displayBoxFillColor;
+                boxOffset = displayTheme.displayBoxOffset;
+                boxThickness = displayTheme.displayBoxThickness;
+                boxResizeAnimation = true;
         }
     }
 

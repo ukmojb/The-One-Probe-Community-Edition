@@ -7,7 +7,6 @@ import mcjty.theoneprobe.apiimpl.styles.ItemStyle;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
 import mcjty.theoneprobe.compat.event.SpecialNameEvent;
 import mcjty.theoneprobe.config.Config;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -258,7 +257,6 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
 
             if (Config.showVillagerCareer) {
                 probeInfo.text("{*top.Career*}" + ": " + "{*entity.Villager." + career.getName() + "*}");
-                probeInfo.text("{*top.Career*}" + ": " + "entity.Villager." + career.getName() + "");
             }
 
             if (Config.showVillagerCareerLevel) probeInfo.text("{*top.CareerLevel*}" + ": " + "{*top.CareerLevel." + careerLevel + "*}");

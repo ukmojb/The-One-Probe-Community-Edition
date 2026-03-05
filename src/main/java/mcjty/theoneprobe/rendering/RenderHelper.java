@@ -21,6 +21,9 @@ import javax.annotation.Nullable;
 
 public class RenderHelper {
     public static float rot = 0.0f;
+    private static float jadeBreakBarAlpha = 0.0f;
+    private static float jadeBreakBarLastDamage = 0.0f;
+    private static long jadeBreakBarLastRenderTime = 0L;
 
     public static void renderEntity(Entity entity, int xPos, int yPos, float scale) {
         GlStateManager.pushMatrix();
@@ -290,6 +293,56 @@ public class RenderHelper {
         Gui.drawRect(x1 - 1, y1, x1 + thickness - 1, y2, extraBorderColor);
         Gui.drawRect(x2 - thickness + 1, y1, x2 + 1, y2, extraBorderColor);
         Gui.drawRect(x1, y2 - thickness + 1, x2, y2 + 1, extraBorderColor);
+    }
+
+    /**
+     * Draw a jade-style break progress strip.
+     * The left edge is fixed and the right edge grows with damage (0..1).
+     */
+    public static void drawJadeBreakProgress(int x1, int y1, int x2, int y2, int thickness, int extraBorderColor, float damage) {
+        long now = System.currentTimeMillis();
+        if (jadeBreakBarLastRenderTime == 0L) {
+            jadeBreakBarLastRenderTime = now;
+        }
+        float dt = Math.min((now - jadeBreakBarLastRenderTime) / 1000.0f, 0.1f);
+        jadeBreakBarLastRenderTime = now;
+
+        float clampedDamage = Math.max(0.0f, Math.min(1.0f, damage));
+        float previousDamage = jadeBreakBarLastDamage;
+        float targetAlpha = clampedDamage > 0.0f ? 1.0f : 0.0f;
+        float fadeSpeed = targetAlpha > jadeBreakBarAlpha ? 12.0f : 6.0f;
+        if (targetAlpha > jadeBreakBarAlpha) {
+            jadeBreakBarAlpha = Math.min(targetAlpha, jadeBreakBarAlpha + fadeSpeed * dt);
+        } else {
+            jadeBreakBarAlpha = Math.max(targetAlpha, jadeBreakBarAlpha - fadeSpeed * dt);
+        }
+
+        if (clampedDamage > 0.0f) {
+            jadeBreakBarLastDamage = clampedDamage;
+        } else if (previousDamage >= 0.9f) {
+            // Breaking finished this frame: keep a full-length strip for fade-out.
+            jadeBreakBarLastDamage = 1.0f;
+        }
+        float displayDamage = clampedDamage > 0.0f ? clampedDamage : jadeBreakBarLastDamage;
+        if (jadeBreakBarAlpha <= 0.001f || displayDamage <= 0.0f) {
+            if (jadeBreakBarAlpha <= 0.001f) {
+                jadeBreakBarLastDamage = 0.0f;
+            }
+            return;
+        }
+
+        int baseAlpha = (extraBorderColor >>> 24) & 0xFF;
+        int finalAlpha = Math.max(0, Math.min(255, (int) (baseAlpha * jadeBreakBarAlpha)));
+        if (finalAlpha <= 0) {
+            return;
+        }
+        int animatedColor = (finalAlpha << 24) | (extraBorderColor & 0x00FFFFFF);
+
+        int totalWidth = Math.max(1, x2 - x1);
+        int progressWidth = Math.max(1, (int) Math.ceil(totalWidth * displayDamage));
+        int right = Math.min(x2, x1 + progressWidth);
+
+        Gui.drawRect(x1, y2 - thickness + 1, right, y2 + 1, animatedColor);
     }
 
     /**
