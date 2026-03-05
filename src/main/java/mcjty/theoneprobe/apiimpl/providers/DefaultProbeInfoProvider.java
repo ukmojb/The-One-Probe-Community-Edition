@@ -125,19 +125,19 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
             showGrowthLevel(probeInfo, blockState);
         }
 
-        if (Config.isJadeTheme()) {
-            HarvestInfoTools.showHarvestInfo(probeInfo, world, pos, block, blockState, player);
-        } else {
-            boolean showHarvestLevel = Tools.show(mode, config.getShowHarvestLevel());
-            boolean showHarvested = Tools.show(mode, config.getShowCanBeHarvested());
-            if (showHarvested && showHarvestLevel) {
-                HarvestInfoTools.showHarvestInfo(probeInfo, world, pos, block, blockState, player);
-            } else if (showHarvestLevel) {
-                HarvestInfoTools.showHarvestLevel(probeInfo, blockState, block);
-            } else if (showHarvested) {
-                HarvestInfoTools.showCanBeHarvested(probeInfo, world, pos, block, player);
-            }
-        }
+//        if (Config.isJadeTheme()) {
+        HarvestInfoTools.showHarvestInfo(probeInfo, world, pos, block, blockState, player);
+//        } else {
+//        boolean showHarvestLevel = Tools.show(mode, config.getShowHarvestLevel());
+//        boolean showHarvested = Tools.show(mode, config.getShowCanBeHarvested());
+//        if (showHarvested && showHarvestLevel) {
+//            HarvestInfoTools.showHarvestInfo(probeInfo, world, pos, block, blockState, player);
+//        } else if (showHarvestLevel) {
+//            HarvestInfoTools.showHarvestLevel(probeInfo, blockState, block);
+//        } else if (showHarvested) {
+//            HarvestInfoTools.showCanBeHarvested(probeInfo, world, pos, block, player);
+//        }
+//        }
 
         if (Tools.show(mode, config.getShowRedstone())) {
             showRedstonePower(probeInfo, world, blockState, data, block, Tools.show(mode, config.getShowLeverSetting()));
