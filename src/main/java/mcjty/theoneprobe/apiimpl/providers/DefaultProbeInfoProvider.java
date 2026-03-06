@@ -126,17 +126,17 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
         }
 
 //        if (Config.isJadeTheme()) {
-        HarvestInfoTools.showHarvestInfo(probeInfo, world, pos, block, blockState, player);
-//        } else {
-//        boolean showHarvestLevel = Tools.show(mode, config.getShowHarvestLevel());
-//        boolean showHarvested = Tools.show(mode, config.getShowCanBeHarvested());
-//        if (showHarvested && showHarvestLevel) {
 //            HarvestInfoTools.showHarvestInfo(probeInfo, world, pos, block, blockState, player);
-//        } else if (showHarvestLevel) {
-//            HarvestInfoTools.showHarvestLevel(probeInfo, blockState, block);
-//        } else if (showHarvested) {
-//            HarvestInfoTools.showCanBeHarvested(probeInfo, world, pos, block, player);
-//        }
+//        } else {
+            boolean showHarvestLevel = Tools.show(mode, config.getShowHarvestLevel());
+            boolean showHarvested = Tools.show(mode, config.getShowCanBeHarvested());
+            if (showHarvested && showHarvestLevel) {
+                HarvestInfoTools.showHarvestInfo(probeInfo, world, pos, block, blockState, player);
+            } else if (showHarvestLevel) {
+                HarvestInfoTools.showHarvestLevel(probeInfo, blockState, block);
+            } else if (showHarvested) {
+                HarvestInfoTools.showCanBeHarvested(probeInfo, world, pos, block, player);
+            }
 //        }
 
         if (Tools.show(mode, config.getShowRedstone())) {
