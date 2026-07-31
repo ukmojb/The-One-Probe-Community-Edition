@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -175,6 +176,7 @@ public class Tools {
     }
 
     public static String applyTextStyles(String text) {
+        text = applyLegacyTranslations(text);
         if (text.contains("{=")) {
             Set<TextStyleClass> stylesNeedingContext = EnumSet.noneOf(TextStyleClass.class);
             TextStyleClass context = null;
@@ -201,8 +203,25 @@ public class Tools {
         return text;
     }
 
+    private static String applyLegacyTranslations(String text) {
+        int start = text.indexOf(IProbeInfo.STARTLOC);
+        while (start >= 0) {
+            int keyStart = start + IProbeInfo.STARTLOC.length();
+            int end = text.indexOf(IProbeInfo.ENDLOC, keyStart);
+            if (end < 0) {
+                break;
+            }
+
+            String key = text.substring(keyStart, end);
+            String translation = I18n.translateToLocal(key).trim();
+            text = text.substring(0, start) + translation + text.substring(end + IProbeInfo.ENDLOC.length());
+            start = text.indexOf(IProbeInfo.STARTLOC);
+        }
+        return text;
+    }
+
     /**
-     * @deprecated Localization markers are no longer parsed. Use {@link #translate(String, Object...)}.
+     * @deprecated Use {@link #translate(String, Object...)} for new code. Legacy localization markers remain supported for compatibility.
      */
     @Deprecated
     public static String stylifyString(String text) {
