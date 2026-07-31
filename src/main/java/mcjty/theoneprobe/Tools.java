@@ -17,13 +17,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.items.ItemHandlerHelper;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.annotation.Nonnull;
@@ -177,30 +177,60 @@ public class Tools {
 
     public static String applyTextStyles(String text) {
         text = applyLegacyTranslations(text);
-        if (text.contains("{=")) {
-            Set<TextStyleClass> stylesNeedingContext = EnumSet.noneOf(TextStyleClass.class);
-            TextStyleClass context = null;
-            for (TextStyleClass styleClass : Config.textStyleClasses.keySet()) {
-                if (text.contains(styleClass.toString())) {
-                    String replacement = Config.getTextStyle(styleClass);
-                    if ("context".equals(replacement)) {
-                        stylesNeedingContext.add(styleClass);
-                    } else if (context == null) {
-                        context = styleClass;
-                        text = StringUtils.replace(text, styleClass.toString(), replacement);
-                    } else {
-                        text = StringUtils.replace(text, styleClass.toString(), replacement);
-                    }
-                }
-            }
-            if (context != null) {
-                for (TextStyleClass styleClass : stylesNeedingContext) {
-                    String replacement = Config.getTextStyle(context);
-                    text = StringUtils.replace(text, styleClass.toString(), replacement);
+        if (!text.contains("{=")) {
+            return text;
+        }
+
+        Set<TextStyleClass> stylesNeedingContext = EnumSet.noneOf(TextStyleClass.class);
+        TextStyleClass context = null;
+        for (TextStyleClass styleClass : TextStyleClass.values()) {
+            if (text.contains(styleClass.toString())) {
+                String replacement = Config.getTextStyle(styleClass);
+                if ("context".equals(replacement)) {
+                    stylesNeedingContext.add(styleClass);
+                } else if (context == null) {
+                    context = styleClass;
                 }
             }
         }
-        return text;
+
+        String contextStyle = context == null ? "" : Config.getTextStyle(context);
+        String activeStyle = "";
+        StringBuilder styledText = new StringBuilder();
+        int position = 0;
+        while (position < text.length()) {
+            TextStyleClass nextStyle = null;
+            int nextStylePosition = text.length();
+            for (TextStyleClass styleClass : TextStyleClass.values()) {
+                int stylePosition = text.indexOf(styleClass.toString(), position);
+                if (stylePosition >= 0 && stylePosition < nextStylePosition) {
+                    nextStyle = styleClass;
+                    nextStylePosition = stylePosition;
+                }
+            }
+
+            appendStyledText(styledText, text.substring(position, nextStylePosition), activeStyle);
+            if (nextStyle == null) {
+                break;
+            }
+
+            activeStyle = stylesNeedingContext.contains(nextStyle) ? contextStyle : Config.getTextStyle(nextStyle);
+            styledText.append(activeStyle);
+            position = nextStylePosition + nextStyle.toString().length();
+        }
+        return styledText.toString();
+    }
+
+    private static void appendStyledText(StringBuilder styledText, String text, String activeStyle) {
+        String resetCode = TextFormatting.RESET.toString();
+        int position = 0;
+        int resetPosition;
+        while ((resetPosition = text.indexOf(resetCode, position)) >= 0) {
+            styledText.append(text, position, resetPosition + resetCode.length());
+            styledText.append(activeStyle);
+            position = resetPosition + resetCode.length();
+        }
+        styledText.append(text, position, text.length());
     }
 
     private static String applyLegacyTranslations(String text) {
