@@ -26,7 +26,9 @@ public class ElementProgressRender {
         }
 
         if (style.isShowText()) {
-            RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 2, Tools.stylifyString(style.getPrefix()) + ElementProgress.format(current, style.getNumberFormat(), Tools.stylifyString(style.getSuffix())));
+            String prefix = Tools.applyTextStyles(style.getPrefixComponent().getFormattedText());
+            String suffix = Tools.applyTextStyles(style.getSuffixComponent().getFormattedText());
+            RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 2, prefix + ElementProgress.format(current, style.getNumberFormat(), suffix));
         }
     }
 
@@ -63,7 +65,7 @@ public class ElementProgressRender {
     }
 
     private static void renderLifeBar(long current, int x, int y, int w, int h) {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderHelper.setOverlayColor();
         Minecraft.getMinecraft().getTextureManager().bindTexture(ICONS);
         if (current * 4 >= w) {
             // Shortened view
@@ -81,7 +83,7 @@ public class ElementProgressRender {
     }
 
     private static void renderArmorBar(long current, int x, int y, int w, int h) {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderHelper.setOverlayColor();
         Minecraft.getMinecraft().getTextureManager().bindTexture(ICONS);
         if (current * 4 >= w) {
             // Shortened view

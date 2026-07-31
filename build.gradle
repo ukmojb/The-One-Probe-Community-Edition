@@ -40,6 +40,7 @@ setDefaultProperty 'minecraft_username', true, 'Developer'
 setDefaultProperty 'extra_jvm_args', false, ''
 setDefaultProperty 'extra_tweak_classes', false, ''
 setDefaultProperty 'change_minecraft_sources', false, false
+setDefaultProperty 'use_local_dev_dependencies', false, true
 
 version = propertyString('mod_version')
 group = propertyString('root_package')
@@ -154,14 +155,18 @@ dependencies {
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
+    implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.682"
+
+    if (propertyBool('use_local_dev_dependencies')) {
+        implementation rfg.deobf(fileTree(dir: 'libs/dev', include: '*.jar', exclude: 'CraftTweaker2-*.jar'))
+    } else {
 //    implementation files('./libs/CraftTweaker2-MC1120-Mod-JEI-1.12-4.1.20.670-deobf.jar')
 
     implementation 'curse.maven:HadEnoughItems-557549:4451828'
     implementation 'curse.maven:redstone_flux-270789:2920436'
-    implementation 'curse.maven:tesla-244651:2487962'
-    implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.682"
+//    implementation 'curse.maven:tesla-244651:2487962'
     implementation 'curse.maven:baubles-227083:2518667'
-    implementation 'curse.maven:Ancient Warfare2-224602:3293318'
+//    implementation 'curse.maven:Ancient Warfare2-224602:3293318'
 //    compileOnly "curse.maven:industrialcraft2-242638:3838713"
 //    compileOnly "curse.maven:OpenComputers-223008:4630537"
 //    compileOnly "curse.maven:MooFluids-74254:2643469"
@@ -181,7 +186,7 @@ dependencies {
 //
     implementation "curse.maven:bookshelf-228525:2836960"
     implementation "curse.maven:GameStages-268655:2951840"
-    implementation "curse.maven:OreStages-290201:2640414"
+//    implementation "curse.maven:OreStages-290201:2640414"
 //
 //    runtime 'curse.maven:hwyla-253449:2568751'
 //    runtime 'curse.maven:hammer-lib-247401:3611193'
@@ -212,6 +217,7 @@ dependencies {
 //    compileOnly "curse.maven:ThermalExpansion-69163:2926431"
 //    compileOnly "curse.maven:ThermalDynamics-227443:2920505"
 //    compileOnly "curse.maven:CoFHCore-69162:2920433"
+    }
 }
 
 apply from: 'gradle/scripts/dependencies.gradle'

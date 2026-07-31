@@ -1,6 +1,7 @@
 package mcjty.theoneprobe.apiimpl.providers;
 
 import mcjty.theoneprobe.TheOneProbe;
+import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.IProbeHitEntityData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoEntityProvider;
@@ -37,11 +38,11 @@ public class DebugProbeInfoEntityProvider implements IProbeInfoEntityProvider {
                 float aiMoveSpeed = entityLivingBase.getAIMoveSpeed();
                 int revengeTimer = entityLivingBase.getRevengeTimer();
                 vertical
-                        .text(LABEL + "{*top.Tot_armor*}" + ": " + INFO + totalArmorValue)
-                        .text(LABEL + "{*top.Age*}" + ": " + INFO + age)
-                        .text(LABEL + "{*top.Absorption*}" + ": " + INFO + absorptionAmount)
-                        .text(LABEL + "{*top.AI_Move_Speed*}" + ": " + INFO + aiMoveSpeed)
-                        .text(LABEL + "{*top.Revenge_Timer*}" + ": " + INFO + revengeTimer);
+                        .text(Tools.text(LABEL, Tools.translate("top.Tot_armor"), ": ", INFO, totalArmorValue))
+                        .text(Tools.text(LABEL, Tools.translate("top.Age"), ": ", INFO, age))
+                        .text(Tools.text(LABEL, Tools.translate("top.Absorption"), ": ", INFO, absorptionAmount))
+                        .text(Tools.text(LABEL, Tools.translate("top.AI_Move_Speed"), ": ", INFO, aiMoveSpeed))
+                        .text(Tools.text(LABEL, Tools.translate("top.Revenge_Timer"), ": ", INFO, revengeTimer));
             }
             if (entity instanceof EntityAgeable) {
                 if (vertical == null) {
@@ -51,7 +52,7 @@ public class DebugProbeInfoEntityProvider implements IProbeInfoEntityProvider {
                 EntityAgeable entityAgeable = (EntityAgeable) entity;
                 int growingAge = entityAgeable.getGrowingAge();
                 vertical
-                        .text(LABEL + "{*top.Growing_Age*}" + ": " + INFO + growingAge);
+                        .text(Tools.text(LABEL, Tools.translate("top.Growing_Age"), ": ", INFO, growingAge));
             }
         }
     }

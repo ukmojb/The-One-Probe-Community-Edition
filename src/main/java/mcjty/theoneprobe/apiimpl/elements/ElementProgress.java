@@ -8,6 +8,7 @@ import mcjty.theoneprobe.apiimpl.TheOneProbeImp;
 import mcjty.theoneprobe.apiimpl.client.ElementProgressRender;
 import mcjty.theoneprobe.apiimpl.styles.ProgressStyle;
 import mcjty.theoneprobe.network.NetworkTools;
+import net.minecraft.util.text.ITextComponent;
 
 import java.text.DecimalFormat;
 
@@ -30,8 +31,8 @@ public class ElementProgress implements IElement {
         style = new ProgressStyle()
                 .width(buf.readInt())
                 .height(buf.readInt())
-                .prefix(NetworkTools.readStringUTF8(buf))
-                .suffix(NetworkTools.readStringUTF8(buf))
+                .prefix(ITextComponent.Serializer.jsonToComponent(NetworkTools.readStringUTF8(buf)))
+                .suffix(ITextComponent.Serializer.jsonToComponent(NetworkTools.readStringUTF8(buf)))
                 .borderColor(buf.readInt())
                 .filledColor(buf.readInt())
                 .alternateFilledColor(buf.readInt())
@@ -105,8 +106,8 @@ public class ElementProgress implements IElement {
         buf.writeLong(max);
         buf.writeInt(style.getWidth());
         buf.writeInt(style.getHeight());
-        NetworkTools.writeStringUTF8(buf, style.getPrefix());
-        NetworkTools.writeStringUTF8(buf, style.getSuffix());
+        NetworkTools.writeStringUTF8(buf, ITextComponent.Serializer.componentToJson(style.getPrefixComponent()));
+        NetworkTools.writeStringUTF8(buf, ITextComponent.Serializer.componentToJson(style.getSuffixComponent()));
         buf.writeInt(style.getBorderColor());
         buf.writeInt(style.getFilledColor());
         buf.writeInt(style.getAlternatefilledColor());

@@ -1,6 +1,7 @@
 package mcjty.theoneprobe.apiimpl.providers;
 
 import mcjty.theoneprobe.TheOneProbe;
+import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
@@ -37,17 +38,16 @@ public class DebugProbeInfoProvider implements IProbeInfoProvider {
     private void showDebugInfo(IProbeInfo probeInfo, World world, IBlockState blockState, BlockPos pos, Block block, EnumFacing side) {
         String simpleName = block.getClass().getSimpleName();
         IProbeInfo vertical = probeInfo.vertical(new LayoutStyle().borderColor(0xffff4444).spacing(2))
-                .text(LABEL + "{*top.Reg_Name*}" + ": " + INFO + block.getRegistryName().toString())
-                .text(LABEL + "{*top.Unlocname*}" + ": " + INFO + block.getTranslationKey())
-                .text(LABEL + "{*top.Meta*}" + ": " + INFO + blockState.getBlock().getMetaFromState(blockState))
-                .text(LABEL + "{*top.Class*}" + ": " + INFO + simpleName)
-                .text(LABEL + "{*top.Hardness*}" + ": " + INFO + block.getBlockHardness(blockState, world, pos))
-                .text(LABEL + "{*top.Power_W*}" + ": " + INFO + block.getWeakPower(blockState, world, pos, side.getOpposite())
-                        + LABEL + ", S: " + INFO + block.getStrongPower(blockState, world, pos, side.getOpposite()))
-                .text(LABEL + "{*top.Light*}" + ": " + INFO + block.getLightValue(blockState, world, pos));
+                .text(Tools.text(LABEL, Tools.translate("top.Reg_Name"), ": ", INFO, block.getRegistryName().toString()))
+                .text(Tools.text(LABEL, Tools.translate("top.Unlocname"), ": ", INFO, block.getTranslationKey()))
+                .text(Tools.text(LABEL, Tools.translate("top.Meta"), ": ", INFO, blockState.getBlock().getMetaFromState(blockState)))
+                .text(Tools.text(LABEL, Tools.translate("top.Class"), ": ", INFO, simpleName))
+                .text(Tools.text(LABEL, Tools.translate("top.Hardness"), ": ", INFO, block.getBlockHardness(blockState, world, pos)))
+                .text(Tools.text(LABEL, Tools.translate("top.Power_W"), ": ", INFO, block.getWeakPower(blockState, world, pos, side.getOpposite()), LABEL, ", S: ", INFO, block.getStrongPower(blockState, world, pos, side.getOpposite())))
+                .text(Tools.text(LABEL, Tools.translate("top.Light"), ": ", INFO, block.getLightValue(blockState, world, pos)));
         TileEntity te = world.getTileEntity(pos);
         if (te != null) {
-            vertical.text(LABEL + "{*top.TE*}" + ": " + INFO + te.getClass().getSimpleName());
+            vertical.text(Tools.text(LABEL, Tools.translate("top.TE"), ": ", INFO, te.getClass().getSimpleName()));
         }
     }
 }

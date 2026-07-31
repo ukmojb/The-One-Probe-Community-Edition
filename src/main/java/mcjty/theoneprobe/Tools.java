@@ -14,7 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -29,8 +31,6 @@ import java.util.*;
 
 import static mcjty.theoneprobe.api.IProbeConfig.ConfigMode.EXTENDED;
 import static mcjty.theoneprobe.api.IProbeConfig.ConfigMode.NORMAL;
-import static mcjty.theoneprobe.api.IProbeInfo.ENDLOC;
-import static mcjty.theoneprobe.api.IProbeInfo.STARTLOC;
 
 public class Tools {
 
@@ -145,34 +145,36 @@ public class Tools {
         return cachedEntity;
     }
 
-    public static String getName(Entity entity) {
+    public static ITextComponent getName(Entity entity) {
         if (entity.hasCustomName()) {
-            return entity.getCustomNameTag();
+            return new TextComponentString(entity.getCustomNameTag());
         } else {
             String s = EntityList.getEntityString(entity);
             if (s == null) {
                 s = "generic";
             }
 
-            return "{*entity." + s + ".name*}";
+            return translate("entity." + s + ".name");
         }
     }
 
-    public static String stylifyString(String text) {
-        while (text.contains(STARTLOC) && text.contains(ENDLOC)) {
-            int start = text.indexOf(STARTLOC);
-            int end = text.indexOf(ENDLOC);
-            if (start < end) {
-                // Translation is needed
-                String left = text.substring(0, start);
-                String middle = text.substring(start + 2, end);
-                middle = I18n.translateToLocal(middle).trim();
-                String right = text.substring(end + 2);
-                text = left + middle + right;
+    public static ITextComponent translate(String key, Object... args) {
+        return new TextComponentTranslation(key, args);
+    }
+
+    public static ITextComponent text(Object... parts) {
+        TextComponentString result = new TextComponentString("");
+        for (Object part : parts) {
+            if (part instanceof ITextComponent) {
+                result.appendSibling((ITextComponent) part);
             } else {
-                break;
+                result.appendText(String.valueOf(part));
             }
         }
+        return result;
+    }
+
+    public static String applyTextStyles(String text) {
         if (text.contains("{=")) {
             Set<TextStyleClass> stylesNeedingContext = EnumSet.noneOf(TextStyleClass.class);
             TextStyleClass context = null;
@@ -197,5 +199,13 @@ public class Tools {
             }
         }
         return text;
+    }
+
+    /**
+     * @deprecated Localization markers are no longer parsed. Use {@link #translate(String, Object...)}.
+     */
+    @Deprecated
+    public static String stylifyString(String text) {
+        return applyTextStyles(text);
     }
 }

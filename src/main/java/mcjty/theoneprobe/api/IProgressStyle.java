@@ -1,5 +1,7 @@
 package mcjty.theoneprobe.api;
 
+import net.minecraft.util.text.ITextComponent;
+
 /**
  * Style for the progress bar.
  */
@@ -24,7 +26,11 @@ public interface IProgressStyle {
 
     IProgressStyle prefix(String prefix);
 
+    IProgressStyle prefix(ITextComponent prefix);
+
     IProgressStyle suffix(String suffix);
+
+    IProgressStyle suffix(ITextComponent suffix);
 
     /// If the progressbar is a lifebar then this is the maximum width
     IProgressStyle width(int w);
@@ -49,7 +55,11 @@ public interface IProgressStyle {
 
     String getPrefix();
 
+    ITextComponent getPrefixComponent();
+
     String getSuffix();
+
+    ITextComponent getSuffixComponent();
 
     int getWidth();
 

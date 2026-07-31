@@ -3,6 +3,7 @@ package mcjty.theoneprobe.api;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * Information to return to the probe. Most methods here return the same probe info
@@ -16,8 +17,11 @@ import net.minecraft.util.ResourceLocation;
  */
 public interface IProbeInfo {
 
-    /// Use STARTLOC/ENDLOC in your strings for localization on the client
+    /** @deprecated Use {@link net.minecraft.util.text.TextComponentTranslation} instead. */
+    @Deprecated
     public static final String STARTLOC = "{*";
+    /** @deprecated Use {@link net.minecraft.util.text.TextComponentTranslation} instead. */
+    @Deprecated
     public static final String ENDLOC = "*}";
 
     /**
@@ -73,12 +77,16 @@ public interface IProbeInfo {
     /**
      * Note that you can include TextStyleClass info in the given text which
      * will be translated to the right style client-side. You can also
-     * include STARTLOC/ENDLOC tags to force translation to localized
-     * data on the client
+     * include text style markers that are resolved client-side. Use the
+     * {@link ITextComponent} overload for localized text.
      */
     IProbeInfo text(String text, ITextStyle style);
 
     IProbeInfo text(String text);
+
+    IProbeInfo text(ITextComponent text, ITextStyle style);
+
+    IProbeInfo text(ITextComponent text);
 
     IProbeInfo item(ItemStack stack, IItemStyle style);
 

@@ -24,21 +24,19 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.UsernameCache;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.shadowmage.ancientwarfare.npc.entity.NpcBase;
 
 import java.text.DecimalFormat;
 import java.util.*;
 
-import static mcjty.theoneprobe.api.IProbeInfo.ENDLOC;
-import static mcjty.theoneprobe.api.IProbeInfo.STARTLOC;
 import static mcjty.theoneprobe.api.TextStyleClass.*;
 
 public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider {
@@ -65,9 +63,9 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
         return i < 10 ? j + ":0" + i : j + ":" + i;
     }
 
-    public static String getName(Entity entity) {
+    public static ITextComponent getName(Entity entity) {
         if (entity.hasCustomName()) {
-            return entity.getCustomNameTag();
+            return new TextComponentString(entity.getCustomNameTag());
         } else {
             String s;
 
@@ -81,17 +79,10 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
 
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) entity;
-                return player.getName();
+                return new TextComponentString(player.getName());
             }
 
-            if (Loader.isModLoaded("ancientwarfare")) {
-                if (entity instanceof NpcBase) {
-                    NpcBase npc = (NpcBase) entity;
-                    s = "ancientwarfarenpc." + npc.getNpcFullType();
-                }
-            }
-
-            return "{*entity." + s + ".name*}";
+            return Tools.translate("entity." + s + ".name");
         }
     }
 
@@ -102,22 +93,22 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                 probeInfo.horizontal()
                         .entity(entity)
                         .vertical()
-                        .text(NAME + getName(entity))
+                        .text(Tools.text(NAME, getName(entity)))
                         .text(MODNAME + modid);
             } else {
                 probeInfo.horizontal()
                         .vertical()
-                        .text(NAME + getName(entity))
+                        .text(Tools.text(NAME, getName(entity)))
                         .text(MODNAME + modid);
             }
         } else {
             if (Config.showEntityModel) {
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
                         .entity(entity)
-                        .text(NAME + getName(entity));
+                        .text(Tools.text(NAME, getName(entity)));
             } else {
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
-                        .text(NAME + getName(entity));
+                        .text(Tools.text(NAME, getName(entity)));
             }
         }
     }
@@ -157,7 +148,7 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                 }
 
                 if (mode == ProbeMode.EXTENDED && Config.showEntityHealth) {
-                    probeInfo.text(LABEL + "{*top.Health*}" + ": " + INFOIMP + health + " / " + maxHealth);
+                    probeInfo.text(Tools.text(LABEL, Tools.translate("top.Health"), ": ", INFOIMP, health, " / ", maxHealth));
                 }
 
                 if (armor > 0 && Config.showEntityArmor) {
@@ -168,7 +159,7 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             if (Tools.show(mode, config.getShowMobGrowth()) && entity instanceof EntityAgeable) {
                 int age = ((EntityAgeable) entity).getGrowingAge();
                 if (age < 0) {
-                    probeInfo.text(LABEL + "{*top.Growing_time*}" + ": " + ((age * -1) / 20) + "{*top.Second*}");
+                    probeInfo.text(Tools.text(LABEL, Tools.translate("top.Growing_time"), ": ", (age * -1) / 20, Tools.translate("top.Second")));
                 }
             }
 
@@ -178,20 +169,20 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                     IProbeInfo vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().borderColor(0xffffffff));
                     float durationFactor = 1.0f;
                     for (PotionEffect effect : effects) {
-                        String s1 = STARTLOC + effect.getEffectName() + ENDLOC;
+                        ITextComponent effectText = Tools.translate(effect.getEffectName());
                         Potion potion = effect.getPotion();
                         if (effect.getAmplifier() > 0) {
-                            s1 = s1 + " " + STARTLOC + "potion.potency." + effect.getAmplifier() + ENDLOC;
+                            effectText = Tools.text(effectText, " ", Tools.translate("potion.potency." + effect.getAmplifier()));
                         }
 
                         if (effect.getDuration() > 20) {
-                            s1 = s1 + " (" + getPotionDurationString(effect, durationFactor) + ")";
+                            effectText = Tools.text(effectText, " (", getPotionDurationString(effect, durationFactor), ")");
                         }
 
                         if (potion.isBadEffect()) {
-                            vertical.text(ERROR + s1);
+                            vertical.text(Tools.text(ERROR, effectText));
                         } else {
-                            vertical.text(OK + s1);
+                            vertical.text(Tools.text(OK, effectText));
                         }
                     }
                 }
@@ -204,10 +195,10 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                         .item(stack, new ItemStyle().width(16).height(16))
                         .text(INFO + stack.getDisplayName());
                 if (mode == ProbeMode.EXTENDED) {
-                    probeInfo.text(LABEL + "{*top.Rotation*}" + ": " + INFO + itemFrame.getRotation());
+                    probeInfo.text(Tools.text(LABEL, Tools.translate("top.Rotation"), ": ", INFO, itemFrame.getRotation()));
                 }
             } else {
-                probeInfo.text(LABEL + "{*top.Empty*}");
+                probeInfo.text(Tools.text(LABEL, Tools.translate("top.Empty")));
             }
         }
 
@@ -222,12 +213,12 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             if (ownerId != null) {
                 String username = UsernameCache.getLastKnownUsername(ownerId);
                 if (username == null) {
-                    probeInfo.text(WARNING + "{*top.Unknown_owner*}");
+                    probeInfo.text(Tools.text(WARNING, Tools.translate("top.Unknown_owner")));
                 } else {
-                    probeInfo.text(LABEL + "{*top.Owned_by*}" + ": " + INFO + username);
+                    probeInfo.text(Tools.text(LABEL, Tools.translate("top.Owned_by"), ": ", INFO, username));
                 }
             } else if (entity instanceof EntityTameable) {
-                probeInfo.text(LABEL + "{*top.Tameable*}");
+                probeInfo.text(Tools.text(LABEL, Tools.translate("top.Tameable")));
             }
         }
 
@@ -235,16 +226,16 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             if (entity instanceof EntityHorse) {
                 double jumpStrength = ((EntityHorse) entity).getHorseJumpStrength();
                 double jumpHeight = -0.1817584952 * jumpStrength * jumpStrength * jumpStrength + 3.689713992 * jumpStrength * jumpStrength + 2.128599134 * jumpStrength - 0.343930367;
-                probeInfo.text(LABEL + "{*top.Jump_height*}" + ": " + INFO + dfCommas.format(jumpHeight));
+                probeInfo.text(Tools.text(LABEL, Tools.translate("top.Jump_height"), ": ", INFO, dfCommas.format(jumpHeight)));
                 IAttributeInstance iattributeinstance = ((EntityHorse) entity).getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-                probeInfo.text(LABEL + "{*top.Speed*}" + ": " + INFO + dfCommas.format(iattributeinstance.getAttributeValue()));
+                probeInfo.text(Tools.text(LABEL, Tools.translate("top.Speed"), ": ", INFO, dfCommas.format(iattributeinstance.getAttributeValue())));
             }
         }
 
         if (entity instanceof EntityWolf && Config.showCollarColor) {
             if (((EntityWolf) entity).isTamed()) {
                 EnumDyeColor collarColor = ((EntityWolf) entity).getCollarColor();
-                probeInfo.text(LABEL + "{*top.Collar*}" + ": " + INFO + collarColor.getName());
+                probeInfo.text(Tools.text(LABEL, Tools.translate("top.Collar"), ": ", INFO, collarColor.getName()));
             }
         }
 
@@ -256,30 +247,30 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
             int careerLevel = villager.serializeNBT().getInteger("CareerLevel");
 
             if (Config.showVillagerCareer) {
-                probeInfo.text("{*top.Career*}" + ": " + "{*entity.Villager." + career.getName() + "*}");
+                probeInfo.text(Tools.text(Tools.translate("top.Career"), ": ", Tools.translate("entity.Villager." + career.getName())));
             }
 
-            if (Config.showVillagerCareerLevel) probeInfo.text("{*top.CareerLevel*}" + ": " + "{*top.CareerLevel." + careerLevel + "*}");
+            if (Config.showVillagerCareerLevel) probeInfo.text(Tools.text(Tools.translate("top.CareerLevel"), ": ", Tools.translate("top.CareerLevel." + careerLevel)));
         }
 
         if (entity instanceof EntityTameable) {
             EntityTameable tameable = (EntityTameable) entity;
 
             if (tameable.isTamed()) {
-                probeInfo.text(TextStyleClass.OK + "{*top.tamed*}");
-                probeInfo.text(TextStyleClass.LABEL + (tameable.isSitting() ? "{*top.sitting*}" : "{*top.standing*}"));
+                probeInfo.text(Tools.text(TextStyleClass.OK, Tools.translate("top.tamed")));
+                probeInfo.text(Tools.text(TextStyleClass.LABEL, Tools.translate(tameable.isSitting() ? "top.sitting" : "top.standing")));
             } else {
-                probeInfo.text(TextStyleClass.LABEL + "{*top.not_tamed*}");
+                probeInfo.text(Tools.text(TextStyleClass.LABEL, Tools.translate("top.not_tamed")));
             }
         }
 
         if (entity instanceof EntityTNTPrimed) {
-            probeInfo.text(TextStyleClass.LABEL + "{*top.tnt_fuse*} " + TextStyleClass.WARNING + Tools.ticksToElapsedTime(((EntityTNTPrimed) entity).getFuse()));
+            probeInfo.text(Tools.text(TextStyleClass.LABEL, Tools.translate("top.tnt_fuse"), " ", TextStyleClass.WARNING, Tools.ticksToElapsedTime(((EntityTNTPrimed) entity).getFuse())));
         }
 
         if (entity instanceof EntityChicken) {
             EntityChicken chicken = (EntityChicken) entity;
-            probeInfo.text(TextStyleClass.LABEL + "{*top.chicken_egg*} " + TextStyleClass.INFOIMP + Tools.ticksToElapsedTime(chicken.timeUntilNextEgg));
+            probeInfo.text(Tools.text(TextStyleClass.LABEL, Tools.translate("top.chicken_egg"), " ", TextStyleClass.INFOIMP, Tools.ticksToElapsedTime(chicken.timeUntilNextEgg)));
         }
 
         if (entity instanceof AbstractChestHorse && ((AbstractChestHorse) entity).hasChest()) {
@@ -325,7 +316,7 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
 
             // adult
             if (age > 0) {
-                probeInfo.text(TextStyleClass.LABEL + "{*top.breeding_cooldown*} " + TextStyleClass.INFOIMP + Tools.ticksToElapsedTime(age));
+                probeInfo.text(Tools.text(TextStyleClass.LABEL, Tools.translate("top.breeding_cooldown"), " ", TextStyleClass.INFOIMP, Tools.ticksToElapsedTime(age)));
             }
         }
 

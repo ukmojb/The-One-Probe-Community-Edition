@@ -2,6 +2,8 @@ package mcjty.theoneprobe.apiimpl.styles;
 
 import mcjty.theoneprobe.api.IProgressStyle;
 import mcjty.theoneprobe.api.NumberFormat;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 /**
  * Style for the progress bar.
@@ -12,8 +14,8 @@ public class ProgressStyle implements IProgressStyle {
     private int filledColor = 0xffaaaaaa;
     private int alternatefilledColor = 0xffaaaaaa;
     private boolean showText = true;
-    private String prefix = "";
-    private String suffix = "";
+    private ITextComponent prefix = new TextComponentString("");
+    private ITextComponent suffix = new TextComponentString("");
     private int width = 100;
     private int height = 12;
     private boolean lifeBar = false;
@@ -65,12 +67,24 @@ public class ProgressStyle implements IProgressStyle {
 
     @Override
     public ProgressStyle prefix(String prefix) {
+        this.prefix = new TextComponentString(prefix);
+        return this;
+    }
+
+    @Override
+    public ProgressStyle prefix(ITextComponent prefix) {
         this.prefix = prefix;
         return this;
     }
 
     @Override
     public ProgressStyle suffix(String suffix) {
+        this.suffix = new TextComponentString(suffix);
+        return this;
+    }
+
+    @Override
+    public ProgressStyle suffix(ITextComponent suffix) {
         this.suffix = suffix;
         return this;
     }
@@ -131,11 +145,21 @@ public class ProgressStyle implements IProgressStyle {
 
     @Override
     public String getPrefix() {
+        return prefix.getFormattedText();
+    }
+
+    @Override
+    public ITextComponent getPrefixComponent() {
         return prefix;
     }
 
     @Override
     public String getSuffix() {
+        return suffix.getFormattedText();
+    }
+
+    @Override
+    public ITextComponent getSuffixComponent() {
         return suffix;
     }
 

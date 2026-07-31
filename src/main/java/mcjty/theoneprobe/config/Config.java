@@ -64,6 +64,8 @@ public class Config {
     public static boolean showDebugInfo = true;
     public static int showBreakProgress = 1;    // 0 == off, 1 == bar, 2 == text
     public static boolean boxResizeAnimation = false;
+    public static boolean overlayFadeAnimation = false;
+    public static float overlayFadeSpeed = 0.6f;
     public static boolean harvestStyleVanilla = true;
     public static boolean showCustomHarvestLevelName = false;
     public static boolean showEntityModel = true;
@@ -199,6 +201,13 @@ public class Config {
 
 
     public static void setupStyleConfig(Configuration cfg) {
+        displayTheme = TopDisplayTheme.valueOf(cfg.getString("DisplayTheme",
+                CATEGORY_CLIENT, TopDisplayTheme.VANILLA.name(),
+                "This setting lets you choose a predefined theme for display. \n" +
+                        "When set to VANILLA, the option is ignored. \n" +
+                        "Choosing any other theme will override the individual settings for Box Border, Fill Color, Thickness, and Offset.\n" +
+                        "All theme : VANILLA, JADE"));
+
         leftX = cfg.getInt("boxLeftX", CATEGORY_CLIENT, leftX, -1, 10000, "The distance to the left side of the screen. Use -1 if you don't want to set this");
         rightX = cfg.getInt("boxRightX", CATEGORY_CLIENT, rightX, -1, 10000, "The distance to the right side of the screen. Use -1 if you don't want to set this");
         topY = cfg.getInt("boxTopY", CATEGORY_CLIENT, topY, -1, 10000, "The distance to the top side of the screen. Use -1 if you don't want to set this");
@@ -216,6 +225,8 @@ public class Config {
         chestContentsBorderColor = parseColor(cfg.getString("chestContentsBorderColor", CATEGORY_CLIENT, Integer.toHexString(chestContentsBorderColor), "Color of the border of the chest contents box (0 to disable)"));
         showBreakProgress = cfg.getInt("showBreakProgress", CATEGORY_CLIENT, showBreakProgress, 0, 2, "0 means don't show break progress, 1 is show as bar, 2 is show as text");
         boxResizeAnimation = cfg.getBoolean("boxResizeAnimation", CATEGORY_CLIENT, boxResizeAnimation, "If true the probe box smoothly animates size changes when displayed information changes");
+        overlayFadeAnimation = cfg.getBoolean("overlayFadeAnimation", CATEGORY_CLIENT, displayTheme == TopDisplayTheme.JADE, "If true the probe overlay fades in and out. Enabled by default for the JADE display theme");
+        overlayFadeSpeed = cfg.getFloat("overlayFadeSpeed", CATEGORY_CLIENT, overlayFadeSpeed, 0.1f, 5.0f, "Fade speed in opacity units per client tick. Jade's default speed is 0.6");
         harvestStyleVanilla = cfg.getBoolean("harvestStyleVanilla", CATEGORY_CLIENT, harvestStyleVanilla, "true means shows harvestability with vanilla style icons");
         showCustomHarvestLevelName = cfg.getBoolean("showCustomHarvestLevelName", CATEGORY_CLIENT, showCustomHarvestLevelName, "true means shows Custom harvestLevel (you can chance name in the lang)");
         showEntityModel = cfg.getBoolean("showEntityModel", CATEGORY_CLIENT, showEntityModel, "true means shows entity model");
@@ -235,14 +246,6 @@ public class Config {
         textStyleClasses = newformat;
 
         extendedInMain = cfg.getBoolean("extendedInMain", CATEGORY_CLIENT, extendedInMain, "If true the probe will automatically show extended information if it is in your main hand (so not required to sneak)");
-
-        displayTheme = TopDisplayTheme.valueOf(cfg.getString("DisplayTheme",
-                CATEGORY_CLIENT, TopDisplayTheme.VANILLA.name(),
-                "This setting lets you choose a predefined theme for display. \n" +
-                        "When set to VANILLA, the option is ignored. \n" +
-                        "Choosing any other theme will override the individual settings for Box Border, Fill Color, Thickness, and Offset.\n" +
-                        "All theme : VANILLA, JADE"));
-
 
         handleTheme();
     }

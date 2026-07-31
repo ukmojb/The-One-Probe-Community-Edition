@@ -1,6 +1,7 @@
 package mcjty.theoneprobe.rendering;
 
 import mcjty.theoneprobe.TheOneProbe;
+import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.ProbeHitData;
 import mcjty.theoneprobe.apiimpl.ProbeHitEntityData;
@@ -66,6 +67,9 @@ public class OverlayRenderer {
     private static final long BOX_ANIMATION_RESET_TIMEOUT_MS = 600L;
     private static final float BOX_ANIMATION_SPEED = 42.0f;
     private static final float BOX_ANIMATION_STEP_SECONDS = 1.0f / 200.0f;
+    private static float overlayFadeAlpha = 0.0f;
+    private static long overlayFadeLastUpdateTime = 0L;
+    private static boolean overlayVisible;
 
     public static void registerProbeInfo(int dim, BlockPos pos, ProbeInfo probeInfo) {
         if (probeInfo == null) {
@@ -84,6 +88,7 @@ public class OverlayRenderer {
     }
 
     public static void renderHUD(ProbeMode mode, float partialTicks) {
+        overlayVisible = false;
         float dist = Config.probeDistance;
 
         RayTraceResult mouseOver = Minecraft.getMinecraft().objectMouseOver;
@@ -103,6 +108,7 @@ public class OverlayRenderer {
                 setupOverlayRendering(sw, sh);
                 GlStateManager.popMatrix();
 
+                renderFadingOverlayIfNeeded();
                 checkCleanup();
                 return;
             }
@@ -115,6 +121,8 @@ public class OverlayRenderer {
 
         mouseOver = entity.getEntityWorld().rayTraceBlocks(start, end, Config.showLiquids);
         if (mouseOver == null) {
+            renderFadingOverlayIfNeeded();
+            checkCleanup();
             return;
         }
 
@@ -134,6 +142,7 @@ public class OverlayRenderer {
             GlStateManager.popMatrix();
         }
 
+        renderFadingOverlayIfNeeded();
         checkCleanup();
     }
 
@@ -257,10 +266,10 @@ public class OverlayRenderer {
                 float damage = Minecraft.getMinecraft().playerController.curBlockDamageMP;
                 if (damage > 0) {
                     if (Config.showBreakProgress == 2) {
-                        damageElement = new ElementText(TextFormatting.RED + "{*top.Progress*}" + " " + (int) (damage * 100) + "%");
+                        damageElement = new ElementText(Tools.text(TextFormatting.RED, Tools.translate("top.Progress"), " ", (int) (damage * 100), "%"));
                     } else {
                         damageElement = new ElementProgress((long) (damage * 100), 100, new ProgressStyle()
-                                .prefix("{*top.Progress*}" + " ")
+                                .prefix(Tools.text(Tools.translate("top.Progress"), " "))
                                 .suffix("%")
                                 .width(85)
                                 .borderColor(0)
@@ -409,12 +418,28 @@ public class OverlayRenderer {
 
     public static void renderElements(ProbeInfo probeInfo, IOverlayStyle style, double sw, double sh,
                                       @Nullable IElement extra) {
+        overlayVisible = true;
+        renderElements(probeInfo, style, sw, sh, extra, true);
+    }
+
+    private static void renderElements(ProbeInfo probeInfo, IOverlayStyle style, double sw, double sh,
+                                       @Nullable IElement extra, boolean targetVisible) {
         if (extra != null) {
             probeInfo.element(extra);
         }
 
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.disableLighting();
+        float alpha = updateOverlayFade(targetVisible);
+        if (alpha <= 0.001f) {
+            if (extra != null) {
+                probeInfo.removeElement(extra);
+            }
+            return;
+        }
+
+        RenderHelper.setOverlayAlpha(alpha);
+        try {
+            GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+            GlStateManager.disableLighting();
 
         int scaledWidth = (int) sw;
         int scaledHeight = (int) sh;
@@ -533,10 +558,57 @@ public class OverlayRenderer {
             RenderHelper.rot += .5f;
         }
 
-        probeInfo.render(drawX + margin, drawY + margin);
-        if (extra != null) {
-            probeInfo.removeElement(extra);
+            probeInfo.render(drawX + margin, drawY + margin);
+        } finally {
+            RenderHelper.setOverlayAlpha(1.0f);
+            if (extra != null) {
+                probeInfo.removeElement(extra);
+            }
         }
+    }
+
+    private static void renderFadingOverlayIfNeeded() {
+        if (overlayVisible) {
+            return;
+        }
+        if (lastPair == null) {
+            updateOverlayFade(false);
+            return;
+        }
+
+        GlStateManager.pushMatrix();
+        double scale = Config.tooltipScale;
+        ScaledResolution scaledresolution = new ScaledResolution(Minecraft.getMinecraft());
+        double sw = scaledresolution.getScaledWidth_double();
+        double sh = scaledresolution.getScaledHeight_double();
+        setupOverlayRendering(sw * scale, sh * scale);
+        renderElements(lastPair.getRight(), Config.getDefaultOverlayStyle(), sw * scale, sh * scale, null, false);
+        setupOverlayRendering(sw, sh);
+        GlStateManager.popMatrix();
+
+        if (overlayFadeAlpha <= 0.001f) {
+            lastPair = null;
+        }
+    }
+
+    private static float updateOverlayFade(boolean targetVisible) {
+        if (!Config.overlayFadeAnimation) {
+            overlayFadeAlpha = targetVisible ? 1.0f : 0.0f;
+            overlayFadeLastUpdateTime = System.currentTimeMillis();
+            return overlayFadeAlpha;
+        }
+
+        long now = System.currentTimeMillis();
+        if (overlayFadeLastUpdateTime == 0L) {
+            overlayFadeLastUpdateTime = now;
+        }
+        float deltaTicks = Math.min((now - overlayFadeLastUpdateTime) / 50.0f, 2.0f);
+        overlayFadeLastUpdateTime = now;
+        float change = Config.overlayFadeSpeed * deltaTicks;
+        overlayFadeAlpha = targetVisible
+                ? Math.min(1.0f, overlayFadeAlpha + change)
+                : Math.max(0.0f, overlayFadeAlpha - change);
+        return overlayFadeAlpha;
     }
 
     private static float animateBoxValue(float current, float target, float dt) {

@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 public class ElementIconRender {
 
     public static void render(ResourceLocation icon, int x, int y, int w, int h, int u, int v, int txtw, int txth) {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderHelper.setOverlayColor();
 
         if (icon == null) {
             return;

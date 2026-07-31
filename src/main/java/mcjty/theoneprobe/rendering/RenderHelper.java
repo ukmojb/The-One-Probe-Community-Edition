@@ -10,6 +10,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.item.Item;
@@ -20,14 +21,33 @@ import org.lwjgl.opengl.GL11;
 import javax.annotation.Nullable;
 
 public class RenderHelper {
+    private static final int ITEM_RENDER_TARGET_SIZE = 32;
+    private static final int ITEM_RENDER_TARGET_OFFSET = 8;
+
     public static float rot = 0.0f;
+    private static float overlayAlpha = 1.0f;
+    private static Framebuffer itemRenderTarget;
     private static float jadeBreakBarAlpha = 0.0f;
     private static float jadeBreakBarLastDamage = 0.0f;
     private static long jadeBreakBarLastRenderTime = 0L;
 
+    public static void setOverlayAlpha(float alpha) {
+        overlayAlpha = Math.max(0.0f, Math.min(1.0f, alpha));
+    }
+
+    public static int applyOverlayAlpha(int color) {
+        int alpha = (color >>> 24) & 0xFF;
+        int fadedAlpha = Math.round(alpha * overlayAlpha);
+        return (fadedAlpha << 24) | (color & 0x00FFFFFF);
+    }
+
+    public static void setOverlayColor() {
+        GlStateManager.color(1.0F, 1.0F, 1.0F, overlayAlpha);
+    }
+
     public static void renderEntity(Entity entity, int xPos, int yPos, float scale) {
         GlStateManager.pushMatrix();
-        GlStateManager.color(1f, 1f, 1f);
+        setOverlayColor();
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
@@ -106,7 +126,10 @@ public class RenderHelper {
     }
 
     public static boolean renderItemStack(Minecraft mc, RenderItem itemRender, ItemStack itm, int x, int y, String txt, boolean highlight) {
-        GlStateManager.color(1F, 1F, 1F);
+        if (overlayAlpha < 0.999f && OpenGlHelper.isFramebufferEnabled()) {
+            return renderFadedItemStack(mc, itemRender, itm, x, y, txt, highlight);
+        }
+        setOverlayColor();
 
         boolean rc = false;
         if (highlight) {
@@ -117,7 +140,7 @@ public class RenderHelper {
             rc = true;
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, 0.0F, 32.0F);
-            GlStateManager.color(1F, 1F, 1F, 1F);
+            setOverlayColor();
             GlStateManager.enableRescaleNormal();
             GlStateManager.enableLighting();
             short short1 = 240;
@@ -139,6 +162,8 @@ public class RenderHelper {
      * x2 and y2 are not included.
      */
     public static void drawVerticalGradientRect(int x1, int y1, int x2, int y2, int color1, int color2) {
+        color1 = applyOverlayAlpha(color1);
+        color2 = applyOverlayAlpha(color2);
 //        this.zLevel = 300.0F;
         float zLevel = 0.0f;
 
@@ -175,6 +200,8 @@ public class RenderHelper {
      * x2 and y2 are not included.
      */
     public static void drawHorizontalGradientRect(int x1, int y1, int x2, int y2, int color1, int color2) {
+        color1 = applyOverlayAlpha(color1);
+        color2 = applyOverlayAlpha(color2);
 //        this.zLevel = 300.0F;
         float zLevel = 0.0f;
 
@@ -206,11 +233,11 @@ public class RenderHelper {
     }
 
     public static void drawHorizontalLine(int x1, int y1, int x2, int color) {
-        Gui.drawRect(x1, y1, x2, y1 + 1, color);
+        Gui.drawRect(x1, y1, x2, y1 + 1, applyOverlayAlpha(color));
     }
 
     public static void drawVerticalLine(int x1, int y1, int y2, int color) {
-        Gui.drawRect(x1, y1, x1 + 1, y2, color);
+        Gui.drawRect(x1, y1, x1 + 1, y2, applyOverlayAlpha(color));
     }
 
     // Draw a small triangle. x,y is the coordinate of the left point
@@ -264,7 +291,7 @@ public class RenderHelper {
      */
     public static void drawBeveledBox(int x1, int y1, int x2, int y2, int topleftcolor, int botrightcolor, int fillcolor) {
         if (fillcolor != -1) {
-            Gui.drawRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, fillcolor);
+            Gui.drawRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, applyOverlayAlpha(fillcolor));
         }
         drawHorizontalLine(x1, y1, x2 - 1, topleftcolor);
         drawVerticalLine(x1, y1, y2 - 1, topleftcolor);
@@ -277,22 +304,23 @@ public class RenderHelper {
      */
     public static void drawThickBeveledBox(int x1, int y1, int x2, int y2, int thickness, int topleftcolor, int botrightcolor, int fillcolor) {
         if (fillcolor != -1) {
-            Gui.drawRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, fillcolor);
+            Gui.drawRect(x1 + 1, y1 + 1, x2 - 1, y2 - 1, applyOverlayAlpha(fillcolor));
         }
-        Gui.drawRect(x1, y1, x2 - 1, y1 + thickness, topleftcolor);
-        Gui.drawRect(x1, y1, x1 + thickness, y2 - 1, topleftcolor);
-        Gui.drawRect(x2 - thickness, y1, x2, y2 - 1, botrightcolor);
-        Gui.drawRect(x1, y2 - thickness, x2, y2, botrightcolor);
+        Gui.drawRect(x1, y1, x2 - 1, y1 + thickness, applyOverlayAlpha(topleftcolor));
+        Gui.drawRect(x1, y1, x1 + thickness, y2 - 1, applyOverlayAlpha(topleftcolor));
+        Gui.drawRect(x2 - thickness, y1, x2, y2 - 1, applyOverlayAlpha(botrightcolor));
+        Gui.drawRect(x1, y2 - thickness, x2, y2, applyOverlayAlpha(botrightcolor));
     }
 
     /**
      * Draw a extra border. x2 and y2 are not included.
      */
     public static void drawExtraBorder(int x1, int y1, int x2, int y2, int thickness, int extraBorderColor) {
-        Gui.drawRect(x1, y1 - 1, x2, y1 + thickness - 1, extraBorderColor);
-        Gui.drawRect(x1 - 1, y1, x1 + thickness - 1, y2, extraBorderColor);
-        Gui.drawRect(x2 - thickness + 1, y1, x2 + 1, y2, extraBorderColor);
-        Gui.drawRect(x1, y2 - thickness + 1, x2, y2 + 1, extraBorderColor);
+        int fadedColor = applyOverlayAlpha(extraBorderColor);
+        Gui.drawRect(x1, y1 - 1, x2, y1 + thickness - 1, fadedColor);
+        Gui.drawRect(x1 - 1, y1, x1 + thickness - 1, y2, fadedColor);
+        Gui.drawRect(x2 - thickness + 1, y1, x2 + 1, y2, fadedColor);
+        Gui.drawRect(x1, y2 - thickness + 1, x2, y2 + 1, fadedColor);
     }
 
     /**
@@ -332,7 +360,7 @@ public class RenderHelper {
         }
 
         int baseAlpha = (extraBorderColor >>> 24) & 0xFF;
-        int finalAlpha = Math.max(0, Math.min(255, (int) (baseAlpha * jadeBreakBarAlpha)));
+        int finalAlpha = Math.max(0, Math.min(255, Math.round(baseAlpha * jadeBreakBarAlpha * overlayAlpha)));
         if (finalAlpha <= 0) {
             return;
         }
@@ -500,13 +528,16 @@ public class RenderHelper {
     }
 
     public static boolean renderItemStack(Minecraft mc, RenderItem itemRender, ItemStack itm, int x, int y, String txt) {
-        GlStateManager.color(1.0F, 1.0F, 1.0F);
+        if (overlayAlpha < 0.999f && OpenGlHelper.isFramebufferEnabled()) {
+            return renderFadedItemStack(mc, itemRender, itm, x, y, txt, false);
+        }
+        setOverlayColor();
 
         boolean rc = true;
         if (!itm.isEmpty() && itm.getItem() != null) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F, 0.0F, 32.0F);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            setOverlayColor();
             GlStateManager.enableRescaleNormal();
             GlStateManager.enableLighting();
             short short1 = 240;
@@ -528,6 +559,67 @@ public class RenderHelper {
         return rc;
     }
 
+    private static boolean renderFadedItemStack(Minecraft mc, RenderItem itemRender, ItemStack itemStack, int x, int y, String text, boolean highlight) {
+        Framebuffer renderTarget = getItemRenderTarget();
+        float alpha = overlayAlpha;
+
+        renderTarget.bindFramebuffer(true);
+        GlStateManager.clearColor(0.0F, 0.0F, 0.0F, 0.0F);
+        GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        GlStateManager.matrixMode(GL11.GL_PROJECTION);
+        GlStateManager.pushMatrix();
+        GlStateManager.loadIdentity();
+        GlStateManager.ortho(0.0D, ITEM_RENDER_TARGET_SIZE, ITEM_RENDER_TARGET_SIZE, 0.0D, 1000.0D, 3000.0D);
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+        GlStateManager.pushMatrix();
+        GlStateManager.loadIdentity();
+        GlStateManager.translate(0.0F, 0.0F, -2000.0F);
+
+        overlayAlpha = 1.0f;
+        boolean rendered;
+        try {
+            rendered = renderItemStack(mc, itemRender, itemStack, ITEM_RENDER_TARGET_OFFSET, ITEM_RENDER_TARGET_OFFSET, text, highlight);
+        } finally {
+            overlayAlpha = alpha;
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(GL11.GL_PROJECTION);
+            GlStateManager.popMatrix();
+            GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+            mc.getFramebuffer().bindFramebuffer(true);
+        }
+
+        renderFadedItemTarget(renderTarget, x, y, alpha);
+        return rendered;
+    }
+
+    private static Framebuffer getItemRenderTarget() {
+        if (itemRenderTarget == null) {
+            itemRenderTarget = new Framebuffer(ITEM_RENDER_TARGET_SIZE, ITEM_RENDER_TARGET_SIZE, true);
+            itemRenderTarget.setFramebufferFilter(GL11.GL_NEAREST);
+        }
+        return itemRenderTarget;
+    }
+
+    private static void renderFadedItemTarget(Framebuffer renderTarget, int x, int y, float alpha) {
+        float min = (float) ITEM_RENDER_TARGET_OFFSET / ITEM_RENDER_TARGET_SIZE;
+        float max = (float) (ITEM_RENDER_TARGET_OFFSET + 16) / ITEM_RENDER_TARGET_SIZE;
+
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        renderTarget.bindFramebufferTexture();
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        buffer.pos(x, y + 16, 0.0D).tex(min, min).color(255, 255, 255, Math.round(255 * alpha)).endVertex();
+        buffer.pos(x + 16, y + 16, 0.0D).tex(max, min).color(255, 255, 255, Math.round(255 * alpha)).endVertex();
+        buffer.pos(x + 16, y, 0.0D).tex(max, max).color(255, 255, 255, Math.round(255 * alpha)).endVertex();
+        buffer.pos(x, y, 0.0D).tex(min, max).color(255, 255, 255, Math.round(255 * alpha)).endVertex();
+        Tessellator.getInstance().draw();
+        renderTarget.unbindFramebufferTexture();
+        GlStateManager.enableDepth();
+    }
+
     /**
      * Renders the stack size and/or damage bar for the given ItemStack.
      */
@@ -542,19 +634,20 @@ public class RenderHelper {
 
                 GlStateManager.disableLighting();
                 GlStateManager.disableDepth();
-                GlStateManager.disableBlend();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
                 if (scaled >= 2) {
                     GlStateManager.pushMatrix();
                     GlStateManager.scale(.5f, .5f, .5f);
-                    fr.drawStringWithShadow(s, ((xPosition + 19 - 2) * 2 - 1 - fr.getStringWidth(s)), yPosition * 2 + 24, 16777215);
+                    fr.drawStringWithShadow(s, ((xPosition + 19 - 2) * 2 - 1 - fr.getStringWidth(s)), yPosition * 2 + 24, applyOverlayAlpha(0xFFFFFFFF));
                     GlStateManager.popMatrix();
                 } else if (scaled == 1) {
                     GlStateManager.pushMatrix();
                     GlStateManager.scale(.75f, .75f, .75f);
-                    fr.drawStringWithShadow(s, ((xPosition - 2) * 1.34f + 24 - fr.getStringWidth(s)), yPosition * 1.34f + 14, 16777215);
+                    fr.drawStringWithShadow(s, ((xPosition - 2) * 1.34f + 24 - fr.getStringWidth(s)), yPosition * 1.34f + 14, applyOverlayAlpha(0xFFFFFFFF));
                     GlStateManager.popMatrix();
                 } else {
-                    fr.drawStringWithShadow(s, (xPosition + 19 - 2 - fr.getStringWidth(s)), (yPosition + 6 + 3), 16777215);
+                    fr.drawStringWithShadow(s, (xPosition + 19 - 2 - fr.getStringWidth(s)), (yPosition + 6 + 3), applyOverlayAlpha(0xFFFFFFFF));
                 }
                 GlStateManager.enableLighting();
                 GlStateManager.enableDepth();
@@ -571,12 +664,14 @@ public class RenderHelper {
                 GlStateManager.disableDepth();
                 GlStateManager.disableTexture2D();
                 GlStateManager.disableAlpha();
-                GlStateManager.disableBlend();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
                 Tessellator tessellator = Tessellator.getInstance();
                 BufferBuilder vertexbuffer = tessellator.getBuffer();
-                draw(vertexbuffer, xPosition + 2, yPosition + 13, 13, 2, 0, 0, 0, 255);
-                draw(vertexbuffer, xPosition + 2, yPosition + 13, 12, 1, (255 - i) / 4, 64, 0, 255);
-                draw(vertexbuffer, xPosition + 2, yPosition + 13, j, 1, 255 - i, i, 0, 255);
+                int fadedAlpha = Math.round(255 * overlayAlpha);
+                draw(vertexbuffer, xPosition + 2, yPosition + 13, 13, 2, 0, 0, 0, fadedAlpha);
+                draw(vertexbuffer, xPosition + 2, yPosition + 13, 12, 1, (255 - i) / 4, 64, 0, fadedAlpha);
+                draw(vertexbuffer, xPosition + 2, yPosition + 13, j, 1, 255 - i, i, 0, fadedAlpha);
                 GlStateManager.enableBlend();
                 GlStateManager.enableAlpha();
                 GlStateManager.enableTexture2D();
@@ -591,9 +686,11 @@ public class RenderHelper {
                 GlStateManager.disableLighting();
                 GlStateManager.disableDepth();
                 GlStateManager.disableTexture2D();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
                 Tessellator tessellator1 = Tessellator.getInstance();
                 BufferBuilder vertexbuffer1 = tessellator1.getBuffer();
-                draw(vertexbuffer1, xPosition, yPosition + (int) Math.floor(16.0F * (1.0F - f)), 16, (int) Math.ceil(16.0F * f), 255, 255, 255, 127);
+                draw(vertexbuffer1, xPosition, yPosition + (int) Math.floor(16.0F * (1.0F - f)), 16, (int) Math.ceil(16.0F * f), 255, 255, 255, Math.round(127 * overlayAlpha));
                 GlStateManager.enableTexture2D();
                 GlStateManager.enableLighting();
                 GlStateManager.enableDepth();
@@ -615,20 +712,21 @@ public class RenderHelper {
 
 
     public static int renderText(Minecraft mc, int x, int y, String txt) {
-        GlStateManager.color(1.0F, 1.0F, 1.0F);
+        setOverlayColor();
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0.0F, 0.0F, 32.0F);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        setOverlayColor();
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableLighting();
         net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
 
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
-        GlStateManager.disableBlend();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         int width = mc.fontRenderer.getStringWidth(txt);
-        mc.fontRenderer.drawStringWithShadow(txt, x, y, 16777215);
+        mc.fontRenderer.drawStringWithShadow(txt, x, y, applyOverlayAlpha(0xFFFFFFFF));
         GlStateManager.enableLighting();
         GlStateManager.enableDepth();
         // Fixes opaque cooldown overlay a bit lower

@@ -1,14 +1,13 @@
 package mcjty.theoneprobe.apiimpl.providers;
 
 import mcjty.theoneprobe.TheOneProbe;
+import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.ElementAlignment;
 import mcjty.theoneprobe.api.IIconStyle;
 import mcjty.theoneprobe.api.ILayoutStyle;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.items.ModItems;
-import net.darkhax.gamestages.GameStageHelper;
-import net.darkhax.orestages.api.OreTiersAPI;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,13 +17,16 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static java.util.Objects.isNull;
 import static mcjty.theoneprobe.api.TextStyleClass.*;
@@ -33,6 +35,12 @@ public class HarvestInfoTools {
 
     private static final ResourceLocation ICONS = new ResourceLocation(TheOneProbe.MODID, "textures/gui/icons.png");
     private static final HashMap<String, ItemStack> testTools = new HashMap<>();
+    private static final Set<String> localizedToolClassKeys = new HashSet<>(Arrays.asList(
+            "top.toolclass.Axe",
+            "top.toolclass.Pickaxe",
+            "top.toolclass.Shovel",
+            "top.toolclass.Sword"
+    ));
     private static String[] harvestLevels = new String[]{
             "stone",
             "iron",
@@ -42,9 +50,17 @@ public class HarvestInfoTools {
     };
 
     static {
-        testTools.put("{*top.toolclass.Shovel*}", new ItemStack(Items.WOODEN_SHOVEL));
-        testTools.put("{*top.toolclass.Axe*}", new ItemStack(Items.WOODEN_AXE));
-        testTools.put("{*top.toolclass.Pickaxe*}", new ItemStack(Items.WOODEN_PICKAXE));
+        testTools.put("Shovel", new ItemStack(Items.WOODEN_SHOVEL));
+        testTools.put("Axe", new ItemStack(Items.WOODEN_AXE));
+        testTools.put("Pickaxe", new ItemStack(Items.WOODEN_PICKAXE));
+    }
+
+    private static ITextComponent getToolClassName(String harvestTool) {
+        String translationKey = "top.toolclass." + harvestTool;
+        if (localizedToolClassKeys.contains(translationKey)) {
+            return Tools.translate(translationKey);
+        }
+        return new TextComponentString(harvestTool);
     }
 
     static void showHarvestLevel(IProbeInfo probeInfo, IBlockState blockState, Block block) {
@@ -81,20 +97,8 @@ public class HarvestInfoTools {
     static void showHarvestInfo(IProbeInfo probeInfo, World world, BlockPos pos, Block block, IBlockState blockState, EntityPlayer player) {
         boolean harvestable = block.canHarvestBlock(world, pos, player) && world.getBlockState(pos).getBlockHardness(world, pos) >= 0;
 
-        if (Loader.isModLoaded("orestages")) {
-            Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
-            if (stageInfo != null && player != null && !GameStageHelper.hasStage(player, stageInfo.getFirst())) {
-                Block stageBlock = stageInfo.getSecond().getBlock();
-                if (stageBlock.canHarvestBlock(world, pos, player) && world.getBlockState(pos).getBlockHardness(world, pos) >= 0) {
-                    harvestable = true;
-                } else {
-                    harvestable = false;
-                }
-            }
-        }
-
         String harvestTool = block.getHarvestTool(blockState);
-        String harvestName = null;
+        ITextComponent harvestName = null;
 
 
 
@@ -121,41 +125,19 @@ public class HarvestInfoTools {
 
         int harvestLevel = block.getHarvestLevel(blockState);
 
-        if (Loader.isModLoaded("orestages")) {
-            Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
-            if (harvestTool != null) {
-                if (stageInfo != null && player != null && !GameStageHelper.hasStage(player, stageInfo.getFirst())) {
-                    IBlockState stageBlockState = stageInfo.getSecond();
-                    Block stageBlock = stageInfo.getSecond().getBlock();
-                    harvestTool = stageBlock.getHarvestTool(stageBlockState);
-                }
-            }
-        }
-
         if (harvestLevel < 0) {
             // NOTE: When a block doesn't have an explicitly-set harvest tool, getHarvestLevel will return -1 for ANY tool. (Expected behavior)
 //                TheOneProbe.logger.info("HarvestLevel out of bounds (less than 0). Found " + harvestLevel);
             if (Config.showCustomHarvestLevelName) {
-                if (I18n.canTranslate("top.harvestLevel.null")) {
-                    harvestName = "{*top.harvestLevel.null*}";
-                }
+                harvestName = Tools.translate("top.harvestLevel.null");
             }
         } else if (harvestLevel >= harvestLevels.length) {
 //                TheOneProbe.logger.info("HarvestLevel out of bounds (Max value " + harvestLevels.length + "). Found " + harvestLevel);
         } else {
-            harvestName = harvestLevels[harvestLevel];
+            harvestName = new TextComponentString(harvestLevels[harvestLevel]);
 
-            if (Loader.isModLoaded("orestages")) {
-                Tuple<String, IBlockState> stageInfo = OreTiersAPI.getStageInfo(blockState);
-                if (stageInfo != null && player != null && !GameStageHelper.hasStage(player, stageInfo.getFirst())) {
-                    IBlockState stageBlockState = stageInfo.getSecond();
-                    Block stageBlock = stageInfo.getSecond().getBlock();
-                    int stageharvestLevel = stageBlock.getHarvestLevel(stageBlockState);
-                    harvestName = harvestLevels[stageharvestLevel];
-                }
-            }
             if (Config.showCustomHarvestLevelName)
-                    harvestName = "{*top.harvestLevel." + harvestLevel + "*}";
+                    harvestName = Tools.translate("top.harvestLevel." + harvestLevel);
 
         }
         harvestTool = StringUtils.capitalize(harvestTool);
@@ -164,49 +146,40 @@ public class HarvestInfoTools {
         boolean v = Config.harvestStyleVanilla;
         int offs = v ? 16 : 0;
         int dim = v ? 13 : 16;
-
         ILayoutStyle alignment = probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER);
         IIconStyle iconStyle = probeInfo.defaultIconStyle().width(v ? 18 : 20).height(v ? 14 : 16).textureWidth(32).textureHeight(32);
         IProbeInfo horizontal = probeInfo.horizontal(alignment);
         if (harvestable) {
             if (harvestTool != null) {
-                String ToolClassString;
-
-                if (I18n.canTranslate("top.toolclass." + harvestTool))
-                    ToolClassString = "{*top.toolclass." + harvestTool + "*}";
-                else
-                    ToolClassString = harvestTool.substring(0, 1).toUpperCase() + harvestTool.substring(1);
+                ITextComponent toolClassName = getToolClassName(harvestTool);
 
                 horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
-                        .text(OK + ToolClassString + " (" + "{*top.level*}" + " " + harvestName + ")");
+                        .text(Tools.text(OK, toolClassName, " (", Tools.translate("top.level"), " ", harvestName, ")"));
             } else {
                 if (isNull(harvestName)){
                     horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
-                            .text(OK + "{*top.NoTool*}");
+                            .text(Tools.text(OK, Tools.translate("top.NoTool")));
                 } else {
                     horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
-                            .text(OK + "{*top.NoTool*}" + " (" + "{*top.level*}" + " " + harvestName + ")");
+                            .text(Tools.text(OK, Tools.translate("top.NoTool"), " (", Tools.translate("top.level"), " ", harvestName, ")"));
                 }
+
 
             }
 
         } else {
-            if (harvestName == null || harvestName.isEmpty()) {
+            if (harvestName == null || harvestName.getUnformattedText().isEmpty()) {
                 horizontal.icon(ICONS, 16, offs, dim, dim, iconStyle)
-                        .text(WARNING + ((harvestTool != null) ? harvestTool : "{*top.NoTool*}"));
+                        .text(harvestTool != null ? Tools.text(WARNING, getToolClassName(harvestTool)) : Tools.text(WARNING, Tools.translate("top.NoTool")));
             } else {
                 if (harvestTool != null) {
-                    String ToolClassString;
-                    if (I18n.canTranslate("top.toolclass." + harvestTool))
-                        ToolClassString = "{*top.toolclass." + harvestTool + "*}";
-                    else
-                        ToolClassString = harvestTool.substring(0, 1).toUpperCase() + harvestTool.substring(1);
+                    ITextComponent toolClassName = getToolClassName(harvestTool);
 
                     horizontal.icon(ICONS, 16, offs, dim, dim, iconStyle)
-                            .text(WARNING + ToolClassString + " (" + "{*top.level*}" + " " + harvestName + ")");
+                            .text(Tools.text(WARNING, toolClassName, " (", Tools.translate("top.level"), " ", harvestName, ")"));
                 } else {
                     horizontal.icon(ICONS, 16, offs, dim, dim, iconStyle)
-                            .text(WARNING + "{*top.NoTool*}" + " (" + "{*top.level*}" + " " + harvestName + ")");
+                            .text(Tools.text(WARNING, Tools.translate("top.NoTool"), " (", Tools.translate("top.level"), " ", harvestName, ")"));
                 }
             }
         }
