@@ -5,6 +5,7 @@ import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.rendering.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
@@ -45,60 +46,60 @@ public class GuiNote extends GuiScreen {
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, WIDTH, HEIGHT);
         int x = guiLeft + 5;
         int y = guiTop + 8;
-        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "Things you should know about" + TextFormatting.GOLD + " The One Probe");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.title") + TextFormatting.GOLD + " " + tr("top.note.mod_name"));
         y += 10;
         y += 10;
 
-        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, BOLD + "This mod can show a tooltip on screen");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, BOLD + tr("top.note.intro.1"));
         y += 10;
-        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, BOLD + "when you look at a block or an entity");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, BOLD + tr("top.note.intro.2"));
         y += 10;
 
         y += 10;
         switch (Config.needsProbe) {
             case PROBE_NEEDED:
-                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "In this pack the probe is configured to be");
+                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.needed.1"));
                 y += 10;
-                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "required in order to see the tooltip");
+                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.needed.2"));
                 y += 10;
                 y += 16;
                 y = setInConfig(x, y);
                 break;
             case PROBE_NOTNEEDED:
-                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "In this pack the probe is configured to be not");
+                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.not_needed.1"));
                 y += 10;
-                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "required in order to see the tooltip");
+                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.not_needed.2"));
                 y += 10;
                 y += 16;
                 y = setInConfig(x, y);
                 break;
             case PROBE_NEEDEDFOREXTENDED:
-                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "In this pack the probe is configured to be");
+                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.extended.1"));
                 y += 10;
-                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "required to see extended information (when");
+                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.extended.2"));
                 y += 10;
-                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "sneaking) but not for basic information");
+                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.extended.3"));
                 y += 10;
                 y += 6;
                 y = setInConfig(x, y);
                 break;
             case PROBE_NEEDEDHARD:
-                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "In this pack the probe is configured to be");
+                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.hard_needed.1"));
                 y += 10;
-                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "required in order to see the tooltip");
+                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.hard_needed.2"));
                 y += 10;
-                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "This is set server side");
+                RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.hard_needed.3"));
                 y += 10;
                 break;
         }
 
         y += 10;
 
-        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "Check out the 'Mod Options... for many client'");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.footer.1"));
         y += 10;
-        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "side configuration settings or sneak-right click");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.footer.2"));
         y += 10;
-        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, "this note for more user-friendly setup");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, tr("top.note.footer.3"));
         y += 10;
     }
 
@@ -119,25 +120,29 @@ public class GuiNote extends GuiScreen {
     }
 
     private int setInConfig(int x, int y) {
-        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, BOLD + "" + GREEN + "You can change this here:");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, BOLD + "" + GREEN + tr("top.note.change_here"));
         y += 10;
 
         hitY = y + guiTop;
         hitX = x + guiLeft;
         drawRect(x, y, x + BUTTON_WIDTH, y + BUTTON_HEIGHT, 0xff000000);
-        RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 4, "Needed");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 4, tr("top.note.button.needed"));
         x += BUTTON_MARGIN;
 
         drawRect(x, y, x + BUTTON_WIDTH, y + BUTTON_HEIGHT, 0xff000000);
-        RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 4, "Not needed");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 4, tr("top.note.button.not_needed"));
         x += BUTTON_MARGIN;
 
         drawRect(x, y, x + BUTTON_WIDTH, y + BUTTON_HEIGHT, 0xff000000);
-        RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 4, "Extended");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x + 3, y + 4, tr("top.note.button.extended"));
         x += BUTTON_MARGIN;
 
         y += BUTTON_HEIGHT - 4;
         return y;
+    }
+
+    private static String tr(String key) {
+        return I18n.format(key);
     }
 
 }

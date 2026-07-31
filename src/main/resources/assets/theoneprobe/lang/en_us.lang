@@ -163,8 +163,44 @@ top.apotheosis.requires_redstone=Requires Redstone
 top.projecte.emc=EMC:
 top.projecte.contained_emc=Contained EMC:
 
+# Read Me GUI
+top.note.title=Things you should know about
+top.note.mod_name=The One Probe
+top.note.intro.1=This mod can show a tooltip on screen
+top.note.intro.2=when you look at a block or an entity
+top.note.needed.1=In this pack the probe is configured to be
+top.note.needed.2=required in order to see the tooltip
+top.note.not_needed.1=In this pack the probe is configured to be not
+top.note.not_needed.2=required in order to see the tooltip
+top.note.extended.1=In this pack the probe is configured to be
+top.note.extended.2=required to see extended information (when
+top.note.extended.3=sneaking) but not for basic information
+top.note.hard_needed.1=In this pack the probe is configured to be
+top.note.hard_needed.2=required in order to see the tooltip
+top.note.hard_needed.3=This is set server side
+top.note.footer.1=Check out the 'Mod Options... for many client'
+top.note.footer.2=side configuration settings or sneak-right click
+top.note.footer.3=this note for more user-friendly setup
+top.note.change_here=You can change this here:
+top.note.button.needed=Needed
+top.note.button.not_needed=Not needed
+top.note.button.extended=Extended
 
-
+# Sneak-right-click configuration GUI
+top.config.placement=Placement:
+top.config.placement_hint.1=Click on corner in screenshot
+top.config.placement_hint.2=to move tooltip there
+top.config.presets=Presets:
+top.config.scale=Scale:
+top.config.preset.default_style=Default style
+top.config.preset.waila_style=WAILA style
+top.config.preset.full_transparent_style=Full transparent style
+top.config.preset.black_and_white_style=Black & White style
+top.config.preset.jade_style=Jade style
+top.config.preview.fuel=Fuel:
+top.config.preview.volts=5 volts
+top.config.preview.error=Error:
+top.config.preview.oups=Oups!
 
 
 

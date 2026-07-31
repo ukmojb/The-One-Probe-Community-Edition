@@ -6,11 +6,13 @@ import mcjty.theoneprobe.api.IOverlayStyle;
 import mcjty.theoneprobe.api.TextStyleClass;
 import mcjty.theoneprobe.apiimpl.ProbeInfo;
 import mcjty.theoneprobe.config.Config;
+import mcjty.theoneprobe.config.TopDisplayTheme;
 import mcjty.theoneprobe.rendering.RenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -33,10 +35,10 @@ public class GuiConfig extends GuiScreen {
     private static final List<Preset> presets = new ArrayList<>();
 
     static {
-        presets.add(new Preset("Default style", 0xff999999, 0x55006699, 2, 0));
-        presets.add(new Preset("WAILA style", 0xff4503d0, 0xff000000, 1, 1));
-        presets.add(new Preset("Full transparent style", 0x00000000, 0x00000000, 0, 0));
-        presets.add(new Preset("Black & White style", 0xffffffff, 0xff000000, 2, 0,
+        presets.add(new Preset("top.config.preset.default_style", TopDisplayTheme.VANILLA, 0xff999999, 0x55006699, 2, 0));
+        presets.add(new Preset("top.config.preset.waila_style", TopDisplayTheme.VANILLA, 0xff4503d0, 0xff000000, 1, 1));
+        presets.add(new Preset("top.config.preset.full_transparent_style", TopDisplayTheme.VANILLA, 0x00000000, 0x00000000, 0, 0));
+        presets.add(new Preset("top.config.preset.black_and_white_style", TopDisplayTheme.VANILLA, 0xffffffff, 0xff000000, 2, 0,
                 Pair.of(MODNAME, "white,italic"),
                 Pair.of(NAME, "white,bold"),
                 Pair.of(INFO, "white"),
@@ -48,6 +50,7 @@ public class GuiConfig extends GuiScreen {
                 Pair.of(OK, "white"),
                 Pair.of(PROGRESS, "white")
         ));
+        presets.add(new Preset("top.config.preset.jade_style", TopDisplayTheme.JADE, 0, 0, 0, 0));
     }
 
     private int guiLeft;
@@ -78,17 +81,17 @@ public class GuiConfig extends GuiScreen {
 
         int x = WIDTH + guiLeft + 10;
         int y = guiTop + 10;
-        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, TextFormatting.GOLD + "Placement:");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, TextFormatting.GOLD + tr("top.config.placement"));
         y += 12;
-        RenderHelper.renderText(Minecraft.getMinecraft(), x + 10, y, "Click on corner in screenshot");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x + 10, y, tr("top.config.placement_hint.1"));
         y += 10;
-        RenderHelper.renderText(Minecraft.getMinecraft(), x + 10, y, "to move tooltip there");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x + 10, y, tr("top.config.placement_hint.2"));
         y += 10;
 
         y += 20;
 
         hitboxes = new ArrayList<>();
-        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, TextFormatting.GOLD + "Presets:");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, TextFormatting.GOLD + tr("top.config.presets"));
         y += 12;
         for (Preset preset : presets) {
             y = addPreset(x, y, preset);
@@ -96,7 +99,7 @@ public class GuiConfig extends GuiScreen {
 
         y += 20;
 
-        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, TextFormatting.GOLD + "Scale:");
+        RenderHelper.renderText(Minecraft.getMinecraft(), x, y, TextFormatting.GOLD + tr("top.config.scale"));
         y += 12;
         addButton(x + 10, y, 30, 14, "--", () -> {
             Config.setScale(1.2f);
@@ -162,7 +165,10 @@ public class GuiConfig extends GuiScreen {
     }
 
     private void applyPreset(Preset preset) {
-        Config.setBoxStyle(preset.getBoxThickness(), preset.getBoxBorderColor(), preset.getBoxFillColor(), preset.getBoxOffset());
+        Config.setDisplayTheme(preset.getDisplayTheme());
+        if (preset.getDisplayTheme() == TopDisplayTheme.VANILLA) {
+            Config.setBoxStyle(preset.getBoxThickness(), preset.getBoxBorderColor(), preset.getBoxFillColor(), preset.getBoxOffset());
+        }
 
         for (Map.Entry<TextStyleClass, String> entry : Config.defaultTextStyleClasses.entrySet()) {
             Config.setTextStyle(entry.getKey(), entry.getValue());
@@ -175,7 +181,7 @@ public class GuiConfig extends GuiScreen {
 
     private int addPreset(int x, int y, Preset preset) {
         drawRect(x + 10, y - 1, x + 10 + WIDTH - 50, y + 10, 0xff000000);
-        RenderHelper.renderText(Minecraft.getMinecraft(), x + 20, y, preset.getName());
+        RenderHelper.renderText(Minecraft.getMinecraft(), x + 20, y, tr(preset.getName()));
         hitboxes.add(new HitBox(x + 10 - guiLeft, y - 1 - guiTop, x + 10 + WIDTH - 50 - guiLeft, y + 10 - guiTop, () -> {
             applyPreset(preset);
         }));
@@ -199,8 +205,8 @@ public class GuiConfig extends GuiScreen {
                 .vertical()
                 .text(NAME + pickBlock.getDisplayName())
                 .text(MODNAME + modid);
-        probeInfo.text(LABEL + "Fuel: " + INFO + "5 volts");
-        probeInfo.text(LABEL + "Error: " + ERROR + "Oups!");
+        probeInfo.text(Tools.text(LABEL, Tools.translate("top.config.preview.fuel"), " ", INFO, Tools.translate("top.config.preview.volts")));
+        probeInfo.text(Tools.text(LABEL, Tools.translate("top.config.preview.error"), " ", ERROR, Tools.translate("top.config.preview.oups")));
 
         renderElements(probeInfo, Config.getDefaultOverlayStyle());
     }
@@ -266,6 +272,10 @@ public class GuiConfig extends GuiScreen {
         probeInfo.render(x + margin, y + margin);
 
         GlStateManager.popMatrix();
+    }
+
+    private static String tr(String key) {
+        return I18n.format(key);
     }
 
 }

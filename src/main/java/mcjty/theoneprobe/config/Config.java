@@ -69,6 +69,7 @@ public class Config {
     public static boolean harvestStyleVanilla = true;
     public static boolean showCustomHarvestLevelName = false;
     public static boolean showEntityModel = true;
+    public static float entityModelMaxSize = 25.0f;
     public static boolean showEntityHealth = true;
     public static boolean showEntityArmor = true;
     public static boolean showEntityInfo = true;
@@ -230,6 +231,7 @@ public class Config {
         harvestStyleVanilla = cfg.getBoolean("harvestStyleVanilla", CATEGORY_CLIENT, harvestStyleVanilla, "true means shows harvestability with vanilla style icons");
         showCustomHarvestLevelName = cfg.getBoolean("showCustomHarvestLevelName", CATEGORY_CLIENT, showCustomHarvestLevelName, "true means shows Custom harvestLevel (you can chance name in the lang)");
         showEntityModel = cfg.getBoolean("showEntityModel", CATEGORY_CLIENT, showEntityModel, "true means shows entity model");
+        entityModelMaxSize = cfg.getFloat("entityModelMaxSize", CATEGORY_CLIENT, entityModelMaxSize, 8.0f, 200.0f, "Maximum rendered width or height of entity models in the probe overlay. Larger models are scaled down to fit");
         showEntityInfo = cfg.getBoolean("showEntityInfo", CATEGORY_CLIENT, showEntityInfo, "true means shows entity info");
         showEntityHealth = cfg.getBoolean("showEntityHealth", CATEGORY_CLIENT, showEntityHealth, "true means shows entity health");
         showEntityArmor = cfg.getBoolean("showEntityArmor", CATEGORY_CLIENT, showEntityArmor, "true means shows entity armor value");
@@ -328,6 +330,17 @@ public class Config {
         cfg.get(CATEGORY_CLIENT, "boxBorderColor", Integer.toHexString(borderColor)).set(Integer.toHexString(borderColor));
         cfg.get(CATEGORY_CLIENT, "boxFillColor", Integer.toHexString(fillcolor)).set(Integer.toHexString(fillcolor));
         cfg.get(CATEGORY_CLIENT, "boxOffset", offset).set(offset);
+        cfg.save();
+        updateDefaultOverlayStyle();
+    }
+
+    public static void setDisplayTheme(TopDisplayTheme theme) {
+        Configuration cfg = mainConfig;
+        displayTheme = theme;
+        if (theme == TopDisplayTheme.JADE) {
+            handleTheme();
+        }
+        cfg.get(CATEGORY_CLIENT, "DisplayTheme", TopDisplayTheme.VANILLA.name()).set(theme.name());
         cfg.save();
         updateDefaultOverlayStyle();
     }

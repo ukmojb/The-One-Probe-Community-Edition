@@ -106,3 +106,41 @@ top.harvestLevel.3=黑曜石
 
 # mods
 
+# 阅读指南界面
+top.note.title=关于
+top.note.mod_name=The One Probe
+top.note.intro.1=本模组可在屏幕上显示提示信息
+top.note.intro.2=当你看向方块或实体时
+top.note.needed.1=本整合包中，探测器被设定为
+top.note.needed.2=查看提示信息的必需物品
+top.note.not_needed.1=本整合包中，探测器被设定为无需
+top.note.not_needed.2=即可查看提示信息
+top.note.extended.1=本整合包中，探测器被设定为
+top.note.extended.2=查看扩展信息时（潜行）必需，
+top.note.extended.3=但查看基础信息时不需要
+top.note.hard_needed.1=本整合包中，探测器被设定为
+top.note.hard_needed.2=查看提示信息的必需物品
+top.note.hard_needed.3=此项由服务器设定
+top.note.footer.1=请前往“模组选项...”查看众多客户端
+top.note.footer.2=配置，或潜行右键点击本阅读指南
+top.note.footer.3=进行更便捷的设置
+top.note.change_here=你可在此处更改：
+top.note.button.needed=需要
+top.note.button.not_needed=不需要
+top.note.button.extended=扩展
+
+# 潜行右键配置界面
+top.config.placement=位置：
+top.config.placement_hint.1=点击示意图中的角落
+top.config.placement_hint.2=即可将提示框移至该处
+top.config.presets=预设：
+top.config.scale=缩放：
+top.config.preset.default_style=默认样式
+top.config.preset.waila_style=WAILA 样式
+top.config.preset.full_transparent_style=完全透明样式
+top.config.preset.black_and_white_style=黑白样式
+top.config.preset.jade_style=Jade 样式
+top.config.preview.fuel=燃料：
+top.config.preview.volts=5 伏特
+top.config.preview.error=错误：
+top.config.preview.oups=哎呀！

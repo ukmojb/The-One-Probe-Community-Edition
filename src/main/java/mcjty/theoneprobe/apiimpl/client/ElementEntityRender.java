@@ -1,6 +1,7 @@
 package mcjty.theoneprobe.apiimpl.client;
 
 import mcjty.theoneprobe.api.IEntityStyle;
+import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.rendering.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -10,6 +11,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.fixes.EntityId;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import java.lang.reflect.Method;
 
 public class ElementEntityRender {
 
@@ -62,7 +65,24 @@ public class ElementEntityRender {
         height = (float) ((height - 1) * .7 + 1);
         float s = style.getScale() * ((style.getHeight() * 14.0f / 25) / height);
 
+        float renderedSize = Math.max(entity.width, height) * getRenderSize(entity) * s;
+        if (renderedSize > Config.entityModelMaxSize) {
+            s *= Config.entityModelMaxSize / renderedSize;
+        }
+
         RenderHelper.renderEntity(entity, x, y, s);
+    }
+
+    private static float getRenderSize(Entity entity) {
+        try {
+            Method method = entity.getClass().getMethod("getRenderSize");
+            Object value = method.invoke(entity);
+            if (value instanceof Number) {
+                return Math.max(1.0f, ((Number) value).floatValue());
+            }
+        } catch (ReflectiveOperationException ignored) {
+        }
+        return 1.0f;
     }
 
 }

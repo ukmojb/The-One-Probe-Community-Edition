@@ -214,11 +214,11 @@ public class OverlayRenderer {
                 // It has been a while. Show some info on client that we are
                 // waiting for server information
                 ProbeInfo info = getWaitingEntityInfo(mode, mouseOver, entity, player);
-//                registerProbeInfo(uuid, info);
-//                lastPair = Pair.of(time, info);
-//                lastPairTime = time;
-                renderElements(lastPair.getRight(), Config.getDefaultOverlayStyle(), sw, sh, null);
-//                lastRenderedTime = time;
+                registerProbeInfo(uuid, info);
+                lastPair = Pair.of(time, info);
+                lastPairTime = time;
+                renderElements(info, Config.getDefaultOverlayStyle(), sw, sh, null);
+                lastRenderedTime = time;
             }
         } else {
             if (time > cacheEntry.getLeft() + Config.timeout) {

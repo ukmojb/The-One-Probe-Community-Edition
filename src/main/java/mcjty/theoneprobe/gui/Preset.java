@@ -1,6 +1,7 @@
 package mcjty.theoneprobe.gui;
 
 import mcjty.theoneprobe.api.TextStyleClass;
+import mcjty.theoneprobe.config.TopDisplayTheme;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 class Preset {
     private final String name;
+    private final TopDisplayTheme displayTheme;
     private final int boxBorderColor;
     private final int boxFillColor;
     private final int boxThickness;
@@ -15,8 +17,9 @@ class Preset {
     private final Map<TextStyleClass, String> textStyleClasses;
 
     @SafeVarargs
-    public Preset(String name, int boxBorderColor, int boxFillColor, int boxThickness, int boxOffset, Pair<TextStyleClass, String>... styles) {
+    public Preset(String name, TopDisplayTheme displayTheme, int boxBorderColor, int boxFillColor, int boxThickness, int boxOffset, Pair<TextStyleClass, String>... styles) {
         this.name = name;
+        this.displayTheme = displayTheme;
         this.boxBorderColor = boxBorderColor;
         this.boxFillColor = boxFillColor;
         this.boxThickness = boxThickness;
@@ -29,6 +32,10 @@ class Preset {
 
     public String getName() {
         return name;
+    }
+
+    public TopDisplayTheme getDisplayTheme() {
+        return displayTheme;
     }
 
     public int getBoxBorderColor() {
