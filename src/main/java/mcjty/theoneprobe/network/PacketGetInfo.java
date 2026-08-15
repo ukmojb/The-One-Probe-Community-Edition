@@ -10,6 +10,7 @@ import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.items.ModItems;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -17,7 +18,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -33,23 +33,23 @@ import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDHARD;
 
 public class PacketGetInfo implements IMessage {
 
-    public static int dim;
-    public static BlockPos pos;
-    public static ProbeMode mode;
-    public static EnumFacing sideHit;
-    public static Vec3d hitVec;
-    public static ItemStack pickBlock;
+    private int dim;
+    private BlockPos pos;
+    private ProbeMode mode;
+    private EnumFacing sideHit;
+    private Vec3d hitVec;
+    private ItemStack pickBlock;
 
     public PacketGetInfo() {
     }
 
     public PacketGetInfo(int dim, BlockPos pos, ProbeMode mode, RayTraceResult mouseOver, ItemStack pickBlock) {
-        PacketGetInfo.dim = dim;
-        PacketGetInfo.pos = pos;
-        PacketGetInfo.mode = mode;
-        PacketGetInfo.sideHit = mouseOver.sideHit;
-        PacketGetInfo.hitVec = mouseOver.hitVec;
-        PacketGetInfo.pickBlock = pickBlock;
+        this.dim = dim;
+        this.pos = pos;
+        this.mode = mode;
+        this.sideHit = mouseOver.sideHit;
+        this.hitVec = mouseOver.hitVec;
+        this.pickBlock = pickBlock;
     }
 
     @Override
@@ -65,6 +65,8 @@ public class PacketGetInfo implements IMessage {
         }
         if (buf.readBoolean()) {
             hitVec = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        } else {
+            hitVec = null;
         }
         pickBlock = ByteBufUtils.readItemStack(buf);
 
@@ -106,14 +108,31 @@ public class PacketGetInfo implements IMessage {
         }
 
         private void handle(PacketGetInfo message, MessageContext ctx) {
-            WorldServer world = DimensionManager.getWorld(message.dim);
-            if (world != null) {
-
-                ProbeInfo probeInfo = getProbeInfo(ctx.getServerHandler().player,
-                        message.mode, world, message.pos, message.sideHit, message.hitVec, message.pickBlock);
-                PacketHandler.INSTANCE.sendTo(new PacketReturnInfo(message.dim, message.pos, probeInfo), ctx.getServerHandler().player);
+            EntityPlayerMP player = ctx.getServerHandler().player;
+            WorldServer world = player.getServerWorld();
+            if (message.dim != world.provider.getDimension() || message.pos == null
+                    || !isWithinProbeDistance(player, message.pos)
+                    || !world.isBlockLoaded(message.pos)) {
+                return;
             }
+
+            ProbeInfo probeInfo = getProbeInfo(player, message.mode, world, message.pos, message.sideHit, message.hitVec, message.pickBlock);
+            PacketHandler.INSTANCE.sendTo(new PacketReturnInfo(world.provider.getDimension(), message.pos, probeInfo), player);
         }
+    }
+
+    private static boolean isWithinProbeDistance(EntityPlayer player, BlockPos blockPos) {
+        double eyeX = player.posX;
+        double eyeY = player.posY + player.getEyeHeight();
+        double eyeZ = player.posZ;
+        double closestX = Math.max(blockPos.getX(), Math.min(eyeX, blockPos.getX() + 1.0D));
+        double closestY = Math.max(blockPos.getY(), Math.min(eyeY, blockPos.getY() + 1.0D));
+        double closestZ = Math.max(blockPos.getZ(), Math.min(eyeZ, blockPos.getZ() + 1.0D));
+        double deltaX = eyeX - closestX;
+        double deltaY = eyeY - closestY;
+        double deltaZ = eyeZ - closestZ;
+        double maxDistance = Config.probeDistance;
+        return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ <= maxDistance * maxDistance;
     }
 
     private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, BlockPos blockPos, EnumFacing sideHit, Vec3d hitVec, ItemStack pickBlock) {

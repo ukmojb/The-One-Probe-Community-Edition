@@ -9,11 +9,12 @@ import mcjty.theoneprobe.config.Config;
 import mcjty.theoneprobe.items.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -29,19 +30,19 @@ import static mcjty.theoneprobe.config.Config.PROBE_NEEDEDHARD;
 
 public class PacketGetEntityInfo implements IMessage {
 
-    private static int dim;
-    private static UUID uuid;
-    private static ProbeMode mode;
-    private static Vec3d hitVec;
+    private int dim;
+    private UUID uuid;
+    private ProbeMode mode;
+    private Vec3d hitVec;
 
     public PacketGetEntityInfo() {
     }
 
     public PacketGetEntityInfo(int dim, ProbeMode mode, RayTraceResult mouseOver, Entity entity) {
-        PacketGetEntityInfo.dim = dim;
-        PacketGetEntityInfo.uuid = entity.getPersistentID();
-        PacketGetEntityInfo.mode = mode;
-        PacketGetEntityInfo.hitVec = mouseOver.hitVec;
+        this.dim = dim;
+        this.uuid = entity.getPersistentID();
+        this.mode = mode;
+        this.hitVec = mouseOver.hitVec;
     }
 
 
@@ -52,6 +53,8 @@ public class PacketGetEntityInfo implements IMessage {
         mode = ProbeMode.values()[buf.readByte()];
         if (buf.readBoolean()) {
             hitVec = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+        } else {
+            hitVec = null;
         }
     }
 
@@ -79,15 +82,35 @@ public class PacketGetEntityInfo implements IMessage {
         }
 
         private void handle(PacketGetEntityInfo message, MessageContext ctx) {
-            WorldServer world = DimensionManager.getWorld(message.dim);
-            if (world != null) {
-                Entity entity = world.getEntityFromUuid(message.uuid);
-                if (entity != null) {
-                    ProbeInfo probeInfo = getProbeInfo(ctx.getServerHandler().player, message.mode, world, entity, message.hitVec);
-                    PacketHandler.INSTANCE.sendTo(new PacketReturnEntityInfo(message.uuid, probeInfo), ctx.getServerHandler().player);
-                }
+            EntityPlayerMP player = ctx.getServerHandler().player;
+            WorldServer world = player.getServerWorld();
+            if (message.dim != world.provider.getDimension() || message.uuid == null) {
+                return;
             }
+
+            Entity entity = world.getEntityFromUuid(message.uuid);
+            if (entity == null || entity.isDead || !isWithinProbeDistance(player, entity)) {
+                return;
+            }
+
+            ProbeInfo probeInfo = getProbeInfo(player, message.mode, world, entity, message.hitVec);
+            PacketHandler.INSTANCE.sendTo(new PacketReturnEntityInfo(message.uuid, probeInfo), player);
         }
+    }
+
+    private static boolean isWithinProbeDistance(EntityPlayer player, Entity entity) {
+        double eyeX = player.posX;
+        double eyeY = player.posY + player.getEyeHeight();
+        double eyeZ = player.posZ;
+        AxisAlignedBB bounds = entity.getEntityBoundingBox();
+        double closestX = Math.max(bounds.minX, Math.min(eyeX, bounds.maxX));
+        double closestY = Math.max(bounds.minY, Math.min(eyeY, bounds.maxY));
+        double closestZ = Math.max(bounds.minZ, Math.min(eyeZ, bounds.maxZ));
+        double deltaX = eyeX - closestX;
+        double deltaY = eyeY - closestY;
+        double deltaZ = eyeZ - closestZ;
+        double maxDistance = Math.max(Config.probeDistance, player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue());
+        return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ <= maxDistance * maxDistance;
     }
 
     private static ProbeInfo getProbeInfo(EntityPlayer player, ProbeMode mode, World world, Entity entity, Vec3d hitVec) {
