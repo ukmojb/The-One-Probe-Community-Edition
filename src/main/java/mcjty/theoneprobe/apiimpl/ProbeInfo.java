@@ -12,6 +12,8 @@ import java.util.List;
 
 public class ProbeInfo extends ElementVertical {
 
+    private int elementChangeHeaderCount = 1;
+
     public ProbeInfo() {
         super((Integer) null, 2, ElementAlignment.ALIGN_TOPLEFT);
     }
@@ -40,8 +42,31 @@ public class ProbeInfo extends ElementVertical {
         return children;
     }
 
+    @Override
+    public void toBytes(ByteBuf buf) {
+        super.toBytes(buf);
+        buf.writeShort(elementChangeHeaderCount);
+    }
+
     public void fromBytes(ByteBuf buf) {
         children = createElements(buf);
+        if (buf.readBoolean()) {
+            borderColor = buf.readInt();
+        } else {
+            borderColor = null;
+        }
+        spacing = buf.readShort();
+        alignment = ElementAlignment.values()[buf.readShort()];
+        // Older packets end after the root panel layout fields.
+        elementChangeHeaderCount = buf.readableBytes() >= 2 ? buf.readUnsignedShort() : 1;
+    }
+
+    public int getElementChangeHeaderCount() {
+        return Math.min(elementChangeHeaderCount, children.size());
+    }
+
+    public void markElementChangeHeader() {
+        elementChangeHeaderCount = children.size();
     }
 
     public void removeElement(IElement element) {

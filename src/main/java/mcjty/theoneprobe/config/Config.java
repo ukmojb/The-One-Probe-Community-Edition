@@ -11,7 +11,9 @@ import mcjty.theoneprobe.apiimpl.styles.DefaultOverlayStyle;
 import mcjty.theoneprobe.setup.ModSetup;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 
@@ -63,6 +65,14 @@ public class Config {
     public static boolean holdKeyToMakeVisible = false;
     public static boolean showDebugInfo = true;
     public static int showBreakProgress = 1;    // 0 == off, 1 == bar, 2 == text
+    public static final String AUTO_WRAP_NONE = "NONE";
+    public static final String AUTO_WRAP_ALL_CHANGE = "ALL_CHANGE";
+    public static final String AUTO_WRAP_ELEMENT_CHANGE = "ELEMENT_CHANGE";
+    private static final String[] AUTO_WRAP_MODES = {
+            AUTO_WRAP_NONE, AUTO_WRAP_ALL_CHANGE, AUTO_WRAP_ELEMENT_CHANGE
+    };
+    public static String autoWrapMode = AUTO_WRAP_ALL_CHANGE;
+    public static float autoWrapColumnHeight = 0.6f;
     public static boolean boxResizeAnimation = false;
     public static boolean overlayFadeAnimation = false;
     public static float overlayFadeSpeed = 0.6f;
@@ -225,6 +235,8 @@ public class Config {
         tooltipScale = cfg.getFloat("tooltipScale", CATEGORY_CLIENT, tooltipScale, 0.4f, 5.0f, "The scale of the tooltips, 1 is default, 2 is smaller");
         chestContentsBorderColor = parseColor(cfg.getString("chestContentsBorderColor", CATEGORY_CLIENT, Integer.toHexString(chestContentsBorderColor), "Color of the border of the chest contents box (0 to disable)"));
         showBreakProgress = cfg.getInt("showBreakProgress", CATEGORY_CLIENT, showBreakProgress, 0, 2, "0 means don't show break progress, 1 is show as bar, 2 is show as text");
+        autoWrapMode = loadAutoWrapMode(cfg);
+        autoWrapColumnHeight = cfg.getFloat("autoWrapColumnHeight", CATEGORY_CLIENT, autoWrapColumnHeight, 0.1f, 1.0f, "Maximum target height of a probe column as a fraction of the screen height");
         boxResizeAnimation = cfg.getBoolean("boxResizeAnimation", CATEGORY_CLIENT, boxResizeAnimation, "If true the probe box smoothly animates size changes when displayed information changes");
         overlayFadeAnimation = cfg.getBoolean("overlayFadeAnimation", CATEGORY_CLIENT, displayTheme == TopDisplayTheme.JADE, "If true the probe overlay fades in and out. Enabled by default for the JADE display theme");
         overlayFadeSpeed = cfg.getFloat("overlayFadeSpeed", CATEGORY_CLIENT, overlayFadeSpeed, 0.1f, 5.0f, "Fade speed in opacity units per client tick. Jade's default speed is 0.6");
@@ -250,6 +262,32 @@ public class Config {
         extendedInMain = cfg.getBoolean("extendedInMain", CATEGORY_CLIENT, extendedInMain, "If true the probe will automatically show extended information if it is in your main hand (so not required to sneak)");
 
         handleTheme();
+    }
+
+    private static String loadAutoWrapMode(Configuration cfg) {
+        ConfigCategory clientCategory = cfg.getCategory(CATEGORY_CLIENT);
+        String defaultMode = autoWrapMode;
+
+        // Migrate the boolean option used by earlier versions of automatic wrapping.
+        if (clientCategory.containsKey("autoWrapColumns")) {
+            Property legacyProperty = clientCategory.remove("autoWrapColumns");
+            if (!clientCategory.containsKey("autoWrapMode")) {
+                defaultMode = legacyProperty.getBoolean(true) ? AUTO_WRAP_ALL_CHANGE : AUTO_WRAP_NONE;
+            }
+        }
+
+        String mode = cfg.getString("autoWrapMode", CATEGORY_CLIENT, defaultMode,
+                "Whether to use automatic column wrapping? NONE = disabled, ALL_CHANGE = wrap all elements, " +
+                        "ELEMENT_CHANGE = keep the name and harvest information centered and wrap the remaining elements",
+                AUTO_WRAP_MODES);
+        for (String validMode : AUTO_WRAP_MODES) {
+            if (validMode.equals(mode)) {
+                return mode;
+            }
+        }
+
+        cfg.get(CATEGORY_CLIENT, "autoWrapMode", defaultMode).set(defaultMode);
+        return defaultMode;
     }
 
     private static void handleTheme() {

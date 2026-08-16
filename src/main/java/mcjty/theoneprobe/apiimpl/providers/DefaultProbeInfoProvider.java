@@ -5,6 +5,7 @@ import mcjty.theoneprobe.TheOneProbe;
 import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.ProbeConfig;
+import mcjty.theoneprobe.apiimpl.ProbeInfo;
 import mcjty.theoneprobe.apiimpl.elements.ElementProgress;
 import mcjty.theoneprobe.compat.RedstoneFluxTools;
 import mcjty.theoneprobe.compat.TeslaTools;
@@ -120,10 +121,6 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
             showStandardBlockInfo(config, mode, probeInfo, blockState, block, world, pos, player, data);
         }
 
-        if (Tools.show(mode, config.getShowCropPercentage())) {
-            showGrowthLevel(probeInfo, blockState);
-        }
-
 //        if (Config.isJadeTheme()) {
 //            HarvestInfoTools.showHarvestInfo(probeInfo, world, pos, block, blockState, player);
 //        } else {
@@ -137,6 +134,14 @@ public class DefaultProbeInfoProvider implements IProbeInfoProvider {
                 HarvestInfoTools.showCanBeHarvested(probeInfo, world, pos, block, player);
             }
 //        }
+
+        if (probeInfo instanceof ProbeInfo) {
+            ((ProbeInfo) probeInfo).markElementChangeHeader();
+        }
+
+        if (Tools.show(mode, config.getShowCropPercentage())) {
+            showGrowthLevel(probeInfo, blockState);
+        }
 
         if (Tools.show(mode, config.getShowRedstone())) {
             showRedstonePower(probeInfo, world, blockState, data, block, Tools.show(mode, config.getShowLeverSetting()));

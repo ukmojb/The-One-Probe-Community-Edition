@@ -444,8 +444,11 @@ public class OverlayRenderer {
         int scaledWidth = (int) sw;
         int scaledHeight = (int) sh;
 
-        int w = probeInfo.getWidth();
-        int h = probeInfo.getHeight();
+        ProbeInfoColumnLayout columnLayout = ProbeInfoColumnLayout.create(
+                probeInfo.getElements(), probeInfo.getElementChangeHeaderCount(), scaledHeight,
+                Config.autoWrapMode, Config.autoWrapColumnHeight);
+        int w = columnLayout.getWidth();
+        int h = columnLayout.getHeight();
 
         int offset = style.getBorderOffset();
         int thick = style.getBorderThickness();
@@ -558,7 +561,7 @@ public class OverlayRenderer {
             RenderHelper.rot += .5f;
         }
 
-            probeInfo.render(drawX + margin, drawY + margin);
+            columnLayout.render(drawX + margin, drawY + margin);
         } finally {
             RenderHelper.setOverlayAlpha(1.0f);
             if (extra != null) {
