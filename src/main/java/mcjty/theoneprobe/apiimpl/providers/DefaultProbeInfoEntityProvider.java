@@ -3,6 +3,7 @@ package mcjty.theoneprobe.apiimpl.providers;
 import mcjty.theoneprobe.TheOneProbe;
 import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.*;
+import mcjty.theoneprobe.apiimpl.ProbeInfo;
 import mcjty.theoneprobe.apiimpl.styles.ItemStyle;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
 import mcjty.theoneprobe.compat.event.SpecialNameEvent;
@@ -133,6 +134,10 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
         }
         if (!handled) {
             showStandardInfo(mode, probeInfo, entity, config);
+        }
+
+        if (probeInfo instanceof ProbeInfo) {
+            ((ProbeInfo) probeInfo).markElementChangeHeader();
         }
 
         if (entity instanceof EntityLivingBase) {

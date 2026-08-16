@@ -2,6 +2,7 @@ package mcjty.theoneprobe.rendering;
 
 import io.netty.buffer.ByteBuf;
 import mcjty.theoneprobe.api.IElement;
+import mcjty.theoneprobe.config.Config;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ class ProbeInfoColumnLayoutTest {
     void keepsTheOriginalSingleColumnLayoutWhenDisabled() {
         List<TestElement> elements = elements(3, 10, 8);
 
-        ProbeInfoColumnLayout layout = ProbeInfoColumnLayout.create(asElements(elements), 20, false, 0.6f);
+        ProbeInfoColumnLayout layout = ProbeInfoColumnLayout.create(
+                asElements(elements), 1, 20, Config.AUTO_WRAP_NONE, 0.6f);
 
         assertEquals(1, layout.getColumnCount());
         assertEquals(10, layout.getWidth());
@@ -28,7 +30,8 @@ class ProbeInfoColumnLayoutTest {
         List<TestElement> elements = elements(10, 10, 10);
 
         // Original height: 10 * 10 + 9 * 2 = 118. ceil(118 / (100 * .6)) = 2.
-        ProbeInfoColumnLayout layout = ProbeInfoColumnLayout.create(asElements(elements), 100, true, 0.6f);
+        ProbeInfoColumnLayout layout = ProbeInfoColumnLayout.create(
+                asElements(elements), 1, 100, Config.AUTO_WRAP_ALL_CHANGE, 0.6f);
 
         assertEquals(2, layout.getColumnCount());
         assertEquals(26, layout.getWidth());
@@ -42,7 +45,8 @@ class ProbeInfoColumnLayoutTest {
         TestElement third = new TestElement(7, 10);
         TestElement fourth = new TestElement(9, 10);
         List<TestElement> elements = Arrays.asList(first, second, third, fourth);
-        ProbeInfoColumnLayout layout = ProbeInfoColumnLayout.create(asElements(elements), 40, true, 0.6f);
+        ProbeInfoColumnLayout layout = ProbeInfoColumnLayout.create(
+                asElements(elements), 1, 40, Config.AUTO_WRAP_ALL_CHANGE, 0.6f);
 
         layout.render(100, 5);
 
@@ -59,11 +63,52 @@ class ProbeInfoColumnLayoutTest {
     void doesNotCreateEmptyColumnsForAnIndivisibleElement() {
         List<TestElement> elements = elements(1, 10, 200);
 
-        ProbeInfoColumnLayout layout = ProbeInfoColumnLayout.create(asElements(elements), 100, true, 0.1f);
+        ProbeInfoColumnLayout layout = ProbeInfoColumnLayout.create(
+                asElements(elements), 1, 100, Config.AUTO_WRAP_ALL_CHANGE, 0.1f);
 
         assertEquals(1, layout.getColumnCount());
         assertEquals(10, layout.getWidth());
         assertEquals(200, layout.getHeight());
+    }
+
+    @Test
+    void keepsTheHeaderCenteredAboveAllWrappedBodyColumnsInElementMode() {
+        TestElement header = new TestElement(60, 10);
+        TestElement harvestInfo = new TestElement(16, 8);
+        TestElement first = new TestElement(10, 10);
+        TestElement second = new TestElement(20, 10);
+        TestElement third = new TestElement(20, 10);
+        TestElement fourth = new TestElement(20, 10);
+        List<TestElement> elements = Arrays.asList(header, harvestInfo, first, second, third, fourth);
+        ProbeInfoColumnLayout layout = ProbeInfoColumnLayout.create(
+                asElements(elements), 2, 40, Config.AUTO_WRAP_ELEMENT_CHANGE, 0.6f);
+
+        layout.render(100, 5);
+
+        assertEquals(2, layout.getColumnCount());
+        assertEquals(60, layout.getWidth());
+        assertEquals(44, layout.getHeight());
+        assertEquals(Arrays.asList(100, 5), header.renderPosition);
+        assertEquals(Arrays.asList(122, 17), harvestInfo.renderPosition);
+        // Body elements remain left-aligned even when the centered header is wider than all columns.
+        assertEquals(Arrays.asList(100, 27), first.renderPosition);
+        assertEquals(Arrays.asList(100, 39), second.renderPosition);
+        assertEquals(Arrays.asList(126, 27), third.renderPosition);
+        assertEquals(Arrays.asList(126, 39), fourth.renderPosition);
+    }
+
+    @Test
+    void rendersOnlyTheCenteredHeaderWhenElementModeHasNoBody() {
+        TestElement header = new TestElement(30, 12);
+        ProbeInfoColumnLayout layout = ProbeInfoColumnLayout.create(
+                asElements(Arrays.asList(header)), 1, 100, Config.AUTO_WRAP_ELEMENT_CHANGE, 0.6f);
+
+        layout.render(20, 5);
+
+        assertEquals(1, layout.getColumnCount());
+        assertEquals(30, layout.getWidth());
+        assertEquals(12, layout.getHeight());
+        assertEquals(Arrays.asList(20, 5), header.renderPosition);
     }
 
     private static List<TestElement> elements(int count, int width, int height) {

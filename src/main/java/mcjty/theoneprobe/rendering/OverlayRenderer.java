@@ -445,7 +445,8 @@ public class OverlayRenderer {
         int scaledHeight = (int) sh;
 
         ProbeInfoColumnLayout columnLayout = ProbeInfoColumnLayout.create(
-                probeInfo.getElements(), scaledHeight, Config.autoWrapColumns, Config.autoWrapColumnHeight);
+                probeInfo.getElements(), probeInfo.getElementChangeHeaderCount(), scaledHeight,
+                Config.autoWrapMode, Config.autoWrapColumnHeight);
         int w = columnLayout.getWidth();
         int h = columnLayout.getHeight();
 
