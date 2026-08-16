@@ -13,6 +13,7 @@ import java.util.List;
 public class ProbeInfo extends ElementVertical {
 
     private int elementChangeHeaderCount = 1;
+    private long scrollStartTime = -1L;
 
     public ProbeInfo() {
         super((Integer) null, 2, ElementAlignment.ALIGN_TOPLEFT);
@@ -59,10 +60,19 @@ public class ProbeInfo extends ElementVertical {
         alignment = ElementAlignment.values()[buf.readShort()];
         // Older packets end after the root panel layout fields.
         elementChangeHeaderCount = buf.readableBytes() >= 2 ? buf.readUnsignedShort() : 1;
+        scrollStartTime = -1L;
     }
 
     public int getElementChangeHeaderCount() {
         return Math.min(elementChangeHeaderCount, children.size());
+    }
+
+    public long getScrollElapsedMillis() {
+        long now = System.currentTimeMillis();
+        if (scrollStartTime < 0L) {
+            scrollStartTime = now;
+        }
+        return Math.max(0L, now - scrollStartTime);
     }
 
     public void markElementChangeHeader() {

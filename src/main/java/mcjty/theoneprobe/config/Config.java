@@ -68,11 +68,16 @@ public class Config {
     public static final String AUTO_WRAP_NONE = "NONE";
     public static final String AUTO_WRAP_ALL_CHANGE = "ALL_CHANGE";
     public static final String AUTO_WRAP_ELEMENT_CHANGE = "ELEMENT_CHANGE";
+    public static final String AUTO_WRAP_ELEMENT_SCROLL = "ELEMENT_SCROLL";
     private static final String[] AUTO_WRAP_MODES = {
-            AUTO_WRAP_NONE, AUTO_WRAP_ALL_CHANGE, AUTO_WRAP_ELEMENT_CHANGE
+            AUTO_WRAP_NONE, AUTO_WRAP_ALL_CHANGE, AUTO_WRAP_ELEMENT_CHANGE, AUTO_WRAP_ELEMENT_SCROLL
     };
-    public static String autoWrapMode = AUTO_WRAP_ALL_CHANGE;
+    private static final String[] DISPLAY_THEMES = {
+            TopDisplayTheme.VANILLA.name(), TopDisplayTheme.JADE.name()
+    };
+    public static String autoWrapMode = AUTO_WRAP_ELEMENT_CHANGE;
     public static float autoWrapColumnHeight = 0.6f;
+    public static int autoScrollMaxElements = 6;
     public static boolean boxResizeAnimation = false;
     public static boolean overlayFadeAnimation = false;
     public static float overlayFadeSpeed = 0.6f;
@@ -217,7 +222,8 @@ public class Config {
                 "This setting lets you choose a predefined theme for display. \n" +
                         "When set to VANILLA, the option is ignored. \n" +
                         "Choosing any other theme will override the individual settings for Box Border, Fill Color, Thickness, and Offset.\n" +
-                        "All theme : VANILLA, JADE"));
+                        "All theme : VANILLA, JADE",
+                DISPLAY_THEMES));
 
         leftX = cfg.getInt("boxLeftX", CATEGORY_CLIENT, leftX, -1, 10000, "The distance to the left side of the screen. Use -1 if you don't want to set this");
         rightX = cfg.getInt("boxRightX", CATEGORY_CLIENT, rightX, -1, 10000, "The distance to the right side of the screen. Use -1 if you don't want to set this");
@@ -237,6 +243,7 @@ public class Config {
         showBreakProgress = cfg.getInt("showBreakProgress", CATEGORY_CLIENT, showBreakProgress, 0, 2, "0 means don't show break progress, 1 is show as bar, 2 is show as text");
         autoWrapMode = loadAutoWrapMode(cfg);
         autoWrapColumnHeight = cfg.getFloat("autoWrapColumnHeight", CATEGORY_CLIENT, autoWrapColumnHeight, 0.1f, 1.0f, "Maximum target height of a probe column as a fraction of the screen height");
+        autoScrollMaxElements = cfg.getInt("autoScrollMaxElements", CATEGORY_CLIENT, autoScrollMaxElements, 1, 100, "Maximum number of non-header elements visible at once in ELEMENT_SCROLL mode");
         boxResizeAnimation = cfg.getBoolean("boxResizeAnimation", CATEGORY_CLIENT, boxResizeAnimation, "If true the probe box smoothly animates size changes when displayed information changes");
         overlayFadeAnimation = cfg.getBoolean("overlayFadeAnimation", CATEGORY_CLIENT, displayTheme == TopDisplayTheme.JADE, "If true the probe overlay fades in and out. Enabled by default for the JADE display theme");
         overlayFadeSpeed = cfg.getFloat("overlayFadeSpeed", CATEGORY_CLIENT, overlayFadeSpeed, 0.1f, 5.0f, "Fade speed in opacity units per client tick. Jade's default speed is 0.6");
@@ -278,7 +285,8 @@ public class Config {
 
         String mode = cfg.getString("autoWrapMode", CATEGORY_CLIENT, defaultMode,
                 "Whether to use automatic column wrapping? NONE = disabled, ALL_CHANGE = wrap all elements, " +
-                        "ELEMENT_CHANGE = keep the name and harvest information centered and wrap the remaining elements",
+                        "ELEMENT_CHANGE = keep the name and harvest information centered and wrap the remaining elements, " +
+                        "ELEMENT_SCROLL = keep the name and harvest information in their original positions and scroll the remaining elements",
                 AUTO_WRAP_MODES);
         for (String validMode : AUTO_WRAP_MODES) {
             if (validMode.equals(mode)) {
