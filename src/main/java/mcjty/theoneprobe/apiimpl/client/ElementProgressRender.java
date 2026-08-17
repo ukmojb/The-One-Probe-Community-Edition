@@ -68,15 +68,15 @@ public class ElementProgressRender {
         Minecraft.getMinecraft().getTextureManager().bindTexture(ICONS);
         if (current * 4 >= w) {
             // Shortened view
-            RenderHelper.drawTexturedModalRect(x, y, 52, 0, 9, 9);
+            RenderHelper.drawTexturedModalRectInset(x, y, 52, 0, 9, 9);
             RenderHelper.renderText(Minecraft.getMinecraft(), x + 12, y, TextFormatting.WHITE + String.valueOf((current / 2)));
         } else {
             for (int i = 0; i < current / 2; i++) {
-                RenderHelper.drawTexturedModalRect(x, y, 52, 0, 9, 9);
+                RenderHelper.drawTexturedModalRectInset(x, y, 52, 0, 9, 9);
                 x += 8;
             }
             if (current % 2 != 0) {
-                RenderHelper.drawTexturedModalRect(x, y, 61, 0, 9, 9);
+                RenderHelper.drawTexturedModalRectInset(x, y, 61, 0, 9, 9);
             }
         }
     }

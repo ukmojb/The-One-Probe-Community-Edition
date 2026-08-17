@@ -409,6 +409,24 @@ public class RenderHelper {
         tessellator.draw();
     }
 
+    public static void drawTexturedModalRectInset(int x, int y, int u, int v, int width, int height) {
+        float zLevel = 0.01f;
+        float textureScale = 1 / 256.0f;
+        float minU = (u + 0.01f) * textureScale;
+        float minV = (v + 0.01f) * textureScale;
+        float maxU = (u + width - 0.01f) * textureScale;
+        float maxV = (v + height - 0.01f) * textureScale;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+        buffer.pos(x, y + height, zLevel).tex(minU, maxV).endVertex();
+        buffer.pos(x + width, y + height, zLevel).tex(maxU, maxV).endVertex();
+        buffer.pos(x + width, y, zLevel).tex(maxU, minV).endVertex();
+        buffer.pos(x, y, zLevel).tex(minU, minV).endVertex();
+        tessellator.draw();
+    }
+
     public static void drawTexturedModalRect(int x, int y, TextureAtlasSprite sprite, int width, int height) {
         float zLevel = 0.01f;
         float f = (1 / 256.0f);
