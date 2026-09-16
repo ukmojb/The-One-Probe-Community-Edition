@@ -4,6 +4,7 @@ import mcjty.theoneprobe.TheOneProbe;
 import mcjty.theoneprobe.Tools;
 import mcjty.theoneprobe.api.*;
 import mcjty.theoneprobe.apiimpl.ProbeInfo;
+import mcjty.theoneprobe.apiimpl.elements.ElementEntityName;
 import mcjty.theoneprobe.apiimpl.styles.ItemStyle;
 import mcjty.theoneprobe.apiimpl.styles.LayoutStyle;
 import mcjty.theoneprobe.compat.event.SpecialNameEvent;
@@ -65,26 +66,26 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
     }
 
     public static ITextComponent getName(Entity entity) {
+        ITextComponent fixedName = getFixedName(entity);
+        return fixedName == null ? new TextComponentString(entity.getName()) : fixedName;
+    }
+
+    private static ITextComponent getFixedName(Entity entity) {
         if (entity.hasCustomName()) {
             return new TextComponentString(entity.getCustomNameTag());
-        } else {
-            String s;
-
-            SpecialNameEvent event = new SpecialNameEvent(entity);
-            MinecraftForge.EVENT_BUS.post(event);
-            s = event.getSpacialName();
-
-            if (s == null) {
-                s = EntityList.getEntityString(entity) == null ? "generic" : EntityList.getEntityString(entity);
-            }
-
-            if (entity instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer) entity;
-                return new TextComponentString(player.getName());
-            }
-
-            return Tools.translate("entity." + s + ".name");
         }
+
+        SpecialNameEvent event = new SpecialNameEvent(entity);
+        MinecraftForge.EVENT_BUS.post(event);
+        if (event.getSpacialName() != null) {
+            return new TextComponentString(event.getSpacialName());
+        }
+
+        if (entity instanceof EntityPlayer) {
+            return new TextComponentString(entity.getName());
+        }
+
+        return null;
     }
 
     public static void showStandardInfo(ProbeMode mode, IProbeInfo probeInfo, Entity entity, IProbeConfig config) {
@@ -94,22 +95,22 @@ public class DefaultProbeInfoEntityProvider implements IProbeInfoEntityProvider 
                 probeInfo.horizontal()
                         .entity(entity)
                         .vertical()
-                        .text(Tools.text(NAME, getName(entity)))
+                        .element(new ElementEntityName(entity, getFixedName(entity)))
                         .text(MODNAME + modid);
             } else {
                 probeInfo.horizontal()
                         .vertical()
-                        .text(Tools.text(NAME, getName(entity)))
+                        .element(new ElementEntityName(entity, getFixedName(entity)))
                         .text(MODNAME + modid);
             }
         } else {
             if (Config.showEntityModel) {
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
                         .entity(entity)
-                        .text(Tools.text(NAME, getName(entity)));
+                        .element(new ElementEntityName(entity, getFixedName(entity)));
             } else {
                 probeInfo.horizontal(probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER))
-                        .text(Tools.text(NAME, getName(entity)));
+                        .element(new ElementEntityName(entity, getFixedName(entity)));
             }
         }
     }
