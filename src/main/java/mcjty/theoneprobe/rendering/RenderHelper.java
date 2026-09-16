@@ -8,11 +8,13 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -46,6 +48,18 @@ public class RenderHelper {
     }
 
     public static void renderEntity(Entity entity, int xPos, int yPos, float scale) {
+        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+        float playerViewY = renderManager.playerViewY;
+        float rotationYaw = entity.rotationYaw;
+        float prevRotationYaw = entity.prevRotationYaw;
+        float rotationPitch = entity.rotationPitch;
+        float prevRotationPitch = entity.prevRotationPitch;
+        EntityLivingBase livingEntity = entity instanceof EntityLivingBase ? (EntityLivingBase) entity : null;
+        float renderYawOffset = livingEntity == null ? 0.0F : livingEntity.renderYawOffset;
+        float prevRenderYawOffset = livingEntity == null ? 0.0F : livingEntity.prevRenderYawOffset;
+        float rotationYawHead = livingEntity == null ? 0.0F : livingEntity.rotationYawHead;
+        float prevRotationYawHead = livingEntity == null ? 0.0F : livingEntity.prevRotationYawHead;
+
         GlStateManager.pushMatrix();
         setOverlayColor();
         GlStateManager.enableRescaleNormal();
@@ -60,13 +74,25 @@ public class RenderHelper {
         GlStateManager.rotate(rot, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(0.0F, 1.0F, 0.0F, 0.0F);
 //        entity.renderYawOffset = entity.rotationYaw = entity.prevRotationYaw = entity.prevRotationYawHead = entity.rotationYawHead = 0;//this.rotateTurret;
-        entity.rotationPitch = 0.0F;
         GlStateManager.translate(0.0F, (float) entity.getYOffset() + (entity instanceof EntityHanging ? 0.5F : 0.0F), 0.0F);
-        Minecraft.getMinecraft().getRenderManager().playerViewY = 180F;
         try {
-            Minecraft.getMinecraft().getRenderManager().renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+            entity.rotationPitch = 0.0F;
+            renderManager.playerViewY = 180F;
+            renderManager.renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
         } catch (Exception e) {
             TheOneProbe.setup.getLogger().error("Error rendering entity!", e);
+        } finally {
+            renderManager.playerViewY = playerViewY;
+            entity.rotationYaw = rotationYaw;
+            entity.prevRotationYaw = prevRotationYaw;
+            entity.rotationPitch = rotationPitch;
+            entity.prevRotationPitch = prevRotationPitch;
+            if (livingEntity != null) {
+                livingEntity.renderYawOffset = renderYawOffset;
+                livingEntity.prevRenderYawOffset = prevRenderYawOffset;
+                livingEntity.rotationYawHead = rotationYawHead;
+                livingEntity.prevRotationYawHead = prevRotationYawHead;
+            }
         }
         GlStateManager.popMatrix();
         net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();

@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.fixes.EntityId;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -18,29 +19,57 @@ public class ElementEntityRender {
 
     private static final EntityId FIXER = new EntityId();
 
-    public static void renderPlayer(String entityName, Integer playerID, IEntityStyle style, int x, int y) {
-        Entity entity = Minecraft.getMinecraft().world.getEntityByID(playerID);
+    public static Entity render(String entityName, NBTTagCompound entityNBT, Integer entityID, Entity previewEntity,
+                                IEntityStyle style, int x, int y) {
+        World world = Minecraft.getMinecraft().world;
+        if (world == null) {
+            return null;
+        }
+
+        Entity entity = getWorldEntity(world, entityName, entityID);
+        if (entity == null) {
+            if (entityName == null || entityName.isEmpty()) {
+                return previewEntity;
+            }
+            if (!isValidPreview(previewEntity, world, entityName)) {
+                previewEntity = createPreviewEntity(world, entityName, entityNBT);
+            }
+            entity = previewEntity;
+        }
+
         if (entity != null) {
             renderEntity(style, x, y, entity);
         }
+        return previewEntity;
     }
 
-    public static void render(String entityName, NBTTagCompound entityNBT, IEntityStyle style, int x, int y) {
-        if (entityName != null && !entityName.isEmpty()) {
-            Entity entity = null;
-            if (entityNBT != null) {
-                entity = EntityList.createEntityFromNBT(entityNBT, Minecraft.getMinecraft().world);
-            } else {
-                String fixed = fixEntityId(entityName);
-                EntityEntry value = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(fixed));
-                if (value != null) {
-                    entity = value.newInstance(Minecraft.getMinecraft().world);
-                }
-            }
-            if (entity != null) {
-                renderEntity(style, x, y, entity);
-            }
+    private static Entity getWorldEntity(World world, String entityName, Integer entityID) {
+        if (entityID == null) {
+            return null;
         }
+        Entity entity = world.getEntityByID(entityID);
+        return entityName == null || entityName.isEmpty() || isExpectedEntity(entity, entityName) ? entity : null;
+    }
+
+    private static boolean isValidPreview(Entity entity, World world, String entityName) {
+        return entity != null && entity.world == world && isExpectedEntity(entity, entityName);
+    }
+
+    private static boolean isExpectedEntity(Entity entity, String entityName) {
+        if (entity == null) {
+            return false;
+        }
+        String actualName = EntityList.getEntityString(entity);
+        return entityName.equals(actualName) || fixEntityId(entityName).equals(actualName);
+    }
+
+    private static Entity createPreviewEntity(World world, String entityName, NBTTagCompound entityNBT) {
+        if (entityNBT != null) {
+            return EntityList.createEntityFromNBT(entityNBT, world);
+        }
+        String fixed = fixEntityId(entityName);
+        EntityEntry value = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(fixed));
+        return value == null ? null : value.newInstance(world);
     }
 
     /**
