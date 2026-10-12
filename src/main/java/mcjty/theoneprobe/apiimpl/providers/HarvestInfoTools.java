@@ -148,8 +148,13 @@ public class HarvestInfoTools {
             if (harvestTool != null) {
                 ITextComponent toolClassName = getToolClassName(harvestTool);
 
-                horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
-                        .text(Tools.text(OK, toolClassName, " (", Tools.translate("top.level"), " ", harvestName, ")"));
+                if (isNull(harvestName)){
+                    horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
+                            .text(Tools.text(OK, toolClassName));
+                } else {
+                    horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
+                            .text(Tools.text(OK, toolClassName, " (", Tools.translate("top.level"), " ", harvestName, ")"));
+                }
             } else {
                 if (isNull(harvestName)){
                     horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
