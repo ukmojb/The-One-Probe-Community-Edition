@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
-import static java.util.Objects.isNull;
 import static mcjty.theoneprobe.api.TextStyleClass.*;
 
 public class HarvestInfoTools {
@@ -41,7 +40,7 @@ public class HarvestInfoTools {
             "iron",
             "diamond",
             "obsidian",
-            "cobalt"
+            "netherite"
     };
 
     static {
@@ -128,6 +127,7 @@ public class HarvestInfoTools {
             }
         } else if (harvestLevel >= harvestLevels.length) {
 //                TheOneProbe.logger.info("HarvestLevel out of bounds (Max value " + harvestLevels.length + "). Found " + harvestLevel);
+            harvestName = new TextComponentString(Integer.toString(harvestLevel));
         } else {
             harvestName = new TextComponentString(harvestLevels[harvestLevel]);
 
@@ -144,14 +144,20 @@ public class HarvestInfoTools {
         ILayoutStyle alignment = probeInfo.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER);
         IIconStyle iconStyle = probeInfo.defaultIconStyle().width(v ? 18 : 20).height(v ? 14 : 16).textureWidth(32).textureHeight(32);
         IProbeInfo horizontal = probeInfo.horizontal(alignment);
+        boolean hasHarvestName = harvestName != null && !harvestName.getUnformattedText().isEmpty();
         if (harvestable) {
             if (harvestTool != null) {
                 ITextComponent toolClassName = getToolClassName(harvestTool);
 
-                horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
-                        .text(Tools.text(OK, toolClassName, " (", Tools.translate("top.level"), " ", harvestName, ")"));
+                if (hasHarvestName) {
+                    horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
+                            .text(Tools.text(OK, toolClassName, " (", Tools.translate("top.level"), " ", harvestName, ")"));
+                } else {
+                    horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
+                            .text(Tools.text(OK, toolClassName));
+                }
             } else {
-                if (isNull(harvestName)){
+                if (!hasHarvestName) {
                     horizontal.icon(ICONS, 0, offs, dim, dim, iconStyle)
                             .text(Tools.text(OK, Tools.translate("top.NoTool")));
                 } else {
@@ -163,7 +169,7 @@ public class HarvestInfoTools {
             }
 
         } else {
-            if (harvestName == null || harvestName.getUnformattedText().isEmpty()) {
+            if (!hasHarvestName) {
                 horizontal.icon(ICONS, 16, offs, dim, dim, iconStyle)
                         .text(harvestTool != null ? Tools.text(WARNING, getToolClassName(harvestTool)) : Tools.text(WARNING, Tools.translate("top.NoTool")));
             } else {
